@@ -9,7 +9,6 @@ import java.util.Objects;
 @Getter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode(of = "id")
 public class Services extends BaseEntity{
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,5 +32,18 @@ public class Services extends BaseEntity{
         this.logoImageUrl = logoImageUrl;
         this.serviceUrl = serviceUrl;
         this.content = content;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Services)) return false;
+        Services services = (Services) o;
+        return Objects.equals(id, services.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

@@ -3,13 +3,13 @@ package com.example.servicehub.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Getter
 @ToString(exclude ={"services" , "category"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode(of = "id")
-public class Service_Category extends BaseEntity{
+public class ServiceCategory extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "service_category_id")
@@ -17,21 +17,31 @@ public class Service_Category extends BaseEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "service_id")
-    @Column(nullable = false)
     private Services services;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
-    @Column(nullable = false)
     private Category category;
 
-    public static Service_Category of(Services services , Category category){
-        return new Service_Category(services,category);
+    public static ServiceCategory of(Services services , Category category){
+        return new ServiceCategory(services,category);
     }
 
-    private Service_Category (Services services , Category category){
+    private ServiceCategory(Services services , Category category){
         this.services = services;
         this.category = category;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ServiceCategory)) return false;
+        ServiceCategory that = (ServiceCategory) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

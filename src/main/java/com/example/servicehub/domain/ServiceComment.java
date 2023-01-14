@@ -3,12 +3,12 @@ package com.example.servicehub.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Getter
 @ToString(exclude = {"services","client"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode(of = "id")
 public class ServiceComment extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,12 +20,10 @@ public class ServiceComment extends BaseEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="service_id")
-    @Column(nullable = false)
     private Services services;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="client_id")
-    @Column(nullable = false)
     private Client client;
 
 
@@ -39,4 +37,16 @@ public class ServiceComment extends BaseEntity{
         this.client = client;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ServiceComment)) return false;
+        ServiceComment that = (ServiceComment) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
