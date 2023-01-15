@@ -40,3 +40,5 @@ out/
 #### custom
 *.yml
 /src/main/java/com/example/servicehub/security/
+/src/main/resources/image/
+/src/test/resources/image/
