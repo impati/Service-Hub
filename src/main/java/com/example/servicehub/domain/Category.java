@@ -17,7 +17,7 @@ public class Category extends BaseEntity{
     @Column(name = "category_id")
     private Long id;
 
-    @Column(length = 1000,nullable = false)
+    @Column(length = 1000,nullable = false, unique = true)
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
