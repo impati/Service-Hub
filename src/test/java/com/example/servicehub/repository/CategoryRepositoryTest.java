@@ -1,6 +1,7 @@
 package com.example.servicehub.repository;
 
 import com.example.servicehub.config.JpaConfig;
+import com.example.servicehub.config.TestJpaConfig;
 import com.example.servicehub.domain.Category;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Category 테스트")
-@Import(JpaConfig.class)
+@Import(TestJpaConfig.class)
 @DataJpaTest
 class CategoryRepositoryTest {
 
@@ -28,7 +29,7 @@ class CategoryRepositoryTest {
     @DisplayName("카테고리 게층 구조 테스트 - parent 편")
     public void givenParentCategoryAndChildList_whenSavingAndAddingChildList_thenValidParent() throws Exception{
         // given
-        Category parentCategory = Category.of("IT");
+        Category parentCategory = Category.of("ITTest");
         Category  backend = Category.of("BACKEND");
         Category devops = Category.of("DEVOPS");
         parentCategory.addChildCategory(backend);
@@ -51,7 +52,7 @@ class CategoryRepositoryTest {
     @DisplayName("카테고리 게층 구조 테스트 - child 편")
     public void givenParentCategoryAndChildList_whenSavingAndAddingChildList_thenValidChild() throws Exception{
         // given
-        Category parentCategory = Category.of("IT");
+        Category parentCategory = Category.of("ITTest");
         Category  backend = Category.of("BACKEND");
         Category devops = Category.of("DEVOPS");
         parentCategory.addChildCategory(backend);
