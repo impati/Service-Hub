@@ -16,7 +16,7 @@ public class Services extends BaseEntity{
     private Long id;
 
     @Column(unique = true)
-    private String logoImageUrl;
+    private String logoStoreName;
 
     @Column(nullable = false,unique = true)
     private String serviceUrl;
@@ -24,12 +24,12 @@ public class Services extends BaseEntity{
     @Column(nullable = false,length = 10000)
     private String content;
 
-    public static Services of(String logoImageUrl,String serviceUrl , String content){
-        return new Services(logoImageUrl,serviceUrl,content);
+    public static Services of(String logoStoreName,String serviceUrl , String content){
+        return new Services(logoStoreName,serviceUrl,content);
     }
 
-    private Services(String logoImageUrl, String serviceUrl, String content) {
-        this.logoImageUrl = logoImageUrl;
+    private Services(String logoStoreName, String serviceUrl, String content) {
+        this.logoStoreName = logoStoreName;
         this.serviceUrl = serviceUrl;
         this.content = content;
     }
