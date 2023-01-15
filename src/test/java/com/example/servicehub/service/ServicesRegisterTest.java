@@ -48,7 +48,7 @@ class ServicesRegisterTest {
                 new FileInputStream("/Users/jun-yeongchoe/Desktop/project/ServiceHub/src/main/resources/image/inflearn-logo.png"));
 
         ServicesRegisterForm servicesRegisterForm =
-                ServicesRegisterForm.of(categoryList,serviceUrl,content,logo);
+                ServicesRegisterForm.of(categoryList,"인프런",serviceUrl,content,logo);
         // when
         servicesRegister.registerServices(servicesRegisterForm);
         // then

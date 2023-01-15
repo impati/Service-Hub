@@ -26,7 +26,7 @@ public class ServicesRegister {
 
     public void registerServices(ServicesRegisterForm servicesRegisterForm){
         String logoStoreName = logoManager.tryToRestore(servicesRegisterForm.getLogoFile());
-        Services services = Services.of(logoStoreName, servicesRegisterForm.getServicesUrl(), servicesRegisterForm.getContent());
+        Services services = Services.of(servicesRegisterForm.getServiceName(), logoStoreName,servicesRegisterForm.getServicesUrl(), servicesRegisterForm.getContent());
         addCategoriesToServices(servicesRegisterForm.getCategoryNames(),services);
         servicesRepository.save(services);
     }
