@@ -37,7 +37,7 @@ class ServicesRegisterTest {
 
     @Test
     @DisplayName("서비스 등록 테스트")
-    public void given_when_then() throws Exception{
+    public void givenServiceRegisterForm_whenSavingServices_thenSaveServiceWithCategories() throws Exception{
         // given
         List<String> categoryList = List.of("IT","REPO");
         String serviceUrl = "https://www.inflearn.com/";
