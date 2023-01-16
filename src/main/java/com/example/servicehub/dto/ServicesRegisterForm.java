@@ -13,16 +13,18 @@ public class ServicesRegisterForm {
     private String content;
     private MultipartFile logoFile;
     private String serviceName;
+    private String title;
 
-    public static ServicesRegisterForm of(List<String> categoryName,String serviceName,String servicesUrl,String content,MultipartFile multipartFile){
-        return new ServicesRegisterForm(categoryName,serviceName,servicesUrl,content,multipartFile);
+    public static ServicesRegisterForm of(List<String> categoryName,String serviceName,String servicesUrl,String title,String content,MultipartFile multipartFile){
+        return new ServicesRegisterForm(categoryName,serviceName,servicesUrl,title,content,multipartFile);
     }
 
-    private ServicesRegisterForm(List<String> categoryNames,String serviceName, String servicesUrl, String content, MultipartFile logoFile) {
+    private ServicesRegisterForm(List<String> categoryNames,String serviceName, String servicesUrl, String title,String content, MultipartFile logoFile) {
         this.categoryNames = categoryNames;
         this.servicesUrl = servicesUrl;
         this.content = content;
         this.logoFile = logoFile;
         this.serviceName = serviceName;
+        this.title = title;
     }
 }

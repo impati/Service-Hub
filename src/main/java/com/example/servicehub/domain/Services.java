@@ -27,11 +27,14 @@ public class Services extends BaseEntity{
     @Column(nullable = false,length = 10000)
     private String content;
 
-    public static Services of(String serviceName,String logoStoreName,String serviceUrl , String content){
-        return new Services(serviceName,logoStoreName,serviceUrl,content);
+    private String title;
+
+    public static Services of(String serviceName,String logoStoreName,String serviceUrl , String title, String content){
+        return new Services(serviceName,logoStoreName,serviceUrl,title,content);
     }
 
-    private Services(String serviceName,String logoStoreName, String serviceUrl, String content) {
+    private Services(String serviceName,String logoStoreName, String serviceUrl, String title, String content) {
+        this.title = title;
         this.serviceName = serviceName;
         this.logoStoreName = logoStoreName;
         this.serviceUrl = serviceUrl;
