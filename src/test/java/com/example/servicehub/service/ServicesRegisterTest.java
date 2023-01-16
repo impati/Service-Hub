@@ -41,6 +41,7 @@ class ServicesRegisterTest {
         // given
         List<String> categoryList = List.of("IT","REPO");
         String serviceUrl = "https://www.inflearn.com/";
+        String title = "교육 플랫폼입니다";
         String content = "hi 인프런";
         MockMultipartFile logo = new MockMultipartFile("inflearn-logo",
                 "test.png",
@@ -48,11 +49,11 @@ class ServicesRegisterTest {
                 new FileInputStream("/Users/jun-yeongchoe/Desktop/project/ServiceHub/src/main/resources/image/inflearn-logo.png"));
 
         ServicesRegisterForm servicesRegisterForm =
-                ServicesRegisterForm.of(categoryList,serviceUrl,content,logo);
+                ServicesRegisterForm.of(categoryList,"인프런",serviceUrl,title,content,logo);
         // when
         servicesRegister.registerServices(servicesRegisterForm);
         // then
-        Services services = servicesRepository.findByServiceUrl(serviceUrl).orElseThrow(ChangeSetPersister.NotFoundException::new);
+        Services services = servicesRepository.findByServiceUrl(serviceUrl).orElseThrow();
         assertThat(services.getServiceUrl()).isEqualTo(serviceUrl);
         List<ServiceCategory> serviceCategories = serviceCategoryRepository.findByServices(services);
         serviceCategories
