@@ -3,7 +3,7 @@ package com.example.servicehub.service.impl;
 import com.example.servicehub.domain.Category;
 import com.example.servicehub.domain.ServiceSortType;
 import com.example.servicehub.domain.Services;
-import com.example.servicehub.dto.PopularityService;
+import com.example.servicehub.dto.PopularityServiceDto;
 import com.example.servicehub.dto.ServiceSearchConditionForm;
 import com.example.servicehub.repository.CategoryRepository;
 import com.example.servicehub.repository.ServicesRepository;
@@ -30,7 +30,7 @@ public class ServiceSearchImpl implements ServiceSearch {
     private final CategoryRepository categoryRepository;
 
     @Override
-    public Page<PopularityService> search(ServiceSearchConditionForm serviceSearchConditionForm) {
+    public Page<PopularityServiceDto> search(ServiceSearchConditionForm serviceSearchConditionForm) {
         List<Category> categories = categoryRepository.findByNames(serviceSearchConditionForm.getCategories());
         List<Services> searchedService = servicesRepository.search(categories, serviceSearchConditionForm.getServiceName());
         return servicesRepository.findServicesSortedByPopularity(searchedService,

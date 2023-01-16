@@ -1,7 +1,7 @@
 package com.example.servicehub.service;
 
 import com.example.servicehub.config.TestJpaConfig;
-import com.example.servicehub.dto.PopularityService;
+import com.example.servicehub.dto.PopularityServiceDto;
 import com.example.servicehub.dto.ServiceSearchConditionForm;
 import com.example.servicehub.service.impl.ServiceSearchImpl;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +30,7 @@ class ServiceSearchTest {
                 ServiceSearchConditionForm.of(List.of("search-platform"),null);
 
         // when
-        Page<PopularityService> searchedServices = serviceSearch.search(serviceSearchConditionForm);
+        Page<PopularityServiceDto> searchedServices = serviceSearch.search(serviceSearchConditionForm);
 
         // then
 
@@ -45,7 +45,7 @@ class ServiceSearchTest {
         ServiceSearchConditionForm serviceSearchConditionForm =
                 ServiceSearchConditionForm.of(List.of("search-platform","IT"),null);
         // when
-        Page<PopularityService> searchedServices = serviceSearch.search(serviceSearchConditionForm);
+        Page<PopularityServiceDto> searchedServices = serviceSearch.search(serviceSearchConditionForm);
         // then
         checkContainKeyword(searchedServices,"네이버");
         checkContainKeyword(searchedServices,"유튜브");
@@ -60,7 +60,7 @@ class ServiceSearchTest {
         ServiceSearchConditionForm serviceSearchConditionForm =
                 ServiceSearchConditionForm.of(null,"프로그래머스");
         // when
-        Page<PopularityService> searchedServices = serviceSearch.search(serviceSearchConditionForm);
+        Page<PopularityServiceDto> searchedServices = serviceSearch.search(serviceSearchConditionForm);
         // then
         assertThat(searchedServices.getContent().get(0).getServiceName()).isEqualTo("프로그래머스");
     }
@@ -72,7 +72,7 @@ class ServiceSearchTest {
         ServiceSearchConditionForm serviceSearchConditionForm =
                 ServiceSearchConditionForm.of(null,"잡");
         // when
-        Page<PopularityService> searchedServices = serviceSearch.search(serviceSearchConditionForm);
+        Page<PopularityServiceDto> searchedServices = serviceSearch.search(serviceSearchConditionForm);
         // then
         checkContainKeyword(searchedServices,"잡플래닛");
         checkContainKeyword(searchedServices,"잡코리아");
@@ -85,14 +85,14 @@ class ServiceSearchTest {
         ServiceSearchConditionForm serviceSearchConditionForm =
                 ServiceSearchConditionForm.of(List.of("search-platform","IT"),"브");
         // when
-        Page<PopularityService> searchedServices = serviceSearch.search(serviceSearchConditionForm);
+        Page<PopularityServiceDto> searchedServices = serviceSearch.search(serviceSearchConditionForm);
         // then
         checkContainKeyword(searchedServices,"깃허브");
         checkContainKeyword(searchedServices,"유튜브");
     }
 
 
-    private void checkContainKeyword(Page<PopularityService> searchedServices, String keyword){
+    private void checkContainKeyword(Page<PopularityServiceDto> searchedServices, String keyword){
         assertThat(searchedServices.stream()
                 .filter(services -> services.getServiceName().contains(keyword))
                 .findFirst()).isPresent();

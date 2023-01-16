@@ -1,7 +1,7 @@
 package com.example.servicehub.repository.querydsl;
 
 import com.example.servicehub.domain.*;
-import com.example.servicehub.dto.PopularityService;
+import com.example.servicehub.dto.PopularityServiceDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
@@ -35,10 +35,10 @@ public class ServiceSearchRepositoryImpl implements ServiceSearchRepository{
     }
 
     @Override
-    public Page<PopularityService> findServicesSortedByPopularity(List<Services> serviceList, Pageable pageable) {
-        List<PopularityService> result = queryFactory
+    public Page<PopularityServiceDto> findServicesSortedByPopularity(List<Services> serviceList, Pageable pageable) {
+        List<PopularityServiceDto> result = queryFactory
                 .select(Projections.constructor(
-                        PopularityService.class,
+                        PopularityServiceDto.class,
                         JPAExpressions
                                 .select(clientService.count())
                                 .from(clientService)
