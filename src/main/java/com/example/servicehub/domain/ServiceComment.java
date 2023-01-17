@@ -26,6 +26,9 @@ public class ServiceComment extends BaseEntity{
     @JoinColumn(name ="client_id")
     private Client client;
 
+    public void updateContent(String content){
+        this.content = content;
+    }
 
     public static ServiceComment of(String content,Services services , Client client){
         return new ServiceComment(content,services,client);
