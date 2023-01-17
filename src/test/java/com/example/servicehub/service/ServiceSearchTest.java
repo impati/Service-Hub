@@ -9,6 +9,7 @@ import com.example.servicehub.dto.SingleServiceWithCommentsDto;
 import com.example.servicehub.repository.ClientRepository;
 import com.example.servicehub.repository.ServiceCategoryRepository;
 import com.example.servicehub.repository.ServicesRepository;
+import com.example.servicehub.service.impl.ServiceCommentsAdministerImpl;
 import com.example.servicehub.service.impl.ServiceSearchImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("서비스 검색 테스트")
 @DataJpaTest
-@Import({TestJpaConfig.class, ServiceSearchImpl.class})
+@Import({TestJpaConfig.class, ServiceSearchImpl.class, ServiceCommentsAdministerImpl.class})
 class ServiceSearchTest {
 
     @Autowired private ServiceSearch serviceSearch;
@@ -149,6 +150,16 @@ class ServiceSearchTest {
         assertThat(nonPossessSingleServiceWithCommentsDto.isPossess()).isFalse();
     }
 
+    @Test
+    @DisplayName("단일 서비스 조회 - 댓글과 같이")
+    public void givenServiceIdAndClientID_whenSearching_thenReturnServiceWithComments() throws Exception{
+        // given
+        // when
+        SingleServiceWithCommentsDto singleServiceWithCommentsDto = serviceSearch.searchSingleService(1L, 1L);
+        // then
+        assertThat(singleServiceWithCommentsDto.getComments().size())
+                .isEqualTo(1);
+    }
 
 
 }

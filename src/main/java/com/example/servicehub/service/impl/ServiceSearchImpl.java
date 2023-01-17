@@ -4,11 +4,13 @@ import com.example.servicehub.domain.Category;
 import com.example.servicehub.domain.ServiceSortType;
 import com.example.servicehub.domain.Services;
 import com.example.servicehub.dto.PopularityServiceDto;
+import com.example.servicehub.dto.ServiceCommentsDto;
 import com.example.servicehub.dto.ServiceSearchConditionForm;
 import com.example.servicehub.dto.SingleServiceWithCommentsDto;
 import com.example.servicehub.repository.CategoryRepository;
 import com.example.servicehub.repository.ClientServiceRepository;
 import com.example.servicehub.repository.ServicesRepository;
+import com.example.servicehub.service.ServiceCommentsAdminister;
 import com.example.servicehub.service.ServiceSearch;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +34,7 @@ public class ServiceSearchImpl implements ServiceSearch {
     private final ServicesRepository servicesRepository;
     private final CategoryRepository categoryRepository;
     private final ClientServiceRepository clientServiceRepository;
+    private final ServiceCommentsAdminister serviceCommentsAdminister;
 
     @Override
     public Page<PopularityServiceDto> search(ServiceSearchConditionForm serviceSearchConditionForm) {
@@ -46,7 +49,8 @@ public class ServiceSearchImpl implements ServiceSearch {
         Services services = servicesRepository.findByIdUseFetchJoin(serviceId)
                 .orElseThrow(() -> new EntityNotFoundException("유효하지 않은 서비스 조회입니다."));
         boolean isPossess = clientServiceRepository.existsServiceAndClientRelationship(services, clientId);
-        return SingleServiceWithCommentsDto.of(services,isPossess);
+        List<ServiceCommentsDto> comments = serviceCommentsAdminister.searchComments(serviceId);
+        return SingleServiceWithCommentsDto.of(services,isPossess,comments);
     }
 
 }

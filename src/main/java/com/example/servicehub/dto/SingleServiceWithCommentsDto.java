@@ -10,15 +10,17 @@ import java.util.stream.Collectors;
 @Data
 @ToString
 public class SingleServiceWithCommentsDto {
+
     private String logoStoreName;
     private String serviceName;
     private String serviceUrl;
     private String title;
     private String content;
     private List<String> categories;
+    private List<ServiceCommentsDto> comments;
     private boolean isPossess;
 
-    public static SingleServiceWithCommentsDto of(Services services , boolean isPossess){
+    public static SingleServiceWithCommentsDto of(Services services , boolean isPossess , List<ServiceCommentsDto> comments){
         SingleServiceWithCommentsDto singleServiceWithCommentsDto = new SingleServiceWithCommentsDto();
         singleServiceWithCommentsDto.logoStoreName = services.getLogoStoreName();
         singleServiceWithCommentsDto.serviceName = services.getServiceName();
@@ -31,6 +33,7 @@ public class SingleServiceWithCommentsDto {
                         .map(serviceCategory -> serviceCategory.getCategory().getName())
                         .collect(Collectors.toList());
         singleServiceWithCommentsDto.isPossess = isPossess;
+        singleServiceWithCommentsDto.comments = comments;
         return singleServiceWithCommentsDto;
     }
 }
