@@ -1,8 +1,14 @@
 package com.example.servicehub.service;
 
 import com.example.servicehub.config.TestJpaConfig;
+import com.example.servicehub.domain.Client;
+import com.example.servicehub.domain.Services;
 import com.example.servicehub.dto.PopularityServiceDto;
 import com.example.servicehub.dto.ServiceSearchConditionForm;
+import com.example.servicehub.dto.SingleServiceWithCommentsDto;
+import com.example.servicehub.repository.ClientRepository;
+import com.example.servicehub.repository.ServiceCategoryRepository;
+import com.example.servicehub.repository.ServicesRepository;
 import com.example.servicehub.service.impl.ServiceSearchImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,6 +18,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,6 +28,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ServiceSearchTest {
 
     @Autowired private ServiceSearch serviceSearch;
+    @Autowired private ClientRepository clientRepository;
+    @Autowired private ServicesRepository servicesRepository;
+    @Autowired private ServiceCategoryRepository serviceCategoryRepository;
 
     @Test
     @DisplayName("카테고리로 검색 - 단일")
@@ -97,4 +107,48 @@ class ServiceSearchTest {
                 .filter(services -> services.getServiceName().contains(keyword))
                 .findFirst()).isPresent();
     }
+
+    @Test
+    @DisplayName("단일 서비스 조회 - 댓글이 없는 서비스 정보 조회")
+    public void givenServiceId_whenSearchingServiceInformation_thenReturnServiceInformation() throws Exception{
+        // given
+        Services services = servicesRepository.findById(1L).get();
+        List<String> categoriesName = serviceCategoryRepository
+                .findByServices(services)
+                .stream()
+                .map(serviceCategory -> serviceCategory.getCategory().getName())
+                .collect(Collectors.toList());
+        // when
+        SingleServiceWithCommentsDto singleServiceWithCommentsDto = serviceSearch.searchSingleService(services.getId(),1L);
+        // then
+        assertThat(singleServiceWithCommentsDto.getServiceName())
+                .isEqualTo(services.getServiceName());
+
+        singleServiceWithCommentsDto
+                .getCategories()
+                .stream()
+                .forEach(category->{
+                    assertThat(categoriesName.contains(category)).isTrue();
+                });
+    }
+
+    @Test
+    @DisplayName("단일 서비스 조회 - 사용자가 서비스 소유 체크")
+    public void givenServiceIdAndClientId_whenSearchingService_thenReturnsWhetherTheClientOwns() throws Exception{
+        // given
+        Services possessServices = servicesRepository.findById(1L).get();
+        Services nonPossessServices = servicesRepository.findById(5L).get();
+        Client client = clientRepository.findById(1L).get();
+
+        // when
+        SingleServiceWithCommentsDto possessSingleServiceWithCommentsDto = serviceSearch.searchSingleService(possessServices.getId(), client.getId());
+        SingleServiceWithCommentsDto nonPossessSingleServiceWithCommentsDto = serviceSearch.searchSingleService(nonPossessServices.getId(), client.getId());
+        // then
+
+        assertThat(possessSingleServiceWithCommentsDto.isPossess()).isTrue();
+        assertThat(nonPossessSingleServiceWithCommentsDto.isPossess()).isFalse();
+    }
+
+
+
 }
