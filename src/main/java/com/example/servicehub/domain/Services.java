@@ -3,6 +3,8 @@ package com.example.servicehub.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -28,6 +30,14 @@ public class Services extends BaseEntity{
     private String content;
 
     private String title;
+
+    @OneToMany(mappedBy = "services",fetch = FetchType.LAZY)
+    private List<ServiceCategory> serviceCategories = new ArrayList<>();
+
+
+    public void mappingAssociations(ServiceCategory serviceCategory){
+        serviceCategories.add(serviceCategory);
+    }
 
     public static Services of(String serviceName,String logoStoreName,String serviceUrl , String title, String content){
         return new Services(serviceName,logoStoreName,serviceUrl,title,content);

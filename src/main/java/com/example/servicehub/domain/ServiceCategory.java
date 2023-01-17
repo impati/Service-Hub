@@ -24,7 +24,9 @@ public class ServiceCategory extends BaseEntity{
     private Category category;
 
     public static ServiceCategory of(Services services , Category category){
-        return new ServiceCategory(services,category);
+        ServiceCategory serviceCategory = new ServiceCategory(services, category);
+        services.mappingAssociations(serviceCategory);
+        return serviceCategory;
     }
 
     private ServiceCategory(Services services , Category category){
