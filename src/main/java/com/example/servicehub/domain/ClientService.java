@@ -23,6 +23,12 @@ public class ClientService extends BaseEntity{
     @JoinColumn(name = "client_id")
     private Client client;
 
+    private long clickCount;
+
+    public void click(){
+        this.clickCount += 1L;
+    }
+
     public static ClientService of(Client client , Services services){
         return new ClientService(client,services);
     }
@@ -30,6 +36,7 @@ public class ClientService extends BaseEntity{
     private ClientService(Client client , Services services){
         this.client = client;
         this.services =  services;
+        this.clickCount = 0L;
     }
 
     @Override
