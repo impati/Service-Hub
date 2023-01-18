@@ -1,7 +1,7 @@
 package com.example.servicehub.service.impl;
 
 import com.example.servicehub.domain.Category;
-import com.example.servicehub.domain.ServiceSortType;
+import com.example.servicehub.domain.ServicePage;
 import com.example.servicehub.domain.Services;
 import com.example.servicehub.dto.PopularityServiceDto;
 import com.example.servicehub.dto.ServiceCommentsDto;
@@ -23,14 +23,16 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
+import static com.example.servicehub.domain.ServicePage.DEFAULT_START_PAGE;
+import static com.example.servicehub.domain.ServicePage.POPULARITY;
+import static org.springframework.beans.support.PagedListHolder.DEFAULT_PAGE_SIZE;
+
 @Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ServiceSearchImpl implements ServiceSearch {
 
-    private final static int DEFAULT_PAGE_SIZE = 10;
-    private final static int START_PAGE = 0;
     private final ServicesRepository servicesRepository;
     private final CategoryRepository categoryRepository;
     private final ClientServiceRepository clientServiceRepository;
@@ -40,8 +42,8 @@ public class ServiceSearchImpl implements ServiceSearch {
     public Page<PopularityServiceDto> search(ServiceSearchConditionForm serviceSearchConditionForm) {
         List<Category> categories = categoryRepository.findByNames(serviceSearchConditionForm.getCategories());
         List<Services> searchedService = servicesRepository.search(categories, serviceSearchConditionForm.getServiceName());
-        return servicesRepository.findServicesSortedByPopularity(searchedService,
-                PageRequest.of(START_PAGE,DEFAULT_PAGE_SIZE, Sort.by(Sort.Direction.ASC, ServiceSortType.POPULARITY.getName())));
+        return servicesRepository.findServices(searchedService,
+                PageRequest.of(DEFAULT_START_PAGE,DEFAULT_PAGE_SIZE, Sort.by(Sort.Direction.ASC, POPULARITY.getName())));
     }
 
     @Override
