@@ -1,6 +1,7 @@
 package com.example.servicehub.service.fileUtils;
 
 import com.example.servicehub.exception.FileStoreException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -9,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
+@Slf4j
 @Component
 public class LogoManager {
     @Value("${logo.dir}")
@@ -28,11 +30,16 @@ public class LogoManager {
 
     public String restore(MultipartFile logo) throws IOException {
         if(!logo.isEmpty()){
-            String storeName = createUniqueName();
+            String storeName = createUniqueName() + extractExtension(logo.getOriginalFilename());
             logo.transferTo(new File(getFullPath(storeName)));
             return storeName;
         }
         return null;
+    }
+
+    private String extractExtension(String originFileName){
+        String[] splitStringByPoint = originFileName.split("\\.");
+        return "." + splitStringByPoint[splitStringByPoint.length - 1];
     }
 
     private String createUniqueName(){
