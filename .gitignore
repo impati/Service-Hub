@@ -41,5 +41,5 @@ out/
 /src/main/resources/image/
 /src/main/resources/static/
 /src/main/resources/*.yml
-
+/src/test/resources/image/
 /src/main/generated/
