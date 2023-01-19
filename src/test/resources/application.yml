@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver # h2 드라이버 설정
+    url: jdbc:h2:mem:testdb # jdbc url 설정 (in-memory db 설정)
+    username: sa
+    password:
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect # 방언설정
+    properties:
+      hibernate:
+        ddl-auto: none
+        show_sql: true #sql 문이 보이도록
+        format_sql: true  #sql 계층식 표현
+    generate-ddl: true
+    defer-datasource-initialization: true
+  sql:
+    init:
+      platform: h2
+      data-locations: classpath:data.sql
+      mode: always
+
+
+logo:
+  dir: /Users/jun-yeongchoe/Desktop/project/ServiceHub/src/test/resources/image/

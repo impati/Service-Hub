@@ -37,9 +37,9 @@ out/
 .vscode/
 
 
-#### custom
-*.yml
-/src/main/java/com/example/servicehub/security/
+### custom ###
 /src/main/resources/image/
+/src/main/resources/static/
+/src/main/resources/*.yml
 /src/test/resources/image/
 /src/main/generated/
