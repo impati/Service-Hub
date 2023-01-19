@@ -3,10 +3,15 @@ package com.example.servicehub.dto;
 import com.example.servicehub.domain.Services;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @Data
+@ToString
+@NoArgsConstructor
 public class ServicesRegisterForm {
     private List<String> categoryNames;
     private String servicesUrl;
