@@ -26,47 +26,61 @@
         </div><!--//container-->
     </section>
 
-
     <section class="contact-section px-3 py-5 p-md-5">
+
+        <div class="col-6 container">
+
+            <form id="search" th:action method="get">
+                <div class="input-group mb-auto">
+                    <input type="url" class="form-control" id="servicesUrl"  name="servicesUrl" placeholder="URL" aria-label="URL" aria-describedby="button-addon2">
+                    <button class="btn btn-outline-secondary" type="submit" id="button-addon2">검색</button>
+                </div>
+            </form>
+
+        </div>
+
+        <hr>
         <div class="container">
             <form th:object="${serviceRegisterForm}" id="contact-form" class="contact-form col-lg-8 mx-lg-auto"  name="register" th:action method="post" enctype="multipart/form-data">
 
-                <hr>
-                <br>
                 <div class="row g-3">
-
-
                     <div class="col-12">
                         <label class="sr-only" for="serviceName">serviceName</label>
-                        <input type="text" class="form-control" id="serviceName" name="serviceName" placeholder="serviceName" required="" aria-required="true">
-                        <small class="form-text text-muted pt-1"><i class="fas fa-info-circle me-2 text-primary"></i>간단한 서비스 설명해주세요</small>
+                        <input type="text" class="form-control" id="serviceName" name="serviceName" th:value="${metaData.siteName}" placeholder="serviceName" required="" aria-required="true">
+                        <small class="form-text text-muted pt-1"><i class="fas fa-info-circle me-2 text-primary"></i>서비스 이름을 입력해주세요</small>
                     </div>
 
 
-                    <div class="col-12 col-md-6">
-                        <label class="sr-only" for="logo">LOGO</label>
-                        <input type="file" class="form-control" id="logo" name="logoFile" placeholder="LOGO" minlength="2" required="" aria-required="true">
+                    <div th:if="${metaData.image == null }" class="col-12 col-md-6">
+                        <label class="sr-only" for="logoFile">LOGO</label>
+                        <input type="file" class="form-control" id="logoFile" name="logoFile" placeholder="LOGO"  th:value="${metaData.image}" minlength="2" required="" aria-required="true" >
                         <small class="form-text text-muted pt-1"><i class="fas fa-info-circle me-2 text-primary"></i>서비스 로고를 선택해주세요</small>
                     </div>
 
+                    <div th:if="${metaData.image != null }" class="col-12 col-md-6">
+                        <label class="sr-only" for="logoUrl">LOGO</label>
+                        <input type="url" class="form-control" id="logoUrl" name="logoUrl" placeholder="LOGO"  th:value="${metaData.image}" minlength="2" required="" aria-required="true">
+                        <small class="form-text text-muted pt-1"><i class="fas fa-info-circle me-2 text-primary"></i>서비스 로고를 선택해주세요</small>
+                    </div>
+
+
                     <div class="col-12 col-md-6">
                         <label class="sr-only" for="servicesUrl">URL</label>
-                        <input type="url" class="form-control" id="servicesUrl" name="servicesUrl" placeholder="URL" required="" aria-required="true">
+                        <input type="url" class="form-control" id="url" name="servicesUrl" placeholder="URL" th:value="${metaData.url}" required="" aria-required="true">
                         <small class="form-text text-muted pt-1"><i class="fas fa-info-circle me-2 text-primary"></i>서비스 URL을 작성해주세요</small>
                     </div>
 
 
-
                     <div class="col-12">
                         <label class="sr-only" for="title">Title</label>
-                        <input type="text" class="form-control" id="title" name="title" placeholder="Title" required="" aria-required="true">
+                        <input type="text" class="form-control" id="title" name="title" placeholder="Title" th:value="${metaData.title}" required="" aria-required="true">
                         <small class="form-text text-muted pt-1"><i class="fas fa-info-circle me-2 text-primary"></i>간단한 서비스 설명해주세요</small>
                     </div>
 
 
                     <div class="col-12">
                         <label class="sr-only" for="content">explain About Service ... </label>
-                        <textarea class="form-control" id="content" name="content" placeholder="explain About Service ... " rows="10" required="" aria-required="true"></textarea>
+                        <textarea class="form-control" id="content" name="content" placeholder="explain About Service ... " th:value="${metaData.description}" rows="10" required="" aria-required="true"></textarea>
                         <small class="form-text text-muted pt-1"><i class="fas fa-info-circle me-2 text-primary"></i>서비스를 설명해주세요</small>
                     </div>
 

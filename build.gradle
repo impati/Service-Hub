@@ -19,6 +19,9 @@ repositories {
 }
 
 dependencies {
+
+    implementation 'org.jsoup:jsoup:1.15.3'
+
     implementation "com.querydsl:querydsl-jpa"
     implementation "com.querydsl:querydsl-core"
     implementation "com.querydsl:querydsl-collections"
