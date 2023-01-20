@@ -1,11 +1,14 @@
 package com.example.servicehub.web;
 
+import com.example.servicehub.dto.PopularityServiceDto;
+import com.example.servicehub.dto.ServiceSearchConditionForm;
 import com.example.servicehub.dto.ServicesRegisterForm;
 import com.example.servicehub.service.CategoryAdminister;
+import com.example.servicehub.service.ServiceSearch;
 import com.example.servicehub.service.ServicesRegister;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,10 +20,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/service")
-public class ServiceRegisterController {
+public class ServiceController {
 
     private final CategoryAdminister categoryAdminister;
     private final ServicesRegister servicesRegister;
+    private final ServiceSearch serviceSearch;
 
     @GetMapping("/registration")
     public String renderServiceRegistrationPage(Model model){
@@ -33,6 +37,17 @@ public class ServiceRegisterController {
     public String RegisterService(@ModelAttribute ServicesRegisterForm servicesRegisterForm){
         servicesRegister.registerServices(servicesRegisterForm);
         return "redirect:/";
+    }
+
+    @GetMapping("/search")
+    public String renderServiceSearch(@ModelAttribute ServiceSearchConditionForm serviceSearchConditionForm, Model model){
+
+        Page<PopularityServiceDto> searchedServices = serviceSearch.search(serviceSearchConditionForm);
+        model.addAttribute("searchedServices",searchedServices.getContent());
+        model.addAttribute("serviceSearchConditionForm",serviceSearchConditionForm);
+        model.addAttribute("categories",categoryAdminister.getAllCategories());
+
+        return "service/search";
     }
 
 }
