@@ -1,10 +1,8 @@
 package com.example.servicehub.support;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
 
-@Data
 @ToString
 public class ServiceMetaData {
     private String siteName;
@@ -44,23 +42,33 @@ public class ServiceMetaData {
     }
 
     public String getSiteName() {
-        return siteName == null ? "" :siteName;
+        return getNullOrBlank(this.siteName);
     }
 
     public String getTitle() {
-        return title == null ? "" :title;
+        return getNullOrBlank(this.title);
     }
 
     public String getUrl() {
-        return url == null ? "" :url;
+        return getNullOrBlank(this.url);
     }
 
     public String getImage(){
-        if(this.image != null && this.image.contains("http")) return this.image;
+        if(isUrl(getNullOrBlank(this.image))) return this.image;
         return null;
     }
 
     public String getDescription() {
-        return description == null ? "" :description;
+        return getNullOrBlank(this.description);
+    }
+
+    private String getNullOrBlank(String str){
+        if(str == null) return "";
+        return str;
+    }
+
+    private boolean isUrl(String path){
+        if(path.contains("http"))return true;
+        return false;
     }
 }

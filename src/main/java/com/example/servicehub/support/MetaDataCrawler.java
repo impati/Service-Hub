@@ -16,7 +16,7 @@ public class MetaDataCrawler {
         try{
             return getMetaData(serviceUrl);
         }catch (Exception e){
-            throw new ServiceConnectFailException(serviceUrl + "연결에 실패하였습니다");
+            throw new ServiceConnectFailException(serviceUrl + " 연결에 실패하였습니다");
         }
     }
 
