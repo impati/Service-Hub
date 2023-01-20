@@ -36,8 +36,8 @@ class ServicesRegisterTest {
     @Autowired private ServiceCategoryRepository serviceCategoryRepository;
 
     @Test
-    @DisplayName("서비스 등록 테스트")
-    public void givenServiceRegisterForm_whenSavingServices_thenSaveServiceWithCategories() throws Exception{
+    @DisplayName("서비스 등록 테스트 - 로고 파일")
+    public void givenServiceRegisterFormWithLogoFile_whenSavingServices_thenSaveServiceWithCategories() throws Exception{
         // given
         List<String> categoryList = List.of("IT","REPO");
         String serviceUrl = "https://www.inflearn.com/";
@@ -60,6 +60,30 @@ class ServicesRegisterTest {
                 .stream()
                 .forEach(serviceCategory -> {
                     assertThat(serviceCategory.getCategory().getName()).containsAnyOf("IT","REPO");
+                });
+    }
+
+    @Test
+    @DisplayName("서비스 등록 테스트 - 로고 URL")
+    public void givenServiceRegisterFormWithLogoURL_whenSavingServices_thenSaveServiceWithCategories() throws Exception{
+        // given
+        List<String> categoryList = List.of("IT");
+        String serviceUrl = "https://papago.naver.com/";
+        String title = "교육 플랫폼입니다";
+        String content = "hi 인프런";
+        // when
+        ServicesRegisterForm servicesRegisterForm =
+                ServicesRegisterForm.of(categoryList,"인프런",serviceUrl,title,content,"https://papago.naver.com/static/img/papago_og.png");
+        // then
+        servicesRegister.registerServices(servicesRegisterForm);
+
+        Services services = servicesRepository.findByServiceUrl(serviceUrl).orElseThrow();
+        assertThat(services.getServiceUrl()).isEqualTo(serviceUrl);
+        List<ServiceCategory> serviceCategories = serviceCategoryRepository.findByServices(services);
+        serviceCategories
+                .stream()
+                .forEach(serviceCategory -> {
+                    assertThat(serviceCategory.getCategory().getName()).containsAnyOf("IT");
                 });
     }
 }

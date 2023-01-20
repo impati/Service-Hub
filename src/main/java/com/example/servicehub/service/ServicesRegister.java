@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class ServicesRegister {
     private final LogoManager logoManager;
 
     public void registerServices(ServicesRegisterForm servicesRegisterForm){
-        String logoStoreName = logoManager.tryToRestore(servicesRegisterForm.getLogoFile());
+        String logoStoreName = returnLogoStoreName(servicesRegisterForm.getLogoUrl(),servicesRegisterForm.getLogoFile());
         Services services = Services.of(
                 servicesRegisterForm.getServiceName(),
                 logoStoreName,
@@ -36,6 +37,15 @@ public class ServicesRegister {
         servicesRepository.save(services);
     }
 
+    private String returnLogoStoreName(String logoUrl, MultipartFile logoFile){
+        if(isExistLogoUrl(logoUrl)) return logoManager.download(logoUrl);
+        return logoManager.tryToRestore(logoFile);
+    }
+
+    private boolean isExistLogoUrl(String logoUrl){
+        if(logoUrl != null) return true;
+        return false;
+    }
     private void  addCategoriesToServices(List<String> categories,Services services){
         categoryRepository.findByNames(categories)
                 .stream()

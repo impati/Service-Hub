@@ -6,15 +6,13 @@ import com.example.servicehub.dto.ServicesRegisterForm;
 import com.example.servicehub.service.CategoryAdminister;
 import com.example.servicehub.service.ServiceSearch;
 import com.example.servicehub.service.ServicesRegister;
+import com.example.servicehub.support.MetaDataCrawler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Controller
@@ -25,11 +23,16 @@ public class ServiceController {
     private final CategoryAdminister categoryAdminister;
     private final ServicesRegister servicesRegister;
     private final ServiceSearch serviceSearch;
+    private final MetaDataCrawler metaDataCrawler;
 
     @GetMapping("/registration")
-    public String renderServiceRegistrationPage(Model model){
+    public String renderServiceRegistrationPage(
+            @RequestParam(value = "servicesUrl",required = false) String servicesUrl,
+                                                    Model model){
+        model.addAttribute("metaData",metaDataCrawler.tryToGetMetaData(servicesUrl));
         model.addAttribute("serviceRegisterForm",new ServicesRegisterForm());
         model.addAttribute("categories",categoryAdminister.getAllCategories());
+
         return "service/registration";
     }
 

@@ -6,8 +6,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.UUID;
 
 @Slf4j
@@ -36,6 +39,18 @@ public class LogoManager {
         }
         return null;
     }
+
+    public String download(String logoUrl){
+        String storeName = getFullPath(createUniqueName() + extractExtension(logoUrl));
+        try(InputStream in = new URL(logoUrl).openStream()){
+            Path imagePath = Paths.get(storeName);
+            Files.copy(in, imagePath);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return storeName;
+    }
+
 
     private String extractExtension(String originFileName){
         String[] splitStringByPoint = originFileName.split("\\.");
