@@ -41,9 +41,9 @@ public class LogoManager {
     }
 
     public String download(String logoUrl){
-        String storeName = getFullPath(createUniqueName() + extractExtension(logoUrl));
+        String storeName = createUniqueName() + extractExtension(logoUrl);
         try(InputStream in = new URL(logoUrl).openStream()){
-            Path imagePath = Paths.get(storeName);
+            Path imagePath = Paths.get(getFullPath(storeName));
             Files.copy(in, imagePath);
         } catch (IOException e) {
             throw new RuntimeException(e);
