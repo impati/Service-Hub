@@ -53,23 +53,20 @@
     </div><!--//container-->
   </section>
 
-  <section class="blog-list px-3 py-5 p-md-5">
-    <div class="container single-col-max-width">
+  <section class="blog-list px-3 pr-0 p-md-5">
+    <div class="container  single-col-max-width">
+      <div class="card mb-sm-3 " style="height: 10%" th:each="service : ${searchedServices}">
+        <div class="row" style="line-height: 30%">
 
-
-      <div class="item mb-5" th:each="service : ${searchedServices}">
-        <div class="row g-3 g-xl-0">
-
-          <div class="col-2 col-xl-3">
-            <img class="img-fluid post-thumb " th:src='@{http://impatient.iptime.org:8080/logo/{store} (store=${service.logoStoreName})}' alt="image">
+          <div class="col-md-2">
+            <img class="img-fluid rounded-start" width="50%" th:src='@{http://impatient.iptime.org:8080/logo/{store} (store=${service.logoStoreName})}' alt="image">
           </div>
 
-          <div class="col">
-            <h3 class="title mb-1"><a class="text-link" href="blog-post.html" th:text="${service.serviceName}">Top 3 JavaScript Frameworks</a></h3>
-            <div class="intro" th:text="${service.title}" >Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies...</div>
-            <a class="text-link" href="blog-post.html" th:href="${service.serviceUrl}">Read more &rarr;</a>
+          <div class="col-md-8 card-body"> <a class="text-link" th:href="${service.serviceUrl}">
+            <h5 class="title card-title" th:text="${service.serviceName}">Top 3 JavaScript Frameworks</h5></a>
+            <div style="text-align: right"><a class="text-link" href="blog-post.html" th:href="${service.serviceUrl}">서비스로 이동하기 &rarr;</a></div>
+            <span class="card-text" style="text-overflow: clip" th:text="${service.title}" >Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies...</span>
           </div><!--//col-->
-
         </div><!--//row-->
       </div><!--//item-->
 
