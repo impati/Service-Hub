@@ -10,7 +10,6 @@
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.2.13/dist/semantic.min.css">
   <link rel="stylesheet" href="/css/style.css">
-
 </head>
 
 <body>
@@ -65,7 +64,7 @@
           <div class="col-md-8 card-body"> <a class="text-link" th:href="${service.serviceUrl}">
             <h5 class="title card-title" th:text="${service.serviceName}">Top 3 JavaScript Frameworks</h5></a>
             <div style="text-align: right"><a class="text-link" href="blog-post.html" th:href="${service.serviceUrl}">서비스로 이동하기 &rarr;</a></div>
-            <span class="card-text" style="text-overflow: clip" th:text="${service.title}" >Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies...</span>
+            <span class="card-text text-truncate" th:text="${service.title}" >Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies...</span>
           </div><!--//col-->
         </div><!--//row-->
       </div><!--//item-->
