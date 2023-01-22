@@ -12,4 +12,10 @@ public class ServiceCommentUpdateForm {
     private Long clientId;
     private String content;
     private Long serviceId;
+
+    public ServiceCommentUpdateForm(Long serviceCommentsId, Long clientId, String content) {
+        this.serviceCommentsId = serviceCommentsId;
+        this.clientId = clientId;
+        this.content = content;
+    }
 }
