@@ -9,15 +9,19 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 public class ServiceCommentsDto {
+    private Long commentId;
     private String content;
     private Long clientId;
+    private String createBy;
     private LocalDate createAt;
     private LocalDate lastUpdateAt;
 
     public static ServiceCommentsDto of(ServiceComment serviceComment){
         return new ServiceCommentsDto(
+                serviceComment.getId(),
                 serviceComment.getContent(),
                 serviceComment.getClient().getId(),
+                serviceComment.getCreatedBy(),
                 serviceComment.getCreatedAt(),
                 serviceComment.getUpdatedAt());
     }

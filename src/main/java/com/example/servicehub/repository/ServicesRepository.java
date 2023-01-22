@@ -13,7 +13,7 @@ public interface ServicesRepository extends JpaRepository<Services,Long> , Servi
 
     Optional<Services> findByServiceUrl(String serviceUrl);
 
-    @Query("select s from Services s join fetch s.serviceCategories sc where sc.id =:serviceId")
+    @Query("select s from Services s join fetch s.serviceCategories sc where s.id =:serviceId")
     Optional<Services> findByIdUseFetchJoin(@Param("serviceId") Long serviceId);
 
 }

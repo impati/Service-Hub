@@ -3,6 +3,7 @@ package com.example.servicehub.web;
 import com.example.servicehub.dto.PopularityServiceDto;
 import com.example.servicehub.dto.ServiceSearchConditionForm;
 import com.example.servicehub.dto.ServicesRegisterForm;
+import com.example.servicehub.dto.SingleServiceWithCommentsDto;
 import com.example.servicehub.service.CategoryAdminister;
 import com.example.servicehub.service.ServiceSearch;
 import com.example.servicehub.service.ServicesRegister;
@@ -24,6 +25,7 @@ public class ServiceController {
     private final ServicesRegister servicesRegister;
     private final ServiceSearch serviceSearch;
     private final MetaDataCrawler metaDataCrawler;
+
 
     @GetMapping("/registration")
     public String renderServiceRegistrationPage(
@@ -52,5 +54,15 @@ public class ServiceController {
 
         return "service/search";
     }
+
+    @GetMapping("/{serviceId}")
+    public String renderServicePage(@PathVariable Long serviceId , Model model){
+        model.addAttribute("singleServiceWithCommentsDto"
+                ,serviceSearch.searchSingleService(serviceId, 1L));//  TODO : 사용자 처리
+
+        return "service/service-page";
+    }
+
+
 
 }

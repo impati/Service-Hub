@@ -71,5 +71,13 @@ public class ServiceCommentsAdministerImpl implements ServiceCommentsAdminister 
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public String getCommentContent(Long serviceCommentsId) {
+        return serviceCommentRepository
+                .findById(serviceCommentsId)
+                .orElseThrow(()-> new EntityNotFoundException("유효하지 않은 댓글 접근 입니다."))
+                .getContent();
+    }
+
 
 }

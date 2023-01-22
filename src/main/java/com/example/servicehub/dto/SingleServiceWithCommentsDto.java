@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 @ToString
 public class SingleServiceWithCommentsDto {
 
+    private Long serviceId;
     private String logoStoreName;
     private String serviceName;
     private String serviceUrl;
@@ -22,6 +23,7 @@ public class SingleServiceWithCommentsDto {
 
     public static SingleServiceWithCommentsDto of(Services services , boolean isPossess , List<ServiceCommentsDto> comments){
         SingleServiceWithCommentsDto singleServiceWithCommentsDto = new SingleServiceWithCommentsDto();
+        singleServiceWithCommentsDto.serviceId = services.getId();
         singleServiceWithCommentsDto.logoStoreName = services.getLogoStoreName();
         singleServiceWithCommentsDto.serviceName = services.getServiceName();
         singleServiceWithCommentsDto.serviceUrl = services.getServiceUrl();

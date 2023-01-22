@@ -51,7 +51,7 @@ public class ServiceSearchImpl implements ServiceSearch {
         Services services = servicesRepository.findByIdUseFetchJoin(serviceId)
                 .orElseThrow(() -> new EntityNotFoundException("유효하지 않은 서비스 조회입니다."));
         boolean isPossess = clientServiceRepository.existsServiceAndClientRelationship(services, clientId);
-        List<ServiceCommentsDto> comments = serviceCommentsAdminister.searchComments(serviceId);
+        List<ServiceCommentsDto> comments = serviceCommentsAdminister.searchComments(services.getId());
         return SingleServiceWithCommentsDto.of(services,isPossess,comments);
     }
 

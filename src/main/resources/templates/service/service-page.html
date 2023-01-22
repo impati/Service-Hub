@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:insert="~{fragment/header :: header}"></div>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/3.0.1/github-markdown.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div th:insert="~{fragment/sidebar :: sidebar}"></div>
+
+<div class="main-wrapper">
+    <section class="cta-section theme-bg-light py-5">
+        <div class="container text-center single-col-max-width">
+            <h1 class="heading mb-3" th:text="${singleServiceWithCommentsDto.serviceName}">ServiceName</h1>
+            <a class="btn btn-primary" th:href="${singleServiceWithCommentsDto.serviceUrl}" target="_blank"><i class="fas fa-plane-departure me-2"></i>Service로 이동하기</a>
+        </div><!--//container-->
+    </section>
+    <div class="container resume-container px-3 px-lg-5">
+        <article class="resume-wrapper mx-auto theme-bg-light p-5 mb-5 my-5 shadow-lg">
+
+            <div class="resume-header">
+                <div class="row align-items-center">
+                    <div class="resume-title col-12 col-md-6 col-lg-8 col-xl-9">
+                        <h2 class="resume-name mb-0 text-uppercase" th:text="${singleServiceWithCommentsDto.serviceName}">ServiceName</h2>
+                    </div><!--//resume-title-->
+                    <div class="resume-contact col-12 col-md-6 col-lg-4 col-xl-3">
+
+                        <ul class="list-unstyled mb-0">
+                            <span th:each="category : ${singleServiceWithCommentsDto.categories}">
+                                <li class="mb-2"><i class="fas fa-wpressr fa-fw fa-lg me-2 "></i><span th:text="${category}"></span></li>
+                            </span>
+                        </ul>
+                    </div><!--//resume-contact-->
+                </div><!--//row-->
+
+            </div><!--//resume-header-->
+
+            <hr>
+            <div class="resume-intro py-3">
+                <div class="row align-items-center">
+                    <div class="col-12 col-md-3 col-xl-2 text-center">
+                        <img class="resume-profile-image mb-3 mb-md-0 me-md-5  ms-md-0 rounded mx-auto" th:src='@{/logo/{store} (store=${singleServiceWithCommentsDto.logoStoreName})}' alt="image">
+                    </div>
+
+                    <div class="col text-start">
+                        <p class="mb-0" th:text="${singleServiceWithCommentsDto.serviceName}">Service Title </p>
+                    </div><!--//col-->
+                </div>
+            </div><!--//resume-intro-->
+
+            <hr>
+            <div class="markdown-body">
+                <div class="row">
+                    <div class="resume-main col-12 col-lg-8 col-xl-9   pe-0   pe-lg-5">
+                        <section class="work-section py-3">
+                            <h3 class="text-uppercase resume-section-heading mb-4">Description</h3>
+                            <div class="item mb-3">
+                                <div class="item-content">
+                                    <p th:text="${singleServiceWithCommentsDto.content}">Role description goes here ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Donec pede justo, fringilla vel. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis.</p>
+                                </div>
+                            </div><!--//item-->
+                        </section><!--//work-section-->
+                    </div>
+                    </aside><!--//resume-aside-->
+                </div><!--//row-->
+            </div><!--//resume-body-->
+
+
+            <hr>
+
+
+            <div class="resume-footer text-center">
+
+                <label for="exampleFormControlTextarea1" class="form-label">댓글</label>
+
+                <div class="client-quote border p-2 border-opacity-10 mb-1 " style="height: 4%" th:each="comment :${singleServiceWithCommentsDto.comments}">
+                    <div class="quote-holder" style="height: 1px">
+                        <blockquote class="com"  th:text="${comment.content}">
+                            Simon is a brilliant software engineer! Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis.
+                        </blockquote>
+                        <i class="fas ui-icon-comment"></i>
+                    </div><!--//quote-holder-->
+                    <div class="source-holder">
+                        <!--<div class="source-profile">
+                            <img src="assets/images/clients/profile-4.png" alt="image"/> //TODO : 사용자 프로필 기능이 추가되면
+                        </div> -->
+                        <div class="meta" style="text-align: right">
+                            <div class="name"th:text="${comment.createBy}">James Lee</div>
+                            <div class="info"th:text="${comment.createAt}">James Lee</div>
+                            <span><a class="text-link" th:href="@{/comments/edit/{serviceId}/{commentId} (serviceId = ${singleServiceWithCommentsDto.serviceId},commentId=${comment.commentId})}">수정</a></span>
+                            <span><a class="text-link" th:href="@{/comments/delete/{serviceId}/{commentId} (serviceId = ${singleServiceWithCommentsDto.serviceId},commentId=${comment.commentId})}">삭제</a></span>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+                <br>
+
+                <div class="mb-1">
+                    <form th:action="@{/comments}" method="post">
+                        <input type="hidden" id="serviceId" th:value="${singleServiceWithCommentsDto.serviceId}" name="serviceId">
+                        <textarea class="form-control" name="content"  id="exampleFormControlTextarea1" placeholder="comments..." rows="1"></textarea>
+                        <br>
+                        <div style="text-align: right">
+                            <button class="btn btn-dark" type="submit" id="button-addon2">게시</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div><!--//resume-footer-->
+
+        </article>
+
+    </div><!--//container-->
+
+    <div th:insert="~{fragment/footer :: footer}"></div>
+
+
+</div><!--//main-wrapper-->
+
+<div th:insert="~{fragment/library :: libraries}"></div>
+
+
+</body>
+</html>
+
