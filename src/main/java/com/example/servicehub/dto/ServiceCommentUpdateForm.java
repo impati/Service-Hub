@@ -11,4 +11,5 @@ public class ServiceCommentUpdateForm {
     private Long serviceCommentsId;
     private Long clientId;
     private String content;
+    private Long serviceId;
 }

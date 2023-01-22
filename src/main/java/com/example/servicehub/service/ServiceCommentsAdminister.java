@@ -13,4 +13,5 @@ public interface ServiceCommentsAdminister {
     void updateServiceComment(ServiceCommentUpdateForm serviceCommentUpdateForm);
     void deleteServiceComment(Long serviceCommentsId,Long clientId);
     List<ServiceCommentsDto> searchComments(Long serviceId);
+    String getCommentContent(Long serviceCommentsId);
 }

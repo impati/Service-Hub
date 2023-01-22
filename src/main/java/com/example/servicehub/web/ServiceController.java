@@ -55,7 +55,6 @@ public class ServiceController {
         return "service/search";
     }
 
-
     @GetMapping("/{serviceId}")
     public String renderServicePage(@PathVariable Long serviceId , Model model){
         model.addAttribute("singleServiceWithCommentsDto"
