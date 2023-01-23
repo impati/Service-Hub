@@ -47,6 +47,7 @@ public class ServiceSearchRepositoryImpl implements ServiceSearchRepository{
                 .selectDistinct(Projections.constructor(
                         ClickServiceDto.class,
                         clientService.clickCount,
+                        services.id,
                         services.serviceName,
                         services.logoStoreName,
                         services.serviceUrl,

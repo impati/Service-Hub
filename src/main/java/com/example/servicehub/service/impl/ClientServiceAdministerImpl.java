@@ -4,10 +4,7 @@ import com.example.servicehub.domain.*;
 import com.example.servicehub.dto.ClickServiceDto;
 import com.example.servicehub.dto.PopularityServiceDto;
 import com.example.servicehub.dto.ServiceSearchConditionForm;
-import com.example.servicehub.repository.CategoryRepository;
-import com.example.servicehub.repository.ClientRepository;
-import com.example.servicehub.repository.ClientServiceRepository;
-import com.example.servicehub.repository.ServicesRepository;
+import com.example.servicehub.repository.*;
 import com.example.servicehub.repository.querydsl.ServiceSearchRepository;
 import com.example.servicehub.service.ClientServiceAdminister;
 import lombok.AllArgsConstructor;
@@ -36,6 +33,7 @@ public class ClientServiceAdministerImpl implements ClientServiceAdminister {
     private final ClientRepository clientRepository;
     private final ServicesRepository servicesRepository;
     private final CategoryRepository categoryRepository;
+    private final ServiceCategoryRepository serviceCategoryRepository;
 
     @Override
     public void addClientService(Long clientId, Long serviceId) {
@@ -62,8 +60,12 @@ public class ClientServiceAdministerImpl implements ClientServiceAdminister {
     @Override
     public Page<ClickServiceDto> servicesOfClient(Long clientId, ServiceSearchConditionForm serviceSearchConditionForm) {
         List<Category> categories = categoryRepository.findByNames(serviceSearchConditionForm.getCategories());
-        return servicesRepository.searchByClient(clientId,categories,serviceSearchConditionForm.getServiceName(),
+        Page<ClickServiceDto> servicesWithClick = servicesRepository.searchByClient(clientId, categories, serviceSearchConditionForm.getServiceName(),
                 PageRequest.of(DEFAULT_START_PAGE, DEFAULT_SIZE, Sort.by(Sort.Direction.DESC, CLICK.getName())));
+        for(var service : servicesWithClick.getContent()){
+            service.setCategories(serviceCategoryRepository.findByServiceName(service.getServiceName()));
+        }
+        return servicesWithClick;
     }
 
     @Override
