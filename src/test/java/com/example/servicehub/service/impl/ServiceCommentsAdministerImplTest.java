@@ -95,7 +95,7 @@ class ServiceCommentsAdministerImplTest {
     public void givenCommentAndUnAuthorizeClient_whenUpdatingAndDeleting_thenNothing() throws Exception{
         // given
         ServiceComment serviceComment = serviceCommentRepository.findById(1L).get();
-        Client newClient = Client.of("test","test","test","test@naver.com", CustomRole.USER);
+        Client newClient = Client.of("test","test","test","test@naver.com", CustomRole.ROLE_USER);
         clientRepository.save(newClient);
         // whenUpdating
         serviceCommentsAdminister.updateServiceComment(new ServiceCommentUpdateForm(serviceComment.getId(),newClient.getId(),"XXX"));
