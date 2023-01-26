@@ -77,6 +77,11 @@ public class ClientServiceAdministerImpl implements ClientServiceAdminister {
         return clientService.getServices().getServiceUrl();
     }
 
+    @Override
+    public Client registerClient(Client client) {
+        return clientRepository.save(client);
+    }
+
 
     private ClientAndService createBy(Long clientId,Long serviceId){
         Client client = clientRepository.findById(clientId)
