@@ -19,6 +19,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -120,7 +121,7 @@ class ServiceSearchTest {
                 .map(serviceCategory -> serviceCategory.getCategory().getName())
                 .collect(Collectors.toList());
         // when
-        SingleServiceWithCommentsDto singleServiceWithCommentsDto = serviceSearch.searchSingleService(services.getId(),1L);
+        SingleServiceWithCommentsDto singleServiceWithCommentsDto = serviceSearch.searchSingleService(services.getId(),Optional.ofNullable(1L));
         // then
         assertThat(singleServiceWithCommentsDto.getServiceName())
                 .isEqualTo(services.getServiceName());
@@ -142,8 +143,8 @@ class ServiceSearchTest {
         Client client = clientRepository.findById(1L).get();
 
         // when
-        SingleServiceWithCommentsDto possessSingleServiceWithCommentsDto = serviceSearch.searchSingleService(possessServices.getId(), client.getId());
-        SingleServiceWithCommentsDto nonPossessSingleServiceWithCommentsDto = serviceSearch.searchSingleService(nonPossessServices.getId(), client.getId());
+        SingleServiceWithCommentsDto possessSingleServiceWithCommentsDto = serviceSearch.searchSingleService(possessServices.getId(), Optional.ofNullable(client.getId()));
+        SingleServiceWithCommentsDto nonPossessSingleServiceWithCommentsDto = serviceSearch.searchSingleService(nonPossessServices.getId(), Optional.ofNullable(client.getId()));
         // then
 
         assertThat(possessSingleServiceWithCommentsDto.isPossess()).isTrue();
@@ -155,11 +156,22 @@ class ServiceSearchTest {
     public void givenServiceIdAndClientID_whenSearching_thenReturnServiceWithComments() throws Exception{
         // given
         // when
-        SingleServiceWithCommentsDto singleServiceWithCommentsDto = serviceSearch.searchSingleService(1L, 1L);
+        SingleServiceWithCommentsDto singleServiceWithCommentsDto = serviceSearch.searchSingleService(1L, Optional.ofNullable(1L));
         // then
         assertThat(singleServiceWithCommentsDto.getComments().size())
                 .isEqualTo(1);
     }
 
+
+    @Test
+    @DisplayName("단일 서비스 조회 - 인증된 사용자가 아닐 경우")
+    public void givenUnAuthenticationUser_whenSearchingServicePage_thenReturnServiceWithComments() throws Exception{
+        // given
+        // when
+        SingleServiceWithCommentsDto singleServiceWithCommentsDto = serviceSearch.searchSingleService(1L, Optional.ofNullable(null));
+        // then
+        assertThat(singleServiceWithCommentsDto.getComments().size())
+                .isEqualTo(1);
+    }
 
 }

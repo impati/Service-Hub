@@ -1,7 +1,6 @@
 package com.example.servicehub.service.impl;
 
 import com.example.servicehub.domain.Category;
-import com.example.servicehub.domain.ServicePage;
 import com.example.servicehub.domain.Services;
 import com.example.servicehub.dto.PopularityServiceDto;
 import com.example.servicehub.dto.ServiceCommentsDto;
@@ -22,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 import static com.example.servicehub.domain.ServicePage.DEFAULT_START_PAGE;
 import static com.example.servicehub.domain.ServicePage.POPULARITY;
@@ -40,18 +40,25 @@ public class ServiceSearchImpl implements ServiceSearch {
 
     @Override
     public Page<PopularityServiceDto> search(ServiceSearchConditionForm serviceSearchConditionForm) {
+
         List<Category> categories = categoryRepository.findByNames(serviceSearchConditionForm.getCategories());
+
         List<Services> searchedService = servicesRepository.search(categories, serviceSearchConditionForm.getServiceName());
+
         return servicesRepository.findServices(searchedService,
                 PageRequest.of(DEFAULT_START_PAGE,DEFAULT_PAGE_SIZE, Sort.by(Sort.Direction.ASC, POPULARITY.getName())));
     }
 
     @Override
-    public SingleServiceWithCommentsDto searchSingleService(Long serviceId, Long clientId) {
+    public SingleServiceWithCommentsDto searchSingleService(Long serviceId, Optional<Long> optionalClientId) {
+
         Services services = servicesRepository.findByIdUseFetchJoin(serviceId)
                 .orElseThrow(() -> new EntityNotFoundException("유효하지 않은 서비스 조회입니다."));
-        boolean isPossess = clientServiceRepository.existsServiceAndClientRelationship(services, clientId);
+
+        boolean isPossess = clientServiceRepository.existsServiceAndClientRelationship(services, optionalClientId.orElse(0L));
+
         List<ServiceCommentsDto> comments = serviceCommentsAdminister.searchComments(services.getId());
+
         return SingleServiceWithCommentsDto.of(services,isPossess,comments);
     }
 
