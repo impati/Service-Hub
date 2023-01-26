@@ -13,8 +13,10 @@ import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.access.vote.RoleHierarchyVoter;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -40,12 +42,16 @@ public class SecurityConfig {
                     auth.mvcMatchers("/comments/**").hasRole("USER");
                     auth.anyRequest().permitAll();
         });
-
         httpSecurity
                 .formLogin()
                 .loginPage("/login")
                 .loginProcessingUrl("/login_process")
-                .successHandler(successHandler);
+                .successHandler(successHandler)
+                .and()
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login")
+                .deleteCookies("JSESSIONID", "remember-me");
 
 
         return httpSecurity.build();
