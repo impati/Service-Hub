@@ -11,4 +11,9 @@ public class ServiceCommentForm {
     private Long serviceId;
     private Long clientId;
     private String content;
+
+
+    public void assignAnAuthor(Long clientId){
+        this.clientId = clientId;
+    }
 }

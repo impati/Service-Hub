@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.*;
 @DisplayName(" 사용자 서비스 기능 ")
 @DataJpaTest
 @Import({TestJpaConfig.class , ClientServiceAdministerImpl.class})
-class ClientServiceAdministerImplTest {
+class dClientServiceAdministerImplTest {
 
     @Autowired private ClientServiceAdminister clientServiceAdminister;
     @Autowired private ClientRepository clientRepository;
@@ -38,7 +38,7 @@ class ClientServiceAdministerImplTest {
     public void givenClientIdAndServiceId_whenAdding_thenAddServiceOfClient() throws Exception{
         // given
         Client newClient = Client.of("test","test",
-                "123","yongs@naver.com", CustomRole.USER);
+                "123","yongs@naver.com", CustomRole.ROLE_USER);
         clientRepository.save(newClient);
 
         // when
@@ -57,7 +57,7 @@ class ClientServiceAdministerImplTest {
     public void givenClientAndServiceDuplication_whenOneAdding_thenOneAddServiceForClient() throws Exception{
         // given
         Client newClient = Client.of("test","test",
-                "123","yongs@naver.com", CustomRole.USER);
+                "123","yongs@naver.com", CustomRole.ROLE_USER);
         clientRepository.save(newClient);
         // when
         clientServiceAdminister.addClientService(newClient.getId(), 1L);

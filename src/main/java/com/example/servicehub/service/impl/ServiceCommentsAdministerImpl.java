@@ -41,7 +41,7 @@ public class ServiceCommentsAdministerImpl implements ServiceCommentsAdminister 
 
     @Override
     public void updateServiceComment(ServiceCommentUpdateForm serviceCommentUpdateForm) {
-        ServiceComment serviceComment  = serviceCommentRepository.findById(serviceCommentUpdateForm.getServiceCommentsId())
+        ServiceComment serviceComment  = serviceCommentRepository.findById(serviceCommentUpdateForm.getCommentId())
                 .orElseThrow(()-> new EntityNotFoundException("유효하지 않은 댓글을 수정 시도했습니다"));
 
         if(isAuthorizeToChangeComments(serviceComment,serviceCommentUpdateForm.getClientId()))

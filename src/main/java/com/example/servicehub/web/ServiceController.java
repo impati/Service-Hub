@@ -8,9 +8,11 @@ import com.example.servicehub.service.CategoryAdminister;
 import com.example.servicehub.service.ServiceSearch;
 import com.example.servicehub.service.ServicesRegister;
 import com.example.servicehub.support.MetaDataCrawler;
+import com.example.servicehub.web.util.ClientIdGetter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -56,9 +58,9 @@ public class ServiceController {
     }
 
     @GetMapping("/{serviceId}")
-    public String renderServicePage(@PathVariable Long serviceId , Model model){
+    public String renderServicePage(@PathVariable Long serviceId , UsernamePasswordAuthenticationToken authenticationToken, Model model){
         model.addAttribute("singleServiceWithCommentsDto"
-                ,serviceSearch.searchSingleService(serviceId, 1L));//  TODO : 사용자 처리
+                ,serviceSearch.searchSingleService(serviceId, ClientIdGetter.getIdForm(authenticationToken)));
 
         return "service/service-page";
     }
