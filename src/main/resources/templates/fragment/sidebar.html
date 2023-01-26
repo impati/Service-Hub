@@ -3,7 +3,7 @@
 <body>
 <header class="header text-center" th:fragment="sidebar">
     <div class="force-overflow">
-        <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html">Impati</a></h1>
+        <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html" th:text="${#authentication.getName()}">SERVICE HUB</a></h1>
 
         <nav class="navbar navbar-expand-lg navbar-dark" >
 

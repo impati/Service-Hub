@@ -91,8 +91,8 @@
                         <div class="meta" style="text-align: right">
                             <div class="name"th:text="${comment.createBy}">James Lee</div>
                             <div class="info"th:text="${comment.createAt}">James Lee</div>
-                            <span><a class="text-link" th:href="@{/comments/edit/{serviceId}/{commentId} (serviceId = ${singleServiceWithCommentsDto.serviceId},commentId=${comment.commentId})}">수정</a></span>
-                            <span><a class="text-link" th:href="@{/comments/delete/{serviceId}/{commentId} (serviceId = ${singleServiceWithCommentsDto.serviceId},commentId=${comment.commentId})}">삭제</a></span>
+                            <span><a class="text-link" th:if="${#authentication.name == comment.createBy}" th:href="@{/comments/edit (serviceId = ${singleServiceWithCommentsDto.serviceId},commentId=${comment.commentId})}">수정</a></span>
+                            <span><a class="text-link" th:if="${#authentication.name == comment.createBy}" th:href="@{/comments/delete (serviceId = ${singleServiceWithCommentsDto.serviceId},commentId=${comment.commentId})}">삭제</a></span>
                         </div>
                     </div>
                     <br>
