@@ -6,12 +6,6 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.Objects;
 
-/**
- *  1.서비스 회원 가입
- *  2.서비스 회원 가입 후 SSO 연동
- *  3.SSO 로그인 후 서비스 회원 가입 (O)
- */
-
 @Entity
 @Getter
 @ToString
