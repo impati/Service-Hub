@@ -32,7 +32,7 @@ public class ClientController {
 
         List<String> allCategories = categoryAdminister.getAllCategories();
         ServiceSearchConditionForm serviceSearchConditionForm = ServiceSearchConditionForm.of(categoryAdminister.getAllCategories(), serviceName);
-        model.addAttribute("serviceWithClick",clientServiceAdminister.servicesOfClient(ClientIdGetter.getIdForm(authenticationToken), serviceSearchConditionForm).getContent()); // 사용자 처리
+        model.addAttribute("serviceWithClick",clientServiceAdminister.servicesOfClient(ClientIdGetter.getIdFrom(authenticationToken), serviceSearchConditionForm).getContent());
         model.addAttribute("allCategories",allCategories);
 
         return "/client/client-page";
@@ -44,7 +44,7 @@ public class ClientController {
             @RequestParam String serviceUrl,
             UsernamePasswordAuthenticationToken authenticationToken){
 
-        clientServiceAdminister.countClickAndReturnUrl(ClientIdGetter.getIdForm(authenticationToken),serviceId);
+        clientServiceAdminister.countClickAndReturnUrl(ClientIdGetter.getIdFrom(authenticationToken),serviceId);
 
         return "redirect:" + serviceUrl;
     }

@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @Slf4j
 @Controller
 @RequiredArgsConstructor
@@ -24,7 +26,7 @@ public class ServiceCommentsController {
     @PostMapping
     public String addServiceComments(@ModelAttribute ServiceCommentForm serviceCommentForm,
                                      UsernamePasswordAuthenticationToken authenticationToken){
-        serviceCommentForm.assignAnAuthor(ClientIdGetter.getIdForm(authenticationToken));
+        serviceCommentForm.assignAnAuthor(ClientIdGetter.getIdFrom(authenticationToken));
         serviceCommentsAdminister.addServiceComment(serviceCommentForm);
         return "redirect:/service/" + serviceCommentForm.getServiceId();
     }
@@ -35,7 +37,7 @@ public class ServiceCommentsController {
                                         Model model){
 
         model.addAttribute("singleServiceWithCommentsDto"
-                ,serviceSearch.searchSingleService(serviceCommentUpdateForm.getServiceId(),ClientIdGetter.getIdForm(authenticationToken)));
+                ,serviceSearch.searchSingleService(serviceCommentUpdateForm.getServiceId(), Optional.ofNullable(ClientIdGetter.getIdFrom(authenticationToken))));
         model.addAttribute("commentId",serviceCommentUpdateForm.getCommentId());
         model.addAttribute("commentContent",serviceCommentsAdminister.getCommentContent(serviceCommentUpdateForm.getCommentId()));
         return "/service/service-edit-page";
@@ -44,7 +46,7 @@ public class ServiceCommentsController {
     @PostMapping("/edit")
     public String updateComment(@ModelAttribute ServiceCommentUpdateForm serviceCommentUpdateForm,
                                 UsernamePasswordAuthenticationToken authenticationToken){
-        serviceCommentUpdateForm.assignClient(ClientIdGetter.getIdForm(authenticationToken));
+        serviceCommentUpdateForm.assignClient(ClientIdGetter.getIdFrom(authenticationToken));
         serviceCommentsAdminister.updateServiceComment(serviceCommentUpdateForm);
         return "redirect:/service/" + serviceCommentUpdateForm.getServiceId();
     }
@@ -53,7 +55,7 @@ public class ServiceCommentsController {
     public String deleteComment(@ModelAttribute ServiceCommentUpdateForm serviceCommentUpdateForm,
                                 UsernamePasswordAuthenticationToken authenticationToken){
         serviceCommentsAdminister.deleteServiceComment(serviceCommentUpdateForm.getCommentId(),
-                ClientIdGetter.getIdForm(authenticationToken));
+                ClientIdGetter.getIdFrom(authenticationToken));
         return "redirect:/service/" + serviceCommentUpdateForm.getServiceId();
     }
 

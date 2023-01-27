@@ -39,35 +39,18 @@
                 </ul><!--//filters-->
             </div>
 
-            <div class="project-cards row isotope">
-                <div class="isotope-item col-md-6 mb-5" style="width: 20%; height: 10%"  th:classappend="${service.getCategories()}" th:each="service : ${serviceWithClick}">
-                    <div class="card project-card" >
-                        <div class="row">
-
-                            <div class="col-12 col-xl-5 card-img-holder">
+            <div class="project-meta row isotope" style="width: 80%">
+                <div class="isotope-item" style="width: 20%; height: 20%"  th:classappend="${service.getCategories()}" th:each="service : ${serviceWithClick}">
+                        <div class="flex-sm-row" style="width: 50%; height: 50%">
+                            <div class="col">
+                                <a class="card-link"  th:href="@{/client/click/(serviceId=${service.serviceId},serviceUrl=${service.serviceUrl})}">
                                 <img th:src="@{/logo/{logoStoreName} (logoStoreName=${service.logoStoreName})}" class="card-img" alt="image">
-                            </div>
-
-                            <div class="col-12 col-xl-7">
-                                <div class="card-body">
-                                    <h5 class="card-title" th:text="${service.serviceName}"><a th:href="@{/service/{serviceId} (serviceId=${service.serviceId})}" class="theme-link">Project Heading</a></h5>
-                                    <p class="card-text" th:text="${service.title}">.</p>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="link-mask" >
-                            <a class="link-mask-link"  th:href="@{/client/click(serviceId=${service.serviceId},serviceUrl=${service.serviceUrl})}"></a>
-                            <div class="link-mask-text">
-                                <a class="btn btn-secondary" th:href="@{/client/click/(serviceId=${service.serviceId},serviceUrl=${service.serviceUrl})}">
-                                    <i class="fas fa-eye me-2"></i>GO TO Service
                                 </a>
                             </div>
-                        </div><!--//link-mask-->
-
-                    </div><!--//card-->
-                </div><!--//col-->
+                            <a class="tile" style="text-align: center" th:text="${service.serviceName}"  th:href="@{/service/{serviceId} (serviceId=${service.serviceId})}">
+                            </a>
+                        </div><!--//card-->
+                </div>
             </div><!--//row-->
 
         </div>
