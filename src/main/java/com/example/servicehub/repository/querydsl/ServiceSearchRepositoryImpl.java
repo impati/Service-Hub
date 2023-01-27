@@ -77,7 +77,8 @@ public class ServiceSearchRepositoryImpl implements ServiceSearchRepository{
                         services.serviceName,
                         services.logoStoreName,
                         services.serviceUrl,
-                        services.title
+                        services.title,
+                        services.id
                 ))
                 .from(services)
                 .where(services.in(serviceList))
