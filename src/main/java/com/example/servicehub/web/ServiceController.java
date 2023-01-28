@@ -1,8 +1,10 @@
 package com.example.servicehub.web;
 
+import com.example.servicehub.domain.Client;
 import com.example.servicehub.dto.PopularityServiceDto;
 import com.example.servicehub.dto.ServiceSearchConditionForm;
 import com.example.servicehub.dto.ServicesRegisterForm;
+import com.example.servicehub.security.authentication.ClientContext;
 import com.example.servicehub.service.CategoryAdminister;
 import com.example.servicehub.service.ServiceSearch;
 import com.example.servicehub.service.ServicesRegister;
@@ -12,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -52,9 +55,12 @@ public class ServiceController {
     }
 
     @GetMapping("/search")
-    public String renderServiceSearch(@ModelAttribute ServiceSearchConditionForm serviceSearchConditionForm, Model model){
+    public String renderServiceSearch(@ModelAttribute ServiceSearchConditionForm serviceSearchConditionForm,
+                                      Authentication authentication ,
+                                      Model model){
 
-        Page<PopularityServiceDto> searchedServices = serviceSearch.search(serviceSearchConditionForm);
+
+        Page<PopularityServiceDto> searchedServices = serviceSearch.search(serviceSearchConditionForm,returnClientId(authentication));
 
         model.addAttribute("searchedServices",searchedServices.getContent());
 
@@ -63,6 +69,14 @@ public class ServiceController {
         model.addAttribute("categories",categoryAdminister.getAllCategories());
 
         return "service/search";
+    }
+
+    private Optional<Long> returnClientId(Authentication authentication){
+        if(authentication == null) return Optional.empty();
+        return Optional.of(authentication.getPrincipal())
+                .map(type->(ClientContext)type)
+                .map(ClientContext::getClient)
+                .map(Client::getId);
     }
 
     @GetMapping("/{serviceId}")

@@ -14,8 +14,8 @@ public interface ClientServiceRepository extends JpaRepository<ClientService,Lon
 
     Optional<ClientService> findClientServiceByClientAndServices(Client client , Services services);
 
-    @Query("select count(cs) > 0 from ClientService cs where cs.services = :service and cs.client.id = :client")
-    boolean existsServiceAndClientRelationship(@Param("service")Services services , @Param("client") Long clientId);
+    @Query("select count(cs) > 0 from ClientService cs where cs.services.id = :service and cs.client.id = :client")
+    boolean existsServiceAndClientRelationship(@Param("service")Long serviceId , @Param("client") Long clientId);
 
     @Query("select cs.services from ClientService cs where cs.client.id = :clientId ")
     List<Services> findServiceByClientId(@Param("clientId") Long clientId);
