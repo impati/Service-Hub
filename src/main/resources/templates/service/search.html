@@ -56,27 +56,33 @@
   <section class="blog-list px-3 pr-0 p-md-5">
     <div class="container  single-col-max-width">
 
-        <div class="card mb-sm-3 " style="height: 10%" th:each="service : ${searchedServices}">
+      <div class="card mb-sm-3 " style="height: 10%" th:each="service : ${searchedServices}">
 
 
-            <div class="row" style="line-height: 30%">
+        <div class="row" style="line-height: 30%">
 
-              <div class="col-md-2">
-                <a class="card-link"  th:href="${service.serviceUrl}">
-                  <img class="img-fluid rounded-start" width="50%" th:src='@{http://impatient.iptime.org:8080/logo/{store} (store=${service.logoStoreName})}' alt="image">
-                </a>
-              </div>
+          <div class="col-md-2">
+            <a class="card-link"  th:href="${service.serviceUrl}">
+              <img class="img-fluid rounded-start" width="50%" th:src='@{http://impatient.iptime.org:8080/logo/{store} (store=${service.logoStoreName})}' alt="image">
+            </a>
+          </div>
 
-              <div class="col-md-8 card-body">
-                <a class="card-link" th:href="${service.serviceUrl}">
-                  <h5 class="title card-title" th:text="${service.serviceName}">Top 3 JavaScript Frameworks</h5>
-                  <div style="text-align: right"><a class="text-link"  th:href="@{/service/{serviceId} (serviceId=${service.serviceId})}">서비스 정보보기 &rarr;</a></div>
-                  <span class="card-text text-truncate" th:text="${service.title}" >Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies...</span>
-                </a>
-              </div><!--//col-->
-            </div><!--//row-->
+          <div class="col-md-8 card-body">
+            <a class="card-link" th:href="${service.serviceUrl}">
+              <h5 class="title card-title" th:text="${service.serviceName}">Top 3 JavaScript Frameworks</h5>
+              <div style="text-align: right"><a class="text-link"  th:href="@{/service/{serviceId} (serviceId=${service.serviceId})}">서비스 정보 보기</a></div>
+              <span class="card-text text-truncate" th:text="${service.title}" >Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies...</span>
+            </a>
+          </div><!--//col-->
 
-        </div><!--//item-->
+          <div class="col">
+            <button th:onclick="|javascript:addAction('${service.serviceId}')|" style="width: 100%;height: 100%" th:unless="${service.isPossess}" sec:authorize="isAuthenticated()" class="btn btn-outline-primary justify-content-sm-center"> + </button>
+            <button th:onclick="|javascript:deleteAction('${service.serviceId}')|" style="width: 100%;height: 100%" th:if="${service.isPossess}" sec:authorize="isAuthenticated()" class="btn btn-outline-danger justify-content-sm-center"> - </button>
+          </div>
+
+        </div><!--//row-->
+
+      </div><!--//item-->
 
       <nav class="blog-nav nav nav-justified my-5">
         <a class="nav-link-prev nav-item nav-link d-none rounded-left" href="#">Previous<i class="arrow-prev fas fa-long-arrow-alt-left"></i></a>
@@ -88,6 +94,60 @@
   <div th:insert="~{fragment/footer :: footer}"></div>
 
 </div><!--//main-wrapper-->
+
+<script type="text/javascript">
+
+
+
+  function addAction(serviceId){
+
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+
+    $.ajax({
+      type: 'POST',
+      url:'http://impatient.iptime.org:8080/client/add-service/' + serviceId,
+      beforeSend : function(xhr)
+      {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+        xhr.setRequestHeader(header, token);
+      },
+      async: false, //동기, 비동기 여부
+      cache :false, // 캐시 여부
+      success: function(data){
+        console.log(data.name);
+        window.location="http://impatient.iptime.org:8080/service/search";
+      },
+      error:function(xhr,status,error){
+        console.log('error:'+error);
+      },
+    });
+  }
+
+  function deleteAction(serviceId){
+
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+
+    $.ajax({
+      type: 'POST',
+      url:'http://impatient.iptime.org:8080/client/delete-service/' + serviceId,
+      beforeSend : function(xhr)
+      {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+        xhr.setRequestHeader(header, token);
+      },
+      async: false, //동기, 비동기 여부
+      cache :false, // 캐시 여부
+      success: function(data){
+        console.log(data.name);
+        window.location="http://impatient.iptime.org:8080/service/search";
+      },
+      error:function(xhr,status,error){
+        console.log('error:'+error);
+      }
+    });
+  }
+
+</script>
 
 <script src="/js/jquery.min.js"></script>
 <script src="/js/popper.js"></script>
