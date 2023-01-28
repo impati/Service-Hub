@@ -1,5 +1,6 @@
 package com.example.servicehub.service;
 
+import com.example.servicehub.domain.Client;
 import com.example.servicehub.dto.PopularityServiceDto;
 import com.example.servicehub.dto.ServiceSearchConditionForm;
 import com.example.servicehub.dto.SingleServiceWithCommentsDto;
@@ -9,6 +10,6 @@ import java.util.Optional;
 
 
 public interface ServiceSearch {
-    Page<PopularityServiceDto> search(ServiceSearchConditionForm serviceSearchConditionForm);
-    SingleServiceWithCommentsDto searchSingleService(Long serviceId , Optional<Long> clientId);
+    Page<PopularityServiceDto> search(ServiceSearchConditionForm serviceSearchConditionForm,Optional<Long> optionalClientId);
+    SingleServiceWithCommentsDto searchSingleService(Long serviceId , Optional<Long> optionalClientId);
 }

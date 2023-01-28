@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -9,11 +9,16 @@
         <title>ServiceHub</title>
 
         <!-- Meta -->
+
         <meta charset="utf-8">
         <meta property="og:title" content="SERViCE HUB" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="http://impatient.iptime.org:8080" />
         <meta property="og:image" content="http://impatient.iptime.org:8080/logo/impati.jpeg" />
+
+        <meta th:name="_csrf" th:content="${_csrf.token}"/>
+        <meta th:name="_csrf_header" th:content="${_csrf.headerName}"/>
+
 
         <link rel="shortcut icon" href="favicon.ico">
         <!-- Google Fonts -->

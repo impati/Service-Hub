@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+
     <div th:insert="~{fragment/header :: header}"></div>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/3.0.1/github-markdown.css" rel="stylesheet">
 </head>
@@ -17,9 +18,15 @@
         <div class="container text-center single-col-max-width">
             <h1 class="heading mb-3" th:text="${singleServiceWithCommentsDto.serviceName}">ServiceName</h1>
             <a class="btn btn-primary" th:href="${singleServiceWithCommentsDto.serviceUrl}" target="_blank"><i class="fas fa-plane-departure me-2"></i>Service로 이동하기</a>
+
+            <button class="btn btn-primary" th:onclick="|javascript:addAction('${singleServiceWithCommentsDto.serviceId}')|"  th:unless="${singleServiceWithCommentsDto.isPossess}" sec:authorize="isAuthenticated()" > 내 서비스 추가 </button>
+            <button class="btn btn-primary" th:onclick="|javascript:deleteAction('${singleServiceWithCommentsDto.serviceId}')|"  th:if="${singleServiceWithCommentsDto.isPossess}" sec:authorize="isAuthenticated()" > 내 서비스 삭제 </button>
+
         </div><!--//container-->
     </section>
+
     <div class="container resume-container px-3 px-lg-5">
+
         <article class="resume-wrapper mx-auto theme-bg-light p-5 mb-5 my-5 shadow-lg">
 
             <div class="resume-header">
@@ -120,6 +127,62 @@
 
 
 </div><!--//main-wrapper-->
+
+<script type="text/javascript">
+
+
+
+    function addAction(serviceId){
+
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+
+        $.ajax({
+            type: 'POST',
+            url:'http://impatient.iptime.org:8080/client/add-service/' + serviceId,
+            beforeSend : function(xhr)
+            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                xhr.setRequestHeader(header, token);
+            },
+            async: false, //동기, 비동기 여부
+            cache :false, // 캐시 여부
+            success: function(data){
+                console.log(data.name);
+                window.location="http://impatient.iptime.org:8080/service/" + serviceId;
+            },
+            error:function(xhr,status,error){
+                console.log('error:'+error);
+            },
+        });
+    }
+
+    function deleteAction(serviceId){
+
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+
+        $.ajax({
+            type: 'POST',
+            url:'http://impatient.iptime.org:8080/client/delete-service/' + serviceId,
+            beforeSend : function(xhr)
+            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                xhr.setRequestHeader(header, token);
+            },
+            async: false, //동기, 비동기 여부
+            cache :false, // 캐시 여부
+            success: function(data){
+                console.log(data.name);
+                window.location="http://impatient.iptime.org:8080/service/" + serviceId;
+            },
+            error:function(xhr,status,error){
+                console.log('error:'+error);
+            }
+        });
+    }
+
+</script>
+
+<script src="/js/jquery.min.js"></script>
 
 <div th:insert="~{fragment/library :: libraries}"></div>
 

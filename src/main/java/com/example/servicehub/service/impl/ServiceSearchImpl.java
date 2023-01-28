@@ -1,6 +1,7 @@
 package com.example.servicehub.service.impl;
 
 import com.example.servicehub.domain.Category;
+import com.example.servicehub.domain.Client;
 import com.example.servicehub.domain.Services;
 import com.example.servicehub.dto.PopularityServiceDto;
 import com.example.servicehub.dto.ServiceCommentsDto;
@@ -38,15 +39,31 @@ public class ServiceSearchImpl implements ServiceSearch {
     private final ClientServiceRepository clientServiceRepository;
     private final ServiceCommentsAdminister serviceCommentsAdminister;
 
+    // TODO : 쿼리 성능 개선
     @Override
-    public Page<PopularityServiceDto> search(ServiceSearchConditionForm serviceSearchConditionForm) {
+    public Page<PopularityServiceDto> search(ServiceSearchConditionForm serviceSearchConditionForm,Optional<Long> optionalClient) {
 
         List<Category> categories = categoryRepository.findByNames(serviceSearchConditionForm.getCategories());
 
         List<Services> searchedService = servicesRepository.search(categories, serviceSearchConditionForm.getServiceName());
 
-        return servicesRepository.findServices(searchedService,
-                PageRequest.of(DEFAULT_START_PAGE,DEFAULT_PAGE_SIZE, Sort.by(Sort.Direction.ASC, POPULARITY.getName())));
+        Page<PopularityServiceDto> services = servicesRepository.findServices(searchedService,
+                PageRequest.of(DEFAULT_START_PAGE, DEFAULT_PAGE_SIZE, Sort.by(Sort.Direction.ASC, POPULARITY.getName())));
+
+        optionalClient.ifPresent(client -> setClientPossessServices(client, services.getContent()));
+
+        return services;
+    }
+
+    private void setClientPossessServices(Long clientId , List<PopularityServiceDto> services){
+        for(var service : services){
+            if(isClientPossessService(clientId,service.getServiceId()))
+                service.setPossess(true);
+        }
+    }
+
+    private boolean isClientPossessService(Long clientId , Long serviceId){
+        return clientServiceRepository.existsServiceAndClientRelationship(serviceId ,clientId);
     }
 
     @Override
@@ -55,7 +72,7 @@ public class ServiceSearchImpl implements ServiceSearch {
         Services services = servicesRepository.findByIdUseFetchJoin(serviceId)
                 .orElseThrow(() -> new EntityNotFoundException("유효하지 않은 서비스 조회입니다."));
 
-        boolean isPossess = clientServiceRepository.existsServiceAndClientRelationship(services, optionalClientId.orElse(0L));
+        boolean isPossess = clientServiceRepository.existsServiceAndClientRelationship(services.getId(), optionalClientId.orElse(0L));
 
         List<ServiceCommentsDto> comments = serviceCommentsAdminister.searchComments(services.getId());
 
