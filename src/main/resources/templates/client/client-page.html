@@ -39,20 +39,20 @@
                 </ul><!--//filters-->
             </div>
 
-            <div class="project-meta row isotope" style="width: 80%">
-                <div class="isotope-item" style="width: 20%; height: 20%"  th:classappend="${service.getCategories()}" th:each="service : ${serviceWithClick}">
-                        <div class="flex-sm-row" style="width: 50%; height: 50%">
-                            <div class="col">
-                                <a class="card-link"  th:href="@{/client/click/(serviceId=${service.serviceId},serviceUrl=${service.serviceUrl})}">
-                                <img th:src="@{/logo/{logoStoreName} (logoStoreName=${service.logoStoreName})}" class="card-img" alt="image">
+            <div class="project-meta isotope row" style="display: flex; flex-wrap: wrap">
+                <div class="isotope-item col-md-6 mb-5" style="width: 20%;justify-content: center"  th:classappend="${service.getCategories()}" th:each="service : ${serviceWithClick}">
+                        <div class="card" style="width: 60%; height: 100%;border: none;justify-content: center">
+
+                                <a class="card-link" style="display: block;width: 100%" th:href="@{/client/click/(serviceId=${service.serviceId},serviceUrl=${service.serviceUrl})}">
+                                    <img style="width: 50px; display: block" th:src="@{/logo/{logoStoreName} (logoStoreName=${service.logoStoreName})}" class="card-img" alt="image">
                                 </a>
-                            </div>
-                            <a class="tile" style="text-align: center" th:text="${service.serviceName}"  th:href="@{/service/{serviceId} (serviceId=${service.serviceId})}">
-                            </a>
+
+                                <a class="tile" th:text="${service.serviceName}"  th:href="@{/service/{serviceId} (serviceId=${service.serviceId})}">
+                                </a>
+
                         </div><!--//card-->
                 </div>
             </div><!--//row-->
-
         </div>
     </section>
 

@@ -1,97 +1,73 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-
 <body>
 <div th:fragment="toolbar">
-
+    <header>
 
     <!-- Topbar -->
     <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style="justify-content: right">
         <!-- Sidebar Toggle (Topbar) -->
-        <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-            <i class="fa fa-bars"></i>
-        </button>
+        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+            <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
+        </a>
 
-        <!-- Topbar Search -->
-        <form
-                class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-            <div class="input-group">
-                <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                       aria-label="Search" aria-describedby="basic-addon2">
-                <div class="input-group-append">
-                    <button class="btn btn-primary" type="button">
-                        <i class="fas fa-search fa-sm"></i>
-                    </button>
-                </div>
-            </div>
-        </form>
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
 
-        <!-- Topbar Navbar -->
-        <ul class="navbar-nav align-items-xxl-stretch">
-            <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-            <li class="nav-item dropdown no-arrow d-sm-none">
-                <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-search fa-fw"></i>
-                </a>
-                <!-- Dropdown - Messages -->
-                <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                     aria-labelledby="searchDropdown">
-                    <form class="form-inline mr-auto w-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small"
-                                   placeholder="Search for..." aria-label="Search"
-                                   aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </li>
-
-            <!-- Nav Item - Alerts -->
-            <li class="nav-item no-arrow mx-1" sec:authorize="isAnonymous()"><a class="nav-link btn btn-outline-light me-2" th:href="@{/login}">로그인</a></li>
-            <li class="nav-item no-arrow mx-1" sec:authorize="isAuthenticated()"> <form class="form-text" th:action="@{/logout}" method="post"><button type="submit" class="nav-link btn btn-outline-light me-2">로그아웃</button></form></li>
-            <li class="nav-item no-arrow mx-1" sec:authorize="isAnonymous()"> <a class="nav-link btn btn-outline-light me-2" th:href="@{/signup}">회원가입</a></li>
-
-            <!-- Nav Item - User Information -->
-            <li class="nav-item dropdown no-arrow">
-                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="mr-2 d-none d-lg-inline text-gray-600 small" sec:authorize="isAuthenticated()" th:text="${#authentication.name}">Douglas McGee</span>
-                    <img class="img-profile rounded-circle"
-                         src="img/undraw_profile.svg">
-                </a>
-                <!-- Dropdown - User Information -->
-                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                     aria-labelledby="userDropdown">
-                    <a class="dropdown-item" href="#">
-                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                        Profile
-                    </a>
-                    <a class="dropdown-item" href="#">
-                        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                        Settings
-                    </a>
-                    <a class="dropdown-item" href="#">
-                        <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                        Activity Log
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                        Logout
-                    </a>
-                </div>
-            </li>
-
+            <li><a class="btn btn-outline-primary me-2" sec:authorize="hasRole('ADMIN')" th:href="@{/service/registration}">서비스 등록</a></li>
+            <li><a class="btn btn-outline-primary me-2"  th:href="@{/service/search}">서비스 검색</a></li>
         </ul>
 
+        <div class="text-end">
+            <form
+                    class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                <div class="input-group">
+                    <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                           aria-label="Search" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="button">
+                            <i class="fas fa-search fa-sm"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <a class="btn btn-outline-primary me-2" sec:authorize="isAnonymous()" th:href="@{/login}">로그인</a>
+            <a class="btn btn-outline-primary me-2" sec:authorize="isAuthenticated()" onclick="logout()"> 로그아웃</a>
+            <a class="btn btn-outline-primary me-2" sec:authorize="isAnonymous()" th:href="@{/signup}">회원가입</a>
+            <img class="img-profile rounded-circle"
+                 style="width: 5%;height: 5%" src="/assets/images/impati.jpeg">
+            <a class="me-5" href="#" id="userDropdown" role="button" th:href="@{/client}" data-toggle="" aria-haspopup="true" aria-expanded="false">
+                <span class="mr-2 d-none d-lg-inline text-gray-900 " sec:authorize="isAuthenticated()" th:text="${#authentication.name}">Douglas McGee</span>
+            </a>
+
+        </div>
+        <script  type="text/javascript">
+            function logout(){
+                var token = $("meta[name='_csrf']").attr("content");
+                var header = $("meta[name='_csrf_header']").attr("content");
+
+                $.ajax({
+                    type: 'POST',
+                    url:'http://impatient.iptime.org:8080/logout',
+                    beforeSend : function(xhr)
+                    {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                        xhr.setRequestHeader(header, token);
+                    },
+                    async: false, //동기, 비동기 여부
+                    cache :false, // 캐시 여부
+                    success: function(data){
+                        console.log(data.name);
+                        window.location="http://impatient.iptime.org:8080/login";
+                    },
+                    error:function(xhr,status,error){
+                        console.log('error:'+error);
+                    }
+                });
+            }
+
+        </script>
     </nav>
-    <!-- End of Topbar -->
+
+    </header>
 </div>
 </body>
 </html>

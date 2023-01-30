@@ -14,9 +14,7 @@
 
 <body>
 
-<div th:insert="~{fragment/sidebar :: sidebar}"></div>
-
-<div class="main-wrapper">
+<div class="container">
 
     <div th:insert="~{fragment/toolbar :: toolbar}"></div>
 
@@ -33,7 +31,7 @@
 
             <form id="search" th:action method="get">
                 <div class="input-group mb-auto">
-                    <input type="url" class="form-control" id="servicesUrl"  name="servicesUrl" placeholder="URL" aria-label="URL" aria-describedby="button-addon2">
+                    <input type="url" class="form-control bg-light border-0 small" id="servicesUrl"  name="servicesUrl" placeholder="URL" aria-label="URL" aria-describedby="button-addon2">
                     <button class="btn btn-outline-secondary" type="submit" id="button-addon2">검색</button>
                 </div>
             </form>
