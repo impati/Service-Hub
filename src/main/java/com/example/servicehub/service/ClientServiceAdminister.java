@@ -16,5 +16,5 @@ public interface ClientServiceAdminister {
 
     String countClickAndReturnUrl(Long clientId,Long serviceId);
 
-    Client registerClient(Client client);
+    void registerClient(Client client);
 }

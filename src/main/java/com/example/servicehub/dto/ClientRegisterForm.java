@@ -17,27 +17,27 @@ public class ClientRegisterForm {
     @Email
     private String email;
 
-
     private String nickname;
 
     private String username;
 
     private String password;
+
     private String repeatPassword;
 
     private String role;
 
-    public void setEncode(String password){
+    public void setEncode(String encodedPassword){
         if(isNotSamePassword()) throw new PasswordNotMatchException();
-        this.password = password;
+        this.password = encodedPassword;
     }
 
     public Client toEntity(){
-        defaultNickname(username);
+        defaultNickname();
         return Client.of(nickname,username,password,email,CustomRole.valueOf("ROLE_USER"));
     }
 
-    private void defaultNickname(String username){
+    private void defaultNickname(){
         this.nickname = username;
     }
 

@@ -36,8 +36,11 @@ public class HomeController {
 
     @PostMapping("/signup")
     public String signup(@ModelAttribute ClientRegisterForm clientRegisterForm) {
+
         clientRegisterForm.setEncode(passwordEncoder.encode(clientRegisterForm.getPassword()));
+
         clientServiceAdminister.registerClient(clientRegisterForm.toEntity());
+
         return "redirect:/client";
     }
 
