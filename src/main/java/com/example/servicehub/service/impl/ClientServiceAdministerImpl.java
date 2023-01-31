@@ -32,7 +32,6 @@ public class ClientServiceAdministerImpl implements ClientServiceAdminister {
     private final ClientServiceRepository clientServiceRepository;
     private final ClientRepository clientRepository;
     private final ServicesRepository servicesRepository;
-    private final CategoryRepository categoryRepository;
     private final ServiceCategoryRepository serviceCategoryRepository;
 
     @Override
@@ -59,17 +58,15 @@ public class ClientServiceAdministerImpl implements ClientServiceAdminister {
         Optional<ClientService> optionalClientService = clientServiceRepository
                 .findClientServiceByClientAndServices(clientAndService.getClient(),clientAndService.getServices());
 
-        if(optionalClientService.isPresent())
-            clientServiceRepository.delete(optionalClientService.get());
+        optionalClientService.ifPresent(clientServiceRepository::delete);
 
     }
 
 
     @Override
     public Page<ClickServiceDto> servicesOfClient(Long clientId, ServiceSearchConditionForm serviceSearchConditionForm) {
-        List<Category> categories = categoryRepository.findByNames(serviceSearchConditionForm.getCategories());
 
-        Page<ClickServiceDto> servicesWithClick = servicesRepository.searchByClient(clientId, categories, serviceSearchConditionForm.getServiceName(),
+        Page<ClickServiceDto> servicesWithClick = servicesRepository.searchByClient(clientId, serviceSearchConditionForm.getCategories(), serviceSearchConditionForm.getServiceName(),
                 PageRequest.of(DEFAULT_START_PAGE, DEFAULT_SIZE, Sort.by(Sort.Direction.DESC, CLICK.getName())));
 
         for(var service : servicesWithClick.getContent()){
