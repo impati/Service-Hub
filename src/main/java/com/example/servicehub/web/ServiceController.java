@@ -34,10 +34,10 @@ public class ServiceController {
 
 
     @GetMapping("/registration")
-    public String renderServiceRegistrationPage(@RequestParam(value = "servicesUrl",required = false) String servicesUrl,
+    public String renderServiceRegistrationPage(@RequestParam(value = "serviceUrl",required = false) String serviceUrl,
                                                     Model model){
 
-        model.addAttribute("metaData",metaDataCrawler.tryToGetMetaData(servicesUrl));
+        model.addAttribute("metaData",metaDataCrawler.tryToGetMetaData(serviceUrl));
 
         model.addAttribute("serviceRegisterForm",new ServicesRegisterForm());
 
@@ -83,10 +83,10 @@ public class ServiceController {
     public String renderServicePage(@PathVariable Long serviceId , UsernamePasswordAuthenticationToken authenticationToken, Model model){
 
         model.addAttribute("singleServiceWithCommentsDto"
-                ,serviceSearch.searchSingleService(serviceId, Optional.ofNullable(ClientIdGetter.getIdFrom(authenticationToken))));
+        ,serviceSearch.searchSingleService(serviceId, Optional.ofNullable(ClientIdGetter.getIdFrom(authenticationToken))));
 
         return "service/service-page";
-    }
+}
 
 
 
