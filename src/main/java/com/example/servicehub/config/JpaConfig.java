@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -20,7 +21,6 @@ import javax.validation.constraints.Size;
 import java.util.Optional;
 
 @Configuration
-@Slf4j
 @RequiredArgsConstructor
 @EnableJpaAuditing
 public class JpaConfig {
@@ -29,13 +29,13 @@ public class JpaConfig {
 
     @Bean
     public AuditorAware<String> auditorAware() {
-        if(SecurityContextHolder.getContext().getAuthentication() == null) return ()->Optional.of("Signup");
         return () -> Optional.ofNullable(SecurityContextHolder.getContext())
-                    .map(SecurityContext::getAuthentication)
-                    .filter(Authentication::isAuthenticated)
-                    .map(Authentication::getPrincipal)
-                    .map(type -> (ClientContext) type)
-                    .map(ClientContext::getUsername);
+                        .map(SecurityContext::getAuthentication)
+                        .filter(authentication -> !(authentication instanceof AnonymousAuthenticationToken))
+                        .filter(Authentication::isAuthenticated)
+                        .map(Authentication::getPrincipal)
+                        .map(ClientContext.class::cast)
+                        .map(ClientContext::getUsername);
     }
 
     @Bean

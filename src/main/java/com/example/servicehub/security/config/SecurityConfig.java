@@ -36,6 +36,8 @@ public class SecurityConfig {
 
         httpSecurity.csrf();
 
+        httpSecurity.anonymous();
+
         httpSecurity.authorizeRequests(auth-> {
                     auth.mvcMatchers("/service/registration").hasRole("ADMIN");
                     auth.mvcMatchers("/client/**").hasRole("USER");
