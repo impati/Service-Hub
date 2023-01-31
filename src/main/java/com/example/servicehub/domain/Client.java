@@ -42,6 +42,8 @@ public class Client extends BaseEntity{
         this.password = password;
         this.email = email;
         this.roles = roles;
+        this.createdBy = username;
+        this.modifiedBy = username;
     }
 
     @Override
