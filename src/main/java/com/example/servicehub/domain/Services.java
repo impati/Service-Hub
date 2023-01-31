@@ -34,6 +34,11 @@ public class Services extends BaseEntity{
     @OneToMany(mappedBy = "services",fetch = FetchType.LAZY)
     private List<ServiceCategory> serviceCategories = new ArrayList<>();
 
+    @OneToMany(mappedBy = "services",fetch = FetchType.LAZY)
+    private List<ClientService> clientServices = new ArrayList<>();
+
+
+
 
     public void mappingAssociations(ServiceCategory serviceCategory){
         serviceCategories.add(serviceCategory);

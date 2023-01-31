@@ -23,9 +23,11 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.example.servicehub.domain.ServicePage.DEFAULT_START_PAGE;
 import static com.example.servicehub.domain.ServicePage.POPULARITY;
+import static java.util.stream.Collectors.toList;
 import static org.springframework.beans.support.PagedListHolder.DEFAULT_PAGE_SIZE;
 
 @Slf4j
@@ -35,36 +37,35 @@ import static org.springframework.beans.support.PagedListHolder.DEFAULT_PAGE_SIZ
 public class ServiceSearchImpl implements ServiceSearch {
 
     private final ServicesRepository servicesRepository;
-    private final CategoryRepository categoryRepository;
     private final ClientServiceRepository clientServiceRepository;
     private final ServiceCommentsAdminister serviceCommentsAdminister;
 
-    // TODO : 쿼리 성능 개선
     @Override
     public Page<PopularityServiceDto> search(ServiceSearchConditionForm serviceSearchConditionForm,Optional<Long> optionalClient) {
 
-        List<Category> categories = categoryRepository.findByNames(serviceSearchConditionForm.getCategories());
+        PageRequest pageRequest = PageRequest.of(DEFAULT_START_PAGE, DEFAULT_PAGE_SIZE, Sort.by(Sort.Direction.ASC, POPULARITY.getName()));
 
-        List<Services> searchedService = servicesRepository.search(categories, serviceSearchConditionForm.getServiceName());
+        Page<PopularityServiceDto> searchedService = servicesRepository.search(serviceSearchConditionForm.getCategories(), serviceSearchConditionForm.getServiceName(),pageRequest);
 
-        Page<PopularityServiceDto> services = servicesRepository.findServices(searchedService,
-                PageRequest.of(DEFAULT_START_PAGE, DEFAULT_PAGE_SIZE, Sort.by(Sort.Direction.ASC, POPULARITY.getName())));
+        optionalClient.ifPresent(client -> setClientPossessServices(client, searchedService.getContent()));
 
-        optionalClient.ifPresent(client -> setClientPossessServices(client, services.getContent()));
-
-        return services;
+        return searchedService;
     }
 
     private void setClientPossessServices(Long clientId , List<PopularityServiceDto> services){
+        List<Long> clientServices  = clientServiceRepository.findServiceIdOwnedByClient(
+                services
+                        .stream()
+                        .map(PopularityServiceDto::getServiceId)
+                        .collect(toList()), clientId);
+
         for(var service : services){
-            if(isClientPossessService(clientId,service.getServiceId()))
+            if(clientServices.contains(service.getServiceId()))
                 service.setPossess(true);
         }
     }
 
-    private boolean isClientPossessService(Long clientId , Long serviceId){
-        return clientServiceRepository.existsServiceAndClientRelationship(serviceId ,clientId);
-    }
+
 
     @Override
     public SingleServiceWithCommentsDto searchSingleService(Long serviceId, Optional<Long> optionalClientId) {
@@ -72,7 +73,7 @@ public class ServiceSearchImpl implements ServiceSearch {
         Services services = servicesRepository.findByIdUseFetchJoin(serviceId)
                 .orElseThrow(() -> new EntityNotFoundException("유효하지 않은 서비스 조회입니다."));
 
-        boolean isPossess = clientServiceRepository.existsServiceAndClientRelationship(services.getId(), optionalClientId.orElse(0L));
+        boolean isPossess = clientServiceRepository.existsServiceAndClientRelationship(services.getId(), optionalClientId.orElse(-1L));
 
         List<ServiceCommentsDto> comments = serviceCommentsAdminister.searchComments(services.getId());
 

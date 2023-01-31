@@ -40,7 +40,7 @@ class ServicesRegisterTest {
     public void givenServiceRegisterFormWithLogoFile_whenSavingServices_thenSaveServiceWithCategories() throws Exception{
         // given
         List<String> categoryList = List.of("IT","REPO");
-        String serviceUrl = "https://www.inflearn.com/";
+        String serviceUrl = "https://www.test.com/";
         String title = "교육 플랫폼입니다";
         String content = "hi 인프런";
         MockMultipartFile logo = new MockMultipartFile("inflearn-logo",
@@ -49,7 +49,7 @@ class ServicesRegisterTest {
                 new FileInputStream("/Users/jun-yeongchoe/Desktop/project/ServiceHub/src/main/resources/image/inflearn-logo.png"));
 
         ServicesRegisterForm servicesRegisterForm =
-                ServicesRegisterForm.of(categoryList,"인프런",serviceUrl,title,content,logo);
+                ServicesRegisterForm.of(categoryList,"test",serviceUrl,title,content,logo);
         // when
         servicesRegister.registerServices(servicesRegisterForm);
         // then
@@ -68,12 +68,12 @@ class ServicesRegisterTest {
     public void givenServiceRegisterFormWithLogoURL_whenSavingServices_thenSaveServiceWithCategories() throws Exception{
         // given
         List<String> categoryList = List.of("IT");
-        String serviceUrl = "https://papago.naver.com/";
+        String serviceUrl = "https://test.com/";
         String title = "교육 플랫폼입니다";
         String content = "hi 인프런";
         // when
         ServicesRegisterForm servicesRegisterForm =
-                ServicesRegisterForm.of(categoryList,"인프런",serviceUrl,title,content,"https://papago.naver.com/static/img/papago_og.png");
+                ServicesRegisterForm.of(categoryList,"test",serviceUrl,title,content,"https://papago.naver.com/static/img/papago_og.png");
         // then
         servicesRegister.registerServices(servicesRegisterForm);
 
