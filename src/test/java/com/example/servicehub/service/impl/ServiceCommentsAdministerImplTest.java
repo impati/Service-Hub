@@ -2,9 +2,9 @@ package com.example.servicehub.service.impl;
 
 import com.example.servicehub.config.TestJpaConfig;
 import com.example.servicehub.domain.Client;
+import com.example.servicehub.domain.ProviderType;
 import com.example.servicehub.domain.ServiceComment;
 import com.example.servicehub.domain.Services;
-import com.example.servicehub.domain.constant.CustomRole;
 import com.example.servicehub.dto.ServiceCommentForm;
 import com.example.servicehub.dto.ServiceCommentUpdateForm;
 import com.example.servicehub.dto.ServiceCommentsDto;
@@ -95,7 +95,7 @@ class ServiceCommentsAdministerImplTest {
     public void givenCommentAndUnAuthorizeClient_whenUpdatingAndDeleting_thenNothing() throws Exception{
         // given
         ServiceComment serviceComment = serviceCommentRepository.findById(1L).get();
-        Client newClient = Client.of("test","test","test","test@naver.com", CustomRole.ROLE_USER);
+        Client newClient = Client.of("test","test","test","test@naver.com", "ROLE_USER", ProviderType.KEYCLOAK);
         clientRepository.save(newClient);
         // whenUpdating
         serviceCommentsAdminister.updateServiceComment(new ServiceCommentUpdateForm(serviceComment.getId(),newClient.getId(),"XXX"));

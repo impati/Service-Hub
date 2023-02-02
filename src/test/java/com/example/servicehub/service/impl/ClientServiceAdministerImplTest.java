@@ -3,8 +3,8 @@ package com.example.servicehub.service.impl;
 import com.example.servicehub.config.TestJpaConfig;
 import com.example.servicehub.domain.Client;
 import com.example.servicehub.domain.ClientService;
+import com.example.servicehub.domain.ProviderType;
 import com.example.servicehub.domain.Services;
-import com.example.servicehub.domain.constant.CustomRole;
 import com.example.servicehub.dto.ClickServiceDto;
 import com.example.servicehub.dto.ServiceSearchConditionForm;
 import com.example.servicehub.repository.ClientRepository;
@@ -38,7 +38,7 @@ class dClientServiceAdministerImplTest {
     public void givenClientIdAndServiceId_whenAdding_thenAddServiceOfClient() throws Exception{
         // given
         Client newClient = Client.of("test","test",
-                "123","yongs@naver.com", CustomRole.ROLE_USER);
+                "123","yongs@naver.com", "ROLE_USER", ProviderType.KEYCLOAK);
         clientRepository.save(newClient);
 
         // when
@@ -57,7 +57,7 @@ class dClientServiceAdministerImplTest {
     public void givenClientAndServiceDuplication_whenOneAdding_thenOneAddServiceForClient() throws Exception{
         // given
         Client newClient = Client.of("test","test",
-                "123","yongs@naver.com", CustomRole.ROLE_USER);
+                "123","yongs@naver.com", "ROLE_USER", ProviderType.KEYCLOAK);
         clientRepository.save(newClient);
         // when
         clientServiceAdminister.addClientService(newClient.getId(), 1L);
