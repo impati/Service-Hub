@@ -1,6 +1,6 @@
 package com.example.servicehub.domain;
 
-import com.example.servicehub.domain.constant.CustomRole;
+import com.sun.istack.NotNull;
 import lombok.*;
 
 import javax.persistence.*;
@@ -16,34 +16,39 @@ public class Client extends BaseEntity{
     @Column(name ="client_id")
     private Long id;
 
+    @Column(name = "sub", unique = true)
+    @NotNull
+    private String userId;
 
     @Column(unique = true , nullable = false)
     private String nickname;
 
-    @Column(unique = true , nullable = false)
-    private String username;
-
     @Column(nullable = false)
-    private String password;
+    private String username;
 
     @Column(unique = true , nullable = false)
     private String email;
 
     @Enumerated(value = EnumType.STRING)
-    private CustomRole roles;
+    private RoleType roleType;
 
-    public static Client of(String nickname, String username, String password, String email, CustomRole roles){
-        return new Client(nickname,username,password,email,roles);
+    @Enumerated(EnumType.STRING)
+    private ProviderType providerType;
+
+
+    public static Client of(String userId , String nickname, String username, String email, String role,ProviderType providerType){
+        return new Client(userId ,nickname,username,email,role,providerType);
     }
 
-    private Client(String nickname, String username, String password, String email, CustomRole roles) {
+    private Client(String userId,String nickname, String username, String email, String role,ProviderType providerType) {
+        this.userId = userId;
         this.nickname = nickname;
         this.username = username;
-        this.password = password;
         this.email = email;
-        this.roles = roles;
+        this.roleType = RoleType.of(role);
         this.createdBy = username;
         this.modifiedBy = username;
+        this.providerType = providerType;
     }
 
     @Override

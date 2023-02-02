@@ -25,13 +25,13 @@ public class ClientContext implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(client.getRoles().getValue()));
+        authorities.add(new SimpleGrantedAuthority(client.getRoleType().getName()));
         return authorities;
     }
 
     @Override
     public String getPassword() {
-        return client.getPassword();
+        return null;
     }
 
     @Override
