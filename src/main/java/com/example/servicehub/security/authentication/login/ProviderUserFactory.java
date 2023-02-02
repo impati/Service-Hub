@@ -1,4 +1,4 @@
-package com.example.servicehub.security.login;
+package com.example.servicehub.security.authentication.login;
 
 import com.example.servicehub.domain.ProviderType;
 
@@ -6,7 +6,7 @@ import java.util.Map;
 
 public abstract class ProviderUserFactory {
 
-    public ProviderUser create(ProviderType providerType , Map<String, Object> attributes){
+    public static ProviderUser create(ProviderType providerType , Map<String, Object> attributes){
         switch (providerType){
             case KEYCLOAK: return new KeycloakUser(attributes,providerType);
             case KAKAO: return new KakaoUser(attributes,providerType);

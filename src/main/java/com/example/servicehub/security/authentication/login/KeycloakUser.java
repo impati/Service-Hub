@@ -1,4 +1,4 @@
-package com.example.servicehub.security.login;
+package com.example.servicehub.security.authentication.login;
 
 import com.example.servicehub.domain.Client;
 import com.example.servicehub.domain.ProviderType;
