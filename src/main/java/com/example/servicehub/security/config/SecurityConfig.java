@@ -1,6 +1,7 @@
 package com.example.servicehub.security.config;
 
 import com.example.servicehub.repository.ClientRepository;
+import com.example.servicehub.security.authentication.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +15,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -22,7 +24,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final ClientRepository clientRepository;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -38,11 +40,14 @@ public class SecurityConfig {
                     auth.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll();
                     auth.anyRequest().permitAll();
         });
+
         httpSecurity
-                .formLogin()
+                .oauth2Login()
                 .loginPage("/login")
-                .loginProcessingUrl("/login_process")
-                .and()
+                .userInfoEndpoint()
+                .userService(customOAuth2UserService);
+
+        httpSecurity
                 .logout()
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
@@ -67,11 +72,8 @@ public class SecurityConfig {
         return new RoleHierarchyVoter(roleHierarchy());
     }
 
-
     @Bean
     public PasswordEncoder passwordEncoder(){
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
-
-
 }

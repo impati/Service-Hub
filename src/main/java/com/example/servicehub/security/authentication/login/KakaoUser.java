@@ -14,12 +14,12 @@ public class KakaoUser extends ProviderUser {
 
     @Override
     public String getId() {
-        return getAttributeByName("id").toString();
+        return getAttributeByName("id");
     }
 
     @Override
     public String getName() {
-        return getProfile().get("name").toString();
+        return getProfile().get("nickname").toString();
     }
 
     @Override
