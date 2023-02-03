@@ -53,23 +53,23 @@
                                         Login
                                     </button>
                                 </form>
-                                    <hr>
-                                    <a th:href="@{/oauth2/authorization/google}" class="btn btn-google btn-user btn-block">
-                                        <i class="fab fa-google fa-fw"></i> Login with Google
-                                    </a>
-                                    <a th:href="@{/oauth2/authorization/naver}" class="btn btn-naver btn-user btn-block">
-                                        <i class="fab fa-google fa-fw"></i> Login with naver
-                                    </a>
-                                    <a th:href="@{/oauth2/authorization/kakao}" class="btn btn-kakao btn-user btn-block">
-                                        <i class="fab fa-google fa-fw"></i> Login with kakao
-                                    </a>
+                                <hr>
+                                    <button th:onclick="|location.href='@{/oauth2/authorization/naver}'|"class="btn img btn-block">
+                                        <img src="naver2.png">
+                                    </button>
+                                    <button th:onclick="|location.href='@{/oauth2/authorization/google}'|"class="btn img btn-block">
+                                         <img src="google4.png">
+                                    </button>
+                                    <button th:onclick="|location.href='@{/oauth2/authorization/kakao}'|"class="btn img btn-block">
+                                         <img src="kakao_login_medium_wide.png">
+                                    </button>
 
                                 <hr>
                                 <div class="text-center">
                                     <a class="small" href="forgot-password.html">Forgot Password?</a>
                                 </div>
                                 <div class="text-center">
-                                    <a class="small" href="register.html">Create an Account!</a>
+                                    <a class="small" th:href="@{/signup}">Create an Account!</a>
                                 </div>
                             </div>
                         </div>

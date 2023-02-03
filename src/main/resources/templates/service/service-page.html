@@ -138,7 +138,7 @@
 
         $.ajax({
             type: 'POST',
-            url:'http://impatient.iptime.org:8080/client/add-service/' + serviceId,
+            url:'http://impatient.iptime.org:9090/client/add-service/' + serviceId,
             beforeSend : function(xhr)
             {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
                 xhr.setRequestHeader(header, token);
@@ -147,7 +147,7 @@
             cache :false, // 캐시 여부
             success: function(data){
                 console.log(data.name);
-                window.location="http://impatient.iptime.org:8080/service/" + serviceId;
+                window.location="http://impatient.iptime.org:9090/service/" + serviceId;
             },
             error:function(xhr,status,error){
                 console.log('error:'+error);
@@ -162,7 +162,7 @@
 
         $.ajax({
             type: 'POST',
-            url:'http://impatient.iptime.org:8080/client/delete-service/' + serviceId,
+            url:'http://impatient.iptime.org:9090/client/delete-service/' + serviceId,
             beforeSend : function(xhr)
             {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
                 xhr.setRequestHeader(header, token);
@@ -171,7 +171,7 @@
             cache :false, // 캐시 여부
             success: function(data){
                 console.log(data.name);
-                window.location="http://impatient.iptime.org:8080/service/" + serviceId;
+                window.location="http://impatient.iptime.org:9090/service/" + serviceId;
             },
             error:function(xhr,status,error){
                 console.log('error:'+error);
