@@ -88,10 +88,6 @@ public class ClientServiceAdministerImpl implements ClientServiceAdminister {
         return clientService.getServices().getServiceUrl();
     }
 
-    @Override
-    public void registerClient(Client client) {
-        clientRepository.save(client);
-    }
 
 
     private ClientAndService createBy(Long clientId,Long serviceId){
