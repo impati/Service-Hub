@@ -26,16 +26,13 @@
 
           <div class="form-floating  mb-3 col-12">
             <input type="text" class="form-control" id="serviceName" th:field="*{serviceName}" placeholder="serviceName">
-            <label for="serviceName"> &nbsp &nbsp serviceName</label>
+            <label for="serviceName"> &nbsp &nbsp 서비스 이름으로 검색</label>
             <label for="serviceName"></label>
           </div>
 
           <div class="col-12">
-            <script type="text/javascript">
-              $('#example-multiple-selected').multiselect();
-            </script>
             <div>
-              <select name="categories" multiple="" class="label ui selection fluid dropdown">
+              <select name="categories" multiple="" style="height: auto" class="label ui selection fluid dropdown">
                 <option value="">카테고리 선택</option>
                 <option th:each="category : ${categories}"
                         th:value="${category}"
@@ -43,9 +40,9 @@
               </select>
             </div>
           </div>
-
           <hr>
           <button type="submit" class="btn btn-primary">검색</button>
+          <div class="text-end"><button class="btn btn-primary" th:onclick="|location.href='@{/search}'|">인기순 검색</button></div>
         </form>
       </div><!--//single-form-max-width-->
     </div><!--//container-->
@@ -146,7 +143,9 @@
   }
 
 </script>
-
+<script type="text/javascript">
+  $('#example-multiple-selected').multiselect();
+</script>
 <script src="/js/jquery.min.js"></script>
 <script src="/js/popper.js"></script>
 <script src="/js/bootstrap.min.js"></script>

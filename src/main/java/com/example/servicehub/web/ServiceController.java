@@ -63,7 +63,7 @@ public class ServiceController {
 
         model.addAttribute("searchedServices",searchedServices.getContent());
 
-        model.addAttribute("serviceSearchConditionForm",serviceSearchConditionForm);
+        model.addAttribute("serviceSearchConditionForm",new ServiceSearchConditionForm());
 
         model.addAttribute("categories",categoryAdminister.getAllCategories());
 
