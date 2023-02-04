@@ -12,7 +12,7 @@ public class ServiceCommentsDto {
     private Long commentId;
     private String content;
     private Long clientId;
-    private String createBy;
+    private String nickname;
     private LocalDate createAt;
     private LocalDate lastUpdateAt;
 
@@ -21,7 +21,7 @@ public class ServiceCommentsDto {
                 serviceComment.getId(),
                 serviceComment.getContent(),
                 serviceComment.getClient().getId(),
-                serviceComment.getCreatedBy(),
+                serviceComment.getClient().getNickname(),
                 serviceComment.getCreatedAt(),
                 serviceComment.getUpdatedAt());
     }

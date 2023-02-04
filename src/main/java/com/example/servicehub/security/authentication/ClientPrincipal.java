@@ -71,7 +71,7 @@ public class ClientPrincipal implements OAuth2User, UserDetails {
 
     @Override
     public String getName() {
-        return getId().toString();
+        return nickname;
     }
 
 
@@ -84,8 +84,8 @@ public class ClientPrincipal implements OAuth2User, UserDetails {
                 client.getEmail(),
                 client.getEmail(),
                 client.getProviderType(),
-                RoleType.USER,
-                Collections.singletonList(new SimpleGrantedAuthority(RoleType.USER.getName()))
+                client.getRoleType(),
+                Collections.singletonList(new SimpleGrantedAuthority(client.getRoleType().getName()))
         );
     }
 

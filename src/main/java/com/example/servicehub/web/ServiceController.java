@@ -4,6 +4,7 @@ import com.example.servicehub.dto.PopularityServiceDto;
 import com.example.servicehub.dto.ServiceSearchConditionForm;
 import com.example.servicehub.dto.ServicesRegisterForm;
 import com.example.servicehub.security.authentication.ClientPrincipal;
+import com.example.servicehub.security.authentication.ClientPrincipalUtil;
 import com.example.servicehub.service.CategoryAdminister;
 import com.example.servicehub.service.ServiceSearch;
 import com.example.servicehub.service.ServicesRegister;
@@ -55,11 +56,10 @@ public class ServiceController {
 
     @GetMapping("/search")
     public String renderServiceSearch(@ModelAttribute ServiceSearchConditionForm serviceSearchConditionForm,
-                                      Authentication authentication ,
+                                      @AuthenticationPrincipal ClientPrincipal clientPrincipal ,
                                       Model model){
 
-
-        Page<PopularityServiceDto> searchedServices = serviceSearch.search(serviceSearchConditionForm,returnClientId(authentication));
+        Page<PopularityServiceDto> searchedServices = serviceSearch.search(serviceSearchConditionForm, ClientPrincipalUtil.getClientIdFrom(clientPrincipal));
 
         model.addAttribute("searchedServices",searchedServices.getContent());
 
@@ -70,20 +70,14 @@ public class ServiceController {
         return "service/search";
     }
 
-    private Optional<Long> returnClientId(Authentication authentication){
-        if(authentication == null) return Optional.empty();
-        return Optional.of(authentication.getPrincipal())
-                .map(type->(ClientPrincipal)type)
-                .map(ClientPrincipal::getId);
-    }
 
     @GetMapping("/{serviceId}")
     public String renderServicePage(@PathVariable Long serviceId , @AuthenticationPrincipal ClientPrincipal clientPrincipal, Model model){
 
-        model.addAttribute("singleServiceWithCommentsDto",serviceSearch.searchSingleService(serviceId, Optional.ofNullable(clientPrincipal.getId())));
+        model.addAttribute("singleServiceWithCommentsDto",serviceSearch.searchSingleService(serviceId, ClientPrincipalUtil.getClientIdFrom(clientPrincipal)));
 
         return "service/service-page";
-}
+    }
 
 
 
