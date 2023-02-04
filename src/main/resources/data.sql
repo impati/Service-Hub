@@ -1,5 +1,5 @@
-insert into client (nickname,password,username,email,roles,created_by,created_at,updated_at) values ('impati','{noop}123','impati','yongs170@naver.com','ROLE_ADMIN','impati',now(),now());
-insert into client (nickname,password,username,email,roles,created_by,created_at,updated_at) values ('wnsduds1','{noop}123','wnsduds1','wnsduds1@sju.ac.kr','ROLE_USER','wnsduds1',now(),now());
+insert into client (sub,nickname,username,email,role_type,provider_type,created_by,created_at,updated_at) values ('80f7f0c0-5449-4e2b-9422-da1c8cdfbd24','성급한','impati','sinms1116@naver.com','ADMIN','KEYCLOAK','성급한',now(),now());
+insert into client (sub,nickname,username,email,role_type,provider_type,created_by,created_at,updated_at) values ('5c6a008d-0ce5-415f-86db-243671a0d659','wnsduds1','wnsduds1','wnsduds1@sju.ac.kr','USER','KEYCLOAK','wnsduds1',now(),now());
 
 insert into services (logo_store_name, service_url,service_name,title,content,created_by,created_at,updated_at) values ('notion-logo.png','https://notion.so/','노션','블로그입니다','notion이다 ','impati',now(),now());
 insert into services (logo_store_name, service_url,service_name,title,content,created_by,created_at,updated_at) values ('github-logo.png','https://github.com/','깃허브','코드저장소입니다','깃허브다','impati',now(),now());

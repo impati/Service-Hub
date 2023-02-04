@@ -95,10 +95,10 @@
                             <img src="assets/images/clients/profile-4.png" alt="image"/> //TODO : 사용자 프로필 기능이 추가되면
                         </div> -->
                         <div class="meta" style="text-align: right">
-                            <div class="name"th:text="${comment.createBy}">James Lee</div>
+                            <div class="name"th:text="${comment.nickname}">James Lee</div>
                             <div class="info"th:text="${comment.createAt}">James Lee</div>
-                            <span><a class="text-link" th:if="${#authentication.name == comment.createBy}" th:href="@{/comments/edit (serviceId = ${singleServiceWithCommentsDto.serviceId},commentId=${comment.commentId})}">수정</a></span>
-                            <span><a class="text-link" th:if="${#authentication.name == comment.createBy}" th:href="@{/comments/delete (serviceId = ${singleServiceWithCommentsDto.serviceId},commentId=${comment.commentId})}">삭제</a></span>
+                            <span><a class="text-link" th:if="${#authentication.name == comment.nickname}" th:href="@{/comments/edit (serviceId = ${singleServiceWithCommentsDto.serviceId},commentId=${comment.commentId})}">수정</a></span>
+                            <span><a class="text-link" th:if="${#authentication.name == comment.nickname}" th:href="@{/comments/delete (serviceId = ${singleServiceWithCommentsDto.serviceId},commentId=${comment.commentId})}">삭제</a></span>
                         </div>
                     </div>
                     <br>
@@ -138,7 +138,7 @@
 
         $.ajax({
             type: 'POST',
-            url:'http://impatient.iptime.org:8080/client/add-service/' + serviceId,
+            url:'http://impatient.iptime.org:9090/client/add-service/' + serviceId,
             beforeSend : function(xhr)
             {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
                 xhr.setRequestHeader(header, token);
@@ -147,7 +147,7 @@
             cache :false, // 캐시 여부
             success: function(data){
                 console.log(data.name);
-                window.location="http://impatient.iptime.org:8080/service/" + serviceId;
+                window.location="http://impatient.iptime.org:9090/service/" + serviceId;
             },
             error:function(xhr,status,error){
                 console.log('error:'+error);
@@ -162,7 +162,7 @@
 
         $.ajax({
             type: 'POST',
-            url:'http://impatient.iptime.org:8080/client/delete-service/' + serviceId,
+            url:'http://impatient.iptime.org:9090/client/delete-service/' + serviceId,
             beforeSend : function(xhr)
             {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
                 xhr.setRequestHeader(header, token);
@@ -171,7 +171,7 @@
             cache :false, // 캐시 여부
             success: function(data){
                 console.log(data.name);
-                window.location="http://impatient.iptime.org:8080/service/" + serviceId;
+                window.location="http://impatient.iptime.org:9090/service/" + serviceId;
             },
             error:function(xhr,status,error){
                 console.log('error:'+error);

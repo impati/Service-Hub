@@ -1,6 +1,6 @@
 package com.example.servicehub.config;
 
-import com.example.servicehub.security.authentication.ClientContext;
+import com.example.servicehub.security.authentication.ClientPrincipal;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,8 +34,8 @@ public class JpaConfig {
                         .filter(authentication -> !(authentication instanceof AnonymousAuthenticationToken))
                         .filter(Authentication::isAuthenticated)
                         .map(Authentication::getPrincipal)
-                        .map(ClientContext.class::cast)
-                        .map(ClientContext::getUsername);
+                        .map(ClientPrincipal.class::cast)
+                        .map(ClientPrincipal::getEmail);
     }
 
     @Bean

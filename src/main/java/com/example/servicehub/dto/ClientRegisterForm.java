@@ -1,7 +1,7 @@
 package com.example.servicehub.dto;
 
 import com.example.servicehub.domain.Client;
-import com.example.servicehub.domain.constant.CustomRole;
+import com.example.servicehub.domain.ProviderType;
 import com.example.servicehub.exception.PasswordNotMatchException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -34,7 +34,7 @@ public class ClientRegisterForm {
 
     public Client toEntity(){
         defaultNickname();
-        return Client.of(nickname,username,password,email,CustomRole.valueOf("ROLE_USER"));
+        return Client.of("temp" , nickname,username,email,"ROLE_USER", ProviderType.KEYCLOAK); // TOOD 수정 필요
     }
 
     private void defaultNickname(){

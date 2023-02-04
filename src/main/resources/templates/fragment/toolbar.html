@@ -47,7 +47,7 @@
 
                 $.ajax({
                     type: 'POST',
-                    url:'http://impatient.iptime.org:8080/logout',
+                    url:'http://impatient.iptime.org:9090/logout',
                     beforeSend : function(xhr)
                     {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
                         xhr.setRequestHeader(header, token);
@@ -56,7 +56,7 @@
                     cache :false, // 캐시 여부
                     success: function(data){
                         console.log(data.name);
-                        window.location="http://impatient.iptime.org:8080/login";
+                        window.location="http://impatient.iptime.org:9090/login";
                     },
                     error:function(xhr,status,error){
                         console.log('error:'+error);

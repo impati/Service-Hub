@@ -2,12 +2,13 @@ package com.example.servicehub.web;
 
 import com.example.servicehub.dto.ServiceCommentForm;
 import com.example.servicehub.dto.ServiceCommentUpdateForm;
+import com.example.servicehub.security.authentication.ClientPrincipal;
 import com.example.servicehub.service.ServiceCommentsAdminister;
 import com.example.servicehub.service.ServiceSearch;
-import com.example.servicehub.web.util.ClientIdGetter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,37 +26,47 @@ public class ServiceCommentsController {
 
     @PostMapping
     public String addServiceComments(@ModelAttribute ServiceCommentForm serviceCommentForm,
-                                     UsernamePasswordAuthenticationToken authenticationToken){
-        serviceCommentForm.assignAnAuthor(ClientIdGetter.getIdFrom(authenticationToken));
+                                     @AuthenticationPrincipal ClientPrincipal clientPrincipal){
+
+        serviceCommentForm.assignAnAuthor(clientPrincipal.getId());
+
         serviceCommentsAdminister.addServiceComment(serviceCommentForm);
+
         return "redirect:/service/" + serviceCommentForm.getServiceId();
     }
 
     @GetMapping("/edit")
     public String renderEditCommentPage(@ModelAttribute ServiceCommentUpdateForm serviceCommentUpdateForm,
-                                        UsernamePasswordAuthenticationToken authenticationToken,
+                                        @AuthenticationPrincipal ClientPrincipal clientPrincipal,
                                         Model model){
 
         model.addAttribute("singleServiceWithCommentsDto"
-                ,serviceSearch.searchSingleService(serviceCommentUpdateForm.getServiceId(), Optional.ofNullable(ClientIdGetter.getIdFrom(authenticationToken))));
+                ,serviceSearch.searchSingleService(serviceCommentUpdateForm.getServiceId(), Optional.ofNullable(clientPrincipal.getId())));
+
         model.addAttribute("commentId",serviceCommentUpdateForm.getCommentId());
+
         model.addAttribute("commentContent",serviceCommentsAdminister.getCommentContent(serviceCommentUpdateForm.getCommentId()));
+
         return "/service/service-edit-page";
     }
 
     @PostMapping("/edit")
     public String updateComment(@ModelAttribute ServiceCommentUpdateForm serviceCommentUpdateForm,
-                                UsernamePasswordAuthenticationToken authenticationToken){
-        serviceCommentUpdateForm.assignClient(ClientIdGetter.getIdFrom(authenticationToken));
+                                @AuthenticationPrincipal ClientPrincipal clientPrincipal){
+
+        serviceCommentUpdateForm.assignClient(clientPrincipal.getId());
+
         serviceCommentsAdminister.updateServiceComment(serviceCommentUpdateForm);
+
         return "redirect:/service/" + serviceCommentUpdateForm.getServiceId();
     }
 
     @GetMapping("/delete")
     public String deleteComment(@ModelAttribute ServiceCommentUpdateForm serviceCommentUpdateForm,
-                                UsernamePasswordAuthenticationToken authenticationToken){
-        serviceCommentsAdminister.deleteServiceComment(serviceCommentUpdateForm.getCommentId(),
-                ClientIdGetter.getIdFrom(authenticationToken));
+                                @AuthenticationPrincipal ClientPrincipal clientPrincipal){
+
+        serviceCommentsAdminister.deleteServiceComment(serviceCommentUpdateForm.getCommentId(),clientPrincipal.getId());
+
         return "redirect:/service/" + serviceCommentUpdateForm.getServiceId();
     }
 
