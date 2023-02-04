@@ -35,7 +35,7 @@ public class JpaConfig {
                         .filter(Authentication::isAuthenticated)
                         .map(Authentication::getPrincipal)
                         .map(ClientPrincipal.class::cast)
-                        .map(ClientPrincipal::getEmail);
+                        .map(ClientPrincipal::getNickname);
     }
 
     @Bean
