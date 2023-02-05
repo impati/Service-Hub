@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,9 +42,10 @@ public class ServiceSearchImpl implements ServiceSearch {
     private final ServiceCommentsAdminister serviceCommentsAdminister;
 
     @Override
-    public Page<PopularityServiceDto> search(ServiceSearchConditionForm serviceSearchConditionForm,Optional<Long> optionalClient) {
-
-        PageRequest pageRequest = PageRequest.of(DEFAULT_START_PAGE, DEFAULT_PAGE_SIZE, Sort.by(Sort.Direction.ASC, POPULARITY.getName()));
+    public Page<PopularityServiceDto> search(ServiceSearchConditionForm serviceSearchConditionForm,
+                                             Optional<Long> optionalClient,
+                                             Pageable pageRequest
+                                             ) {
 
         Page<PopularityServiceDto> searchedService = servicesRepository.search(serviceSearchConditionForm.getCategories(), serviceSearchConditionForm.getServiceName(),pageRequest);
 

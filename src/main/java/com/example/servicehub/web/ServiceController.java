@@ -12,6 +12,8 @@ import com.example.servicehub.support.MetaDataCrawler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,6 +29,7 @@ import java.util.Optional;
 @RequestMapping("/service")
 public class ServiceController {
 
+    private final static int FIRST_PAGE = 0;
     private final CategoryAdminister categoryAdminister;
     private final ServicesRegister servicesRegister;
     private final ServiceSearch serviceSearch;
@@ -57,9 +60,17 @@ public class ServiceController {
     @GetMapping("/search")
     public String renderServiceSearch(@ModelAttribute ServiceSearchConditionForm serviceSearchConditionForm,
                                       @AuthenticationPrincipal ClientPrincipal clientPrincipal ,
+                                      @PageableDefault Pageable pageable,
                                       Model model){
 
-        Page<PopularityServiceDto> searchedServices = serviceSearch.search(serviceSearchConditionForm, ClientPrincipalUtil.getClientIdFrom(clientPrincipal));
+        Page<PopularityServiceDto> searchedServices = serviceSearch.search(serviceSearchConditionForm, ClientPrincipalUtil.getClientIdFrom(clientPrincipal),pageable);
+
+
+        model.addAttribute("firstPage",FIRST_PAGE);
+
+        model.addAttribute("currentPage",pageable.getPageNumber());
+
+        model.addAttribute("endPage",searchedServices.getTotalPages() - 1);
 
         model.addAttribute("searchedServices",searchedServices.getContent());
 

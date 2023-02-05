@@ -1,10 +1,12 @@
 package com.example.servicehub.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
+@NoArgsConstructor
 public class ServiceSearchConditionForm {
     List<String> categories;
     String serviceName;

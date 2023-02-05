@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -43,7 +45,7 @@ class ServiceSearchTest {
                 ServiceSearchConditionForm.of(List.of("search-platform"),null);
 
         // when
-        Page<PopularityServiceDto> searchedServices = serviceSearch.search(serviceSearchConditionForm,Optional.empty());
+        Page<PopularityServiceDto> searchedServices = serviceSearch.search(serviceSearchConditionForm,Optional.empty(), PageRequest.of(0,10));
 
         // then
 
@@ -58,7 +60,7 @@ class ServiceSearchTest {
         ServiceSearchConditionForm serviceSearchConditionForm =
                 ServiceSearchConditionForm.of(List.of("search-platform","IT"),null);
         // when
-        Page<PopularityServiceDto> searchedServices = serviceSearch.search(serviceSearchConditionForm,Optional.empty());
+        Page<PopularityServiceDto> searchedServices = serviceSearch.search(serviceSearchConditionForm,Optional.empty(),PageRequest.of(0,10));
         // then
         checkContainKeyword(searchedServices,"네이버");
         checkContainKeyword(searchedServices,"유튜브");
@@ -73,7 +75,7 @@ class ServiceSearchTest {
         ServiceSearchConditionForm serviceSearchConditionForm =
                 ServiceSearchConditionForm.of(null,"프로그래머스");
         // when
-        Page<PopularityServiceDto> searchedServices = serviceSearch.search(serviceSearchConditionForm,Optional.empty());
+        Page<PopularityServiceDto> searchedServices = serviceSearch.search(serviceSearchConditionForm,Optional.empty(),PageRequest.of(0,10));
         // then
         assertThat(searchedServices.getContent().get(0).getServiceName()).isEqualTo("프로그래머스");
     }
@@ -85,7 +87,7 @@ class ServiceSearchTest {
         ServiceSearchConditionForm serviceSearchConditionForm =
                 ServiceSearchConditionForm.of(null,"잡");
         // when
-        Page<PopularityServiceDto> searchedServices = serviceSearch.search(serviceSearchConditionForm,Optional.empty());
+        Page<PopularityServiceDto> searchedServices = serviceSearch.search(serviceSearchConditionForm,Optional.empty(),PageRequest.of(0,10));
         // then
         checkContainKeyword(searchedServices,"잡플래닛");
         checkContainKeyword(searchedServices,"잡코리아");
@@ -98,7 +100,7 @@ class ServiceSearchTest {
         ServiceSearchConditionForm serviceSearchConditionForm =
                 ServiceSearchConditionForm.of(List.of("search-platform","IT"),"브");
         // when
-        Page<PopularityServiceDto> searchedServices = serviceSearch.search(serviceSearchConditionForm,Optional.empty());
+        Page<PopularityServiceDto> searchedServices = serviceSearch.search(serviceSearchConditionForm,Optional.empty(),PageRequest.of(0,10));
         // then
         checkContainKeyword(searchedServices,"깃허브");
         checkContainKeyword(searchedServices,"유튜브");
@@ -117,7 +119,7 @@ class ServiceSearchTest {
         ServiceSearchConditionForm serviceSearchConditionForm =
                 ServiceSearchConditionForm.of(null,null);
         // when
-        Page<PopularityServiceDto> searchedService = serviceSearch.search(serviceSearchConditionForm, Optional.of(1L));
+        Page<PopularityServiceDto> searchedService = serviceSearch.search(serviceSearchConditionForm, Optional.of(1L),PageRequest.of(0,10));
 
         // then
 
