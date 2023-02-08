@@ -3,7 +3,6 @@
 <head>
     <div th:insert="~{fragment/header :: header}"></div>
 </head>
-
 <body>
 
 <div th:insert="~{fragment/sidebar :: sidebar}"></div>
@@ -14,7 +13,7 @@
 
     <section class="cta-section theme-bg-light py-5">
         <div class="container single-col-max-width">
-            <h2 class="heading text-center" th:text="|${#authentication.getName()} 님의 서비스 목록|">나의 서비스 목록</h2>
+            <h2 class="heading text-center" th:text="|${simpleClient.nickname} 님의 서비스 목록|">나의 서비스 목록</h2>
             <div class="intro"></div>
             <div class="single-form-max-width text-center pt-3 mx-auto">
                 <form  th:action  method="get">
@@ -26,7 +25,7 @@
                     <hr>
                     <button type="submit" class="btn btn-primary">검색</button>
                 </form>
-                <div class="text-end"><button class="btn btn-primary" th:onclick="|location.href='@{/client}'|">전체 검색</button></div>
+                <div class="text-end"><button class="btn btn-primary" th:onclick="|location.href='@{/client/{clientId} (clientId=${simpleClient.clientId})}'|">전체 검색</button></div>
             </div><!--//single-form-max-width-->
         </div><!--//container-->
     </section>
@@ -43,14 +42,11 @@
             <div class="project-meta isotope row" style="display: flex; flex-wrap: wrap">
                 <div class="isotope-item col-md-6 mb-5" style="width: 20%;justify-content: center"  th:classappend="${service.getCategories()}" th:each="service : ${serviceWithClick}">
                         <div class="card" style="width: 60%; height: 100%;border: none;justify-content: center">
-
                                 <a class="card-link" style="display: block;width: 100%" th:href="@{/client/click/(serviceId=${service.serviceId},serviceUrl=${service.serviceUrl})}">
                                     <img style="width: 50px; display: block" th:src="@{/logo/{logoStoreName} (logoStoreName=${service.logoStoreName})}" class="card-img" alt="image">
                                 </a>
-
                                 <a class="tile" th:text="${service.serviceName}"  th:href="@{/service/{serviceId} (serviceId=${service.serviceId})}">
                                 </a>
-
                         </div><!--//card-->
                 </div>
             </div><!--//row-->
@@ -63,6 +59,7 @@
 </div><!--//main-wrapper-->
 
 <!--Page Specific JS -->
+
 <script type="text/javascript" src="/assets/plugins/imagesloaded.pkgd.min.js"></script>
 <script type="text/javascript" src="/assets/plugins/isotope.pkgd.min.js"></script>
 <script type="text/javascript" src="/assets/js/isotope-custom.js"></script>

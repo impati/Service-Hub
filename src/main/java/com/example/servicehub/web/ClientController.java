@@ -1,17 +1,24 @@
 package com.example.servicehub.web;
 
+import com.example.servicehub.domain.Client;
+import com.example.servicehub.dto.ClientEditForm;
 import com.example.servicehub.dto.ServiceSearchConditionForm;
+import com.example.servicehub.dto.ServicesRegisterForm;
+import com.example.servicehub.dto.SimpleClientDto;
 import com.example.servicehub.security.authentication.ClientPrincipal;
 import com.example.servicehub.service.CategoryAdminister;
+import com.example.servicehub.service.ClientAdminister;
 import com.example.servicehub.service.ClientServiceAdminister;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.constraints.ModCheck;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -21,12 +28,54 @@ public class ClientController {
 
     private final ClientServiceAdminister clientServiceAdminister;
     private final CategoryAdminister categoryAdminister;
+    private final ClientAdminister clientAdminister;
 
-    @GetMapping
+    @GetMapping("/{clientId}")
     public String renderClientPage(
+            @PathVariable Long clientId,
             @RequestParam(value = "serviceName",required = false) String serviceName,
+            Model model){
+
+        List<String> allCategories = categoryAdminister.getAllCategories();
+
+        ServiceSearchConditionForm serviceSearchConditionForm = ServiceSearchConditionForm.of(categoryAdminister.getAllCategories(), serviceName);
+
+        model.addAttribute("serviceWithClick",clientServiceAdminister.servicesOfClient(clientId, serviceSearchConditionForm).getContent());
+
+        model.addAttribute("allCategories",allCategories);
+
+        model.addAttribute("simpleClient", SimpleClientDto.from(clientAdminister.findClientByClientId(clientId)));
+
+        return "/client/client-page";
+    }
+
+    @GetMapping("/edit")
+    public String renderClientEditPage(
             @AuthenticationPrincipal ClientPrincipal clientPrincipal,
             Model model){
+
+        model.addAttribute("clientEditForm",
+                ClientEditForm.from(clientAdminister.findClientByClientId(clientPrincipal.getId())));
+
+        return "/client/client-edit-page";
+    }
+
+    @PostMapping("/edit")
+    public String editClient(
+            @AuthenticationPrincipal ClientPrincipal clientPrincipal,
+            @ModelAttribute ClientEditForm clientEditForm){
+
+        clientAdminister.editClientProfile(clientPrincipal.getId(),clientEditForm);
+
+        clientPrincipal.editNickname(clientEditForm.getNickname());
+
+        return "redirect:/client/" + clientPrincipal.getId();
+    }
+
+    @GetMapping("/service/edit")
+    public String renderClientServiceEdit(@AuthenticationPrincipal ClientPrincipal clientPrincipal,
+                                          @RequestParam(value = "serviceName",required = false) String serviceName,
+                                          Model model){
 
         List<String> allCategories = categoryAdminister.getAllCategories();
 
@@ -36,8 +85,24 @@ public class ClientController {
 
         model.addAttribute("allCategories",allCategories);
 
-        return "/client/client-page";
+        model.addAttribute("simpleClient", SimpleClientDto.from(clientAdminister.findClientByClientId(clientPrincipal.getId())));
+
+        return "/client/client-service-edit";
     }
+
+    @ResponseBody
+    @PostMapping("/service/delete/{serviceId}")
+    public String renderClientServiceEdit(@PathVariable Long serviceId,
+                                          @AuthenticationPrincipal ClientPrincipal clientPrincipal){
+
+        clientServiceAdminister.deleteClientService(clientPrincipal.getId(),serviceId);
+
+        return "Ok";
+    }
+
+
+
+
 
     @GetMapping("/click")
     public String clickService(

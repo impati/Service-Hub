@@ -12,6 +12,7 @@ import com.example.servicehub.repository.ClientRepository;
 import com.example.servicehub.repository.ServiceCommentRepository;
 import com.example.servicehub.repository.ServicesRepository;
 import com.example.servicehub.service.ServiceCommentsAdminister;
+import com.example.servicehub.util.ProjectUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,7 +96,8 @@ class ServiceCommentsAdministerImplTest {
     public void givenCommentAndUnAuthorizeClient_whenUpdatingAndDeleting_thenNothing() throws Exception{
         // given
         ServiceComment serviceComment = serviceCommentRepository.findById(1L).get();
-        Client newClient = Client.of("test","test","test","test@naver.com", "ROLE_USER", ProviderType.KEYCLOAK);
+        Client newClient = Client.of("test","test","test","test@naver.com", "ROLE_USER", ProviderType.KEYCLOAK, ProjectUtils.getDomain() + "client",
+                ProjectUtils.getDomain() +"/profile/default.png");
         clientRepository.save(newClient);
         // whenUpdating
         serviceCommentsAdminister.updateServiceComment(new ServiceCommentUpdateForm(serviceComment.getId(),newClient.getId(),"XXX"));

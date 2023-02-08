@@ -3,6 +3,7 @@ package com.example.servicehub.security.authentication.login;
 
 import com.example.servicehub.domain.Client;
 import com.example.servicehub.domain.ProviderType;
+import com.example.servicehub.util.ProjectUtils;
 
 import java.util.Map;
 
@@ -35,7 +36,9 @@ public class KakaoUser extends ProviderUser {
                 getName(),
                 getEmail(),
                 "ROLE_USER",
-                providerType
+                providerType,
+                ProjectUtils.getDomain() + "/client",
+                ProjectUtils.getDomain() +"/profile/default.png"
         );
     }
 

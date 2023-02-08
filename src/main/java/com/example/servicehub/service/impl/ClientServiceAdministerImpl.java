@@ -88,8 +88,6 @@ public class ClientServiceAdministerImpl implements ClientServiceAdminister {
         return clientService.getServices().getServiceUrl();
     }
 
-
-
     private ClientAndService createBy(Long clientId,Long serviceId){
         Client client = clientRepository.findById(clientId)
                 .orElseThrow(()->new EntityNotFoundException("유효하지 않은 사용자입니다."));
