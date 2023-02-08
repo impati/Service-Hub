@@ -5,23 +5,18 @@ import com.example.servicehub.config.TestJpaConfig;
 import com.example.servicehub.domain.ServiceCategory;
 import com.example.servicehub.domain.Services;
 import com.example.servicehub.dto.ServicesRegisterForm;
-import com.example.servicehub.repository.CategoryRepository;
 import com.example.servicehub.repository.ServiceCategoryRepository;
 import com.example.servicehub.repository.ServicesRepository;
-import com.example.servicehub.service.fileUtils.LogoManager;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import com.example.servicehub.support.LogoManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.FileInputStream;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

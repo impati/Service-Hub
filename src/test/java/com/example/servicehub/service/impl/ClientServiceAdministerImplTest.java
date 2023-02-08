@@ -11,6 +11,7 @@ import com.example.servicehub.repository.ClientRepository;
 import com.example.servicehub.repository.ClientServiceRepository;
 import com.example.servicehub.repository.ServicesRepository;
 import com.example.servicehub.service.ClientServiceAdminister;
+import com.example.servicehub.util.ProjectUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,8 @@ class dClientServiceAdministerImplTest {
     public void givenClientIdAndServiceId_whenAdding_thenAddServiceOfClient() throws Exception{
         // given
         Client newClient = Client.of("test","test",
-                "123","yongs@naver.com", "ROLE_USER", ProviderType.KEYCLOAK);
+                "123","yongs@naver.com", "ROLE_USER", ProviderType.KEYCLOAK, ProjectUtils.getDomain() + "client",
+                ProjectUtils.getDomain() +"/profile/default.png");
         clientRepository.save(newClient);
 
         // when
@@ -57,7 +59,8 @@ class dClientServiceAdministerImplTest {
     public void givenClientAndServiceDuplication_whenOneAdding_thenOneAddServiceForClient() throws Exception{
         // given
         Client newClient = Client.of("test","test",
-                "123","yongs@naver.com", "ROLE_USER", ProviderType.KEYCLOAK);
+                "123","yongs@naver.com", "ROLE_USER", ProviderType.KEYCLOAK,ProjectUtils.getDomain() + "client",
+                ProjectUtils.getDomain() +"/profile/default.png");
         clientRepository.save(newClient);
         // when
         clientServiceAdminister.addClientService(newClient.getId(), 1L);
