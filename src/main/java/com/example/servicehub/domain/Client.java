@@ -35,7 +35,7 @@ public class Client extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private ProviderType providerType;
 
-    private String bolgUrl;
+    private String blogUrl;
 
     private String profileImageUrl;
 
@@ -46,7 +46,7 @@ public class Client extends BaseEntity{
     public void update(String nickname, String introduceComment,String bolgUrl,String profileImageUrl){
         this.nickname = nickname;
         this.introduceComment = introduceComment;
-        this.bolgUrl = bolgUrl;
+        this.blogUrl = bolgUrl;
         this.profileImageUrl = profileImageUrl;
     }
 
@@ -65,7 +65,7 @@ public class Client extends BaseEntity{
         this.providerType = providerType;
         this.introduceComment = nickname + "님을 소개해주세요";
         this.profileImageUrl = profileImageUrl;
-        this.bolgUrl = blogUrl;
+        this.blogUrl = blogUrl;
     }
 
     @Override

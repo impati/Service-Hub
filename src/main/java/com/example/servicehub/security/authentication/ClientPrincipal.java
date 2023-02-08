@@ -95,7 +95,7 @@ public class ClientPrincipal implements OAuth2User, UserDetails {
                 client.getProviderType(),
                 client.getRoleType(),
                 Collections.singletonList(new SimpleGrantedAuthority(client.getRoleType().getName())),
-                client.getBolgUrl(),
+                client.getBlogUrl(),
                 client.getProfileImageUrl(),
                 client.getIntroduceComment()
         );
