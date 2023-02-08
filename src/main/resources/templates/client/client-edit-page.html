@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:insert="~{fragment/header :: header}"></div>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div th:insert="~{fragment/toolbar :: toolbar}"></div>
+
+    <!-- 헤딩 -->
+    <section class="cta-section theme-bg-light py-5">
+        <div class="container text-center">
+            <h2 class="heading">프로필 수정</h2>
+        </div><!--//container-->
+    </section>
+
+    <section class="contact-section px-3 py-5 p-md-5">
+
+        <div class="container">
+            <form th:object="${clientEditForm}" id="contact-form" class="contact-form col-lg-8 mx-lg-auto"  name="register" th:action method="post" enctype="multipart/form-data">
+
+                <div class="row g-3">
+
+
+
+                    <div class="col-12 col-md-6">
+                        <label class="sr-only" for="profile">profile</label>
+                        <input type="file" class="form-control" id="profile" th:field="*{profileImage}" minlength="2">
+                        <small class="form-text text-muted pt-1"><i class="fas fa-info-circle me-2 text-primary"></i>프로필 이미지를 등록하세요!</small>
+                    </div>
+
+
+
+                    <div class="col-12">
+                        <label class="sr-only" for="nick">nickname</label>
+                        <input type="text" class="form-control" id="nick" th:field="*{nickname}" >
+                        <small class="form-text text-muted pt-1"><i class="fas fa-info-circle me-2 text-primary"></i>닉네임을 설정해주세요</small>
+                    </div>
+
+
+                    <div class="col-12 markdown-body">
+                        <label class="sr-only" for="intro">introComment</label>
+                        <input type="text" class="form-control" id="intro"  placeholder="explain About you ... " th:field="*{introComment}">
+                        <small class="form-text text-muted pt-1"><i class="fas fa-info-circle me-2 text-primary"></i>자신을 소개해주세요 ... </small>
+                    </div>
+
+
+                    <div class="col-12">
+                        <label class="sr-only" for="blog">blog link</label>
+                        <input type="url" class="form-control" id="blog"  placeholder="register blog link" th:field="*{blogUri}" >
+                        <small class="form-text text-muted pt-1"><i class="fas fa-info-circle me-2 text-primary"></i>Blog URL를 입력해주세요</small>
+                    </div>
+
+                    <hr>
+                    <br>
+
+                    <div class="form-group col-12">
+                        <button type="submit"  class="btn btn-block btn-primary py-2">등록</button>
+                    </div>
+
+                </div><!--//form-row-->
+            </form>
+        </div><!--//container-->
+    </section>
+
+    <div th:insert="~{fragment/footer :: footer}"></div>
+
+</div><!--//main-wrapper-->
+
+<script src="/js/jquery.min.js"></script>
+<script src="/js/popper.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.2.13/dist/semantic.min.js"></script>
+<script src="/js/main.js"></script>
+
+<div th:insert="~{fragment/library :: libraries}"></div>
+
+</body>
+</html>
+

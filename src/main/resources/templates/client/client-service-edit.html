@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <div th:insert="~{fragment/header :: header}"></div>
+</head>
+<body>
+
+<div th:insert="~{fragment/sidebar :: sidebar}"></div>
+
+<div class="main-wrapper">
+
+  <div th:insert="~{fragment/toolbar :: toolbar}"></div>
+
+  <section class="cta-section theme-bg-light py-5">
+    <div class="container single-col-max-width">
+      <h2 class="heading text-center" th:text="|${simpleClient.nickname} 님의 서비스 목록|">나의 서비스 목록</h2>
+      <div class="intro"></div>
+      <div class="single-form-max-width text-center pt-3 mx-auto">
+        <form  th:action  method="get">
+          <div class="form-floating  mb-3 col-12">
+            <input type="text" class="form-control" id="serviceName" name="serviceName" placeholder="서비스 이름으로 검색">
+            <label for="serviceName"> &nbsp &nbsp 서비스 이름으로 검색</label>
+            <label for="serviceName"></label>
+          </div>
+          <hr>
+          <button type="submit" class="btn btn-primary">검색</button>
+        </form>
+        <div class="text-end"><button class="btn btn-primary" th:onclick="|location.href='@{/client/service/edit}'|">전체 검색</button></div>
+      </div><!--//single-form-max-width-->
+    </div><!--//container-->
+  </section>
+
+  <section class="projects-list px-3 py-5 p-md-5">
+    <div class="container">
+      <div class="text-center">
+        <ul id="filters" class="filters mb-5 mx-auto   ps-0">
+          <li class="type active mb-3 mb-lg-0" data-filter="*">All</li>
+          <li class="type  mb-3 mb-lg-0"  th:attr="data-filter='.' + ${category}" th:each="category : ${allCategories}" th:text="${category}">We App</li>
+        </ul><!--//filters-->
+      </div>
+
+      <div class="project-meta isotope row" style="display: flex; flex-wrap: wrap">
+        <div class="isotope-item col-md-6 mb-5" style="width: 20%;justify-content: center"  th:classappend="${service.getCategories()}" th:each="service : ${serviceWithClick}">
+          <div class="card" style="width: 60%; height: 100%;border: none;justify-content: center">
+            <button th:onclick="|deleteAction('${service.serviceId}')|" style="width: 50%" class="btn btn-outline-danger">-</button>
+            <a class="card-link" style="display: block;width: 100%" th:href="@{/client/click/(serviceId=${service.serviceId},serviceUrl=${service.serviceUrl})}">
+              <img style="width: 50px; display: block" th:src="@{/logo/{logoStoreName} (logoStoreName=${service.logoStoreName})}" class="card-img" alt="image">
+            </a>
+            <a class="tile" th:text="${service.serviceName}"  th:href="@{/service/{serviceId} (serviceId=${service.serviceId})}">
+            </a>
+          </div><!--//card-->
+        </div>
+      </div><!--//row-->
+    </div>
+  </section>
+  <div class="text-center"><button class="btn btn-primary" th:onclick="|location.href='@{/client/{clientId} (clientId=${#authentication.getPrincipal().getId()}) }'|">완료</button></div>
+  <div th:insert="~{fragment/footer :: footer}"></div>
+
+
+</div><!--//main-wrapper-->
+
+<!--Page Specific JS -->
+<script type="text/javascript">
+
+  function deleteAction(serviceId){
+
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+
+    $.ajax({
+      type: 'POST',
+      url:'http://impatient.iptime.org:9090/client/service/delete/' + serviceId,
+      beforeSend : function(xhr)
+      {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+        xhr.setRequestHeader(header, token);
+      },
+      async: false, //동기, 비동기 여부
+      cache :false, // 캐시 여부
+      success: function(data){
+        console.log(data.name);
+        window.location=location.href;
+      },
+      error:function(xhr,status,error){
+        console.log('error:'+error);
+      }
+    });
+  }
+
+</script>
+<script type="text/javascript" src="/assets/plugins/imagesloaded.pkgd.min.js"></script>
+<script type="text/javascript" src="/assets/plugins/isotope.pkgd.min.js"></script>
+<script type="text/javascript" src="/assets/js/isotope-custom.js"></script>
+
+<div th:insert="~{fragment/library :: libraries}"></div>
+
+
+</body>
+</html>
+

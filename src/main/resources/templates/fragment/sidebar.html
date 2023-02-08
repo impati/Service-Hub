@@ -3,7 +3,7 @@
 <body>
 <header class="header text-center" th:fragment="sidebar">
     <div class="force-overflow">
-        <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html" th:text="${#authentication.getName()}">SERVICE HUB</a></h1>
+        <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html" th:text="${simpleClient.nickname}">SERVICE HUB</a></h1>
 
         <nav class="navbar navbar-expand-lg navbar-dark" >
 
@@ -13,26 +13,31 @@
 
             <div id="navigation" class="collapse navbar-collapse flex-column" >
                 <div class="profile-section pt-3 pt-lg-0">
-                    <img class="profile-image mb-3 rounded-circle mx-auto" src="/assets/images/impati.jpeg" alt="image" >
-
-                    <div class="bio mb-3">Hi, my name is jun young . Welcome to my personal website!</div><!--//bio-->
+                    <img class="profile-image mb-3 rounded-circle mx-auto" th:src="${simpleClient.profileUrl}" alt="image" >
+                    <div class="bio mb-3" th:text="${simpleClient.introComment}">Hi, my name is jun young . Welcome to my personal website!</div><!--//bio-->
                     <hr>
                 </div><!--//profile-section-->
 
                 <ul class="navbar-nav flex-column text-start">
+
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/client}"><i class="fas fa-user fa-fw me-2"></i>Mypage</a>
+                        <a class="nav-link" th:if="${#authentication.getPrincipal().getId() == simpleClient.clientId}"  th:href="@{/client/edit}"><i class="fas fa-calculator fa-fw me-2"></i>프로필 수정</a>
                     </li>
+
+                    <hr>
+
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/service/search}"><i class="fas fa-laptop-code fa-fw me-2"></i>서비스 검색</a>
                     </li>
+
                     <li class="nav-item">
-                        <a class="nav-link" sec:authorize="hasRole('ADMIN')" th:href="@{/service/registration}"><i class="fas fa-briefcase fa-fw me-2"></i>서비스 등록</a>
+                        <a class="nav-link" th:if="${#authentication.getPrincipal().getId() == simpleClient.clientId}" th:href="@{/client/service/edit}"><i class="fas fa-laptop-code fa-fw me-2"></i>내서비스 수정</a>
                     </li>
+
                 </ul>
 
                 <div class="my-2">
-                    <a class="btn btn-primary" th:href="@{https://notion.so}" target="_blank"><i class="fas fa-paper-plane me-2"></i>MY BLOG</a>
+                    <a class="btn btn-primary" th:href="${simpleClient.blogUrl}" target="_blank"><i class="fas fa-paper-plane me-2"></i>MY BLOG</a>
                 </div>
 
 

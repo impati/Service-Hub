@@ -35,7 +35,7 @@
             <a class="btn btn-outline-primary me-2" sec:authorize="isAnonymous()" th:href="@{/signup}">회원가입</a>
             <img class="img-profile rounded-circle"
                  style="width: 5%;height: 5%" src="/assets/images/impati.jpeg">
-            <a class="me-5" href="#" id="userDropdown" role="button" th:href="@{/client}" data-toggle="" aria-haspopup="true" aria-expanded="false">
+            <a class="me-5" href="#" id="userDropdown" role="button"  sec:authorize="isAuthenticated()" th:href="@{/client/{clientId} (clientId=${#authentication.getPrincipal().getId()})}" data-toggle="" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline text-gray-900 " sec:authorize="isAuthenticated()" th:text="${#authentication.name}">Douglas McGee</span>
             </a>
 
