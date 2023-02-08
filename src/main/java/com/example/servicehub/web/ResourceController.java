@@ -1,6 +1,8 @@
 package com.example.servicehub.web;
 
-import com.example.servicehub.service.fileUtils.LogoManager;
+
+import com.example.servicehub.support.LogoManager;
+import com.example.servicehub.support.ProfileManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -18,7 +20,9 @@ import java.nio.file.Path;
 @RestController
 @RequiredArgsConstructor
 public class ResourceController {
+
     private final LogoManager logoManager;
+    private final ProfileManager profileManager;
 
     @GetMapping(value = "/logo/{filename}")
     public ResponseEntity<Resource> findLogo(@PathVariable String filename) throws IOException {
@@ -29,4 +33,15 @@ public class ResourceController {
                 .contentType(MediaType.parseMediaType(Files.probeContentType(path)))
                 .body(resource);
     }
+
+    @GetMapping(value = "/profile/{filename}")
+    public ResponseEntity<Resource> findProfile(@PathVariable String filename) throws IOException {
+        String inputFile = profileManager.getFullPath(filename);
+        Path path = new File(inputFile).toPath();
+        FileSystemResource resource = new FileSystemResource(path);
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(Files.probeContentType(path)))
+                .body(resource);
+    }
+
 }

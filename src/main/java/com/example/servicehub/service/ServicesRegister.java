@@ -6,7 +6,7 @@ import com.example.servicehub.dto.ServicesRegisterForm;
 import com.example.servicehub.repository.CategoryRepository;
 import com.example.servicehub.repository.ServiceCategoryRepository;
 import com.example.servicehub.repository.ServicesRepository;
-import com.example.servicehub.service.fileUtils.LogoManager;
+import com.example.servicehub.support.LogoManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
