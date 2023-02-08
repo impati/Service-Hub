@@ -9,4 +9,6 @@ public interface ClientRepository extends JpaRepository<Client,Long> {
 
     Optional<Client> findByUserId(String userId);
 
+    Optional<Client> findByNickname(String nickname);
+
 }

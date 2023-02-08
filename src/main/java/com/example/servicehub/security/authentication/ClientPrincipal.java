@@ -22,12 +22,16 @@ public class ClientPrincipal implements OAuth2User, UserDetails {
 
     private final Long id;
     private final String username;
-    private final String nickname;
+    private String nickname;
     private final String email;
     private final ProviderType providerType;
     private final RoleType roleType;
     private final Collection<GrantedAuthority> authorities;
     private Map<String, Object> attributes;
+    private final String blogUrl;
+    private final String profileImageUrl;
+    private final String introduceComment;
+
 
     @Override
     public String getPassword() {
@@ -77,17 +81,26 @@ public class ClientPrincipal implements OAuth2User, UserDetails {
 
     public String getEmail(){return email;}
 
+
+    public void editNickname(String nickname){
+        this.nickname = nickname;
+    }
+
     public static ClientPrincipal create(Client client) {
         return new ClientPrincipal(
                 client.getId(),
                 client.getUsername(),
-                client.getEmail(),
+                client.getNickname(),
                 client.getEmail(),
                 client.getProviderType(),
                 client.getRoleType(),
-                Collections.singletonList(new SimpleGrantedAuthority(client.getRoleType().getName()))
+                Collections.singletonList(new SimpleGrantedAuthority(client.getRoleType().getName())),
+                client.getBolgUrl(),
+                client.getProfileImageUrl(),
+                client.getIntroduceComment()
         );
     }
+
 
     public static ClientPrincipal create(Client client, Map<String, Object> attributes) {
         ClientPrincipal clientPrincipal = create(client);
@@ -96,5 +109,21 @@ public class ClientPrincipal implements OAuth2User, UserDetails {
     }
 
 
+    private ClientPrincipal(Long id, String username, String nickname,
+                            String email, ProviderType providerType, RoleType roleType,
+                            Collection<GrantedAuthority> authorities, String blogUrl, String profileImageUrl, String introduceComment) {
+        this.id = id;
+        this.username = username;
+        this.nickname = nickname;
+        this.email = email;
+        this.providerType = providerType;
+        this.roleType = roleType;
+        this.authorities = authorities;
+        this.blogUrl = blogUrl;
+        this.profileImageUrl = profileImageUrl;
+        this.introduceComment = introduceComment;
+    }
+
 }
+
 

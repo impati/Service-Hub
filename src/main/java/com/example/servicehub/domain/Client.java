@@ -35,12 +35,26 @@ public class Client extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private ProviderType providerType;
 
+    private String bolgUrl;
 
-    public static Client of(String userId , String nickname, String username, String email, String role,ProviderType providerType){
-        return new Client(userId ,nickname,username,email,role,providerType);
+    private String profileImageUrl;
+
+    @Column(length = 1000)
+    private String introduceComment;
+
+
+    public void update(String nickname, String introduceComment,String bolgUrl,String profileImageUrl){
+        this.nickname = nickname;
+        this.introduceComment = introduceComment;
+        this.bolgUrl = bolgUrl;
+        this.profileImageUrl = profileImageUrl;
     }
 
-    private Client(String userId,String nickname, String username, String email, String role,ProviderType providerType) {
+    public static Client of(String userId , String nickname, String username, String email, String role,ProviderType providerType,String blogUrl , String profileImageUrl){
+        return new Client(userId ,nickname,username,email,role,providerType,blogUrl,profileImageUrl);
+    }
+
+    private Client(String userId,String nickname, String username, String email, String role,ProviderType providerType,String blogUrl , String profileImageUrl) {
         this.userId = userId;
         this.nickname = nickname;
         this.username = username;
@@ -49,6 +63,9 @@ public class Client extends BaseEntity{
         this.createdBy = username;
         this.modifiedBy = username;
         this.providerType = providerType;
+        this.introduceComment = nickname + "님을 소개해주세요";
+        this.profileImageUrl = profileImageUrl;
+        this.bolgUrl = blogUrl;
     }
 
     @Override
