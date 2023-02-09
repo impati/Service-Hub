@@ -1,6 +1,7 @@
 package com.example.servicehub.web;
 
 import com.example.servicehub.dto.PopularityServiceDto;
+import com.example.servicehub.dto.ServiceCommentForm;
 import com.example.servicehub.dto.ServiceSearchConditionForm;
 import com.example.servicehub.dto.ServicesRegisterForm;
 import com.example.servicehub.security.authentication.ClientPrincipal;
