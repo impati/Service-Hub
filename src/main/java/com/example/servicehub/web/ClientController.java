@@ -15,8 +15,10 @@ import org.hibernate.validator.constraints.ModCheck;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,7 +65,11 @@ public class ClientController {
     @PostMapping("/edit")
     public String editClient(
             @AuthenticationPrincipal ClientPrincipal clientPrincipal,
-            @ModelAttribute ClientEditForm clientEditForm){
+            @Valid @ModelAttribute ClientEditForm clientEditForm , BindingResult bindingResult){
+
+        if(bindingResult.hasErrors()){
+            return "/client/client-edit-page";
+        }
 
         clientAdminister.editClientProfile(clientPrincipal.getId(),clientEditForm);
 
@@ -99,7 +105,6 @@ public class ClientController {
 
         return "Ok";
     }
-
 
 
 
