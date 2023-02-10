@@ -1,4 +1,4 @@
-package com.example.servicehub.dto;
+package com.example.servicehub.web.dto;
 
 import com.example.servicehub.domain.Client;
 import lombok.AllArgsConstructor;

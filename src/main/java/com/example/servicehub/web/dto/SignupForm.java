@@ -1,4 +1,4 @@
-package com.example.servicehub.dto;
+package com.example.servicehub.web.dto;
 
 import com.example.servicehub.web.validator.UniqueType;
 import com.example.servicehub.web.validator.annotation.KeycloakUnique;

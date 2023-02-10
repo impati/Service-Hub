@@ -2,7 +2,7 @@ package com.example.servicehub.web;
 
 import com.example.servicehub.dto.ClientEditForm;
 import com.example.servicehub.dto.ServiceSearchConditionForm;
-import com.example.servicehub.dto.SimpleClientDto;
+import com.example.servicehub.web.dto.SimpleClientDto;
 import com.example.servicehub.security.authentication.ClientPrincipal;
 import com.example.servicehub.service.CategoryAdminister;
 import com.example.servicehub.service.ClientAdminister;

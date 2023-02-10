@@ -1,6 +1,6 @@
 package com.example.servicehub.web;
 
-import com.example.servicehub.dto.SignupForm;
+import com.example.servicehub.web.dto.SignupForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
