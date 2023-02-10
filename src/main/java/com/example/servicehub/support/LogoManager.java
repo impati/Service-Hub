@@ -17,32 +17,23 @@ import java.util.List;
 import java.util.UUID;
 
 @Slf4j
-public class LogoManager {
+public class LogoManager extends AbstractFileManager{
 
     @Value("${logo.dir}")
     private String logoDir;
 
-    private final static List<String> imageExtension = new ArrayList<>(List.of("png","bmp","rle","dib","jpeg","jpg","gif","tif","tiff","raw"));
-
+    @Override
     public String getFullPath (String logoName){
         return logoDir + logoName;
     }
 
+    @Override
     public String tryToRestore(MultipartFile logo){
         try{
             return restore(logo);
         }catch (Exception e){
             throw new FileStoreException("[" + logo + "] 로고 이미지 저장 실패 ");
         }
-    }
-
-    public String restore(MultipartFile logo) throws IOException {
-        if(!logo.isEmpty()){
-            String storeName = createUniqueName() + extractExtension(logo.getOriginalFilename());
-            logo.transferTo(new File(getFullPath(storeName)));
-            return storeName;
-        }
-        return null;
     }
 
     public String download(String logoUrl){
@@ -56,17 +47,5 @@ public class LogoManager {
         return storeName;
     }
 
-
-    private String extractExtension(String originFileName){
-        return "." + imageExtension
-                .stream()
-                .filter(originFileName.toLowerCase()::contains)
-                .findFirst().orElseThrow(()->new IllegalStateException("지원하지 않는 파일형식입니다"));
-    }
-
-    private String createUniqueName(){
-        String uuid = UUID.randomUUID().toString();
-        return uuid;
-    }
 
 }

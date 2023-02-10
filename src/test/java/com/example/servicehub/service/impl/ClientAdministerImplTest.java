@@ -62,7 +62,7 @@ class ClientAdministerImplTest {
         Assertions.assertThat(admin.getNickname()).isEqualTo(nickname);
         Assertions.assertThat(admin.getIntroduceComment()).isEqualTo("hi hello world");
         Assertions.assertThat(admin.getBlogUrl()).isEqualTo("https://github.com/impati/Service-Hub");
-        Assertions.assertThat(admin.getProfileImageUrl()).isEqualTo("http://impatient.iptime.org:9090/profile/default.png");
+        Assertions.assertThat(admin.getProfileImageUrl()).isEqualTo("http://impatient.iptime.org:9090/file/profile/default.png");
     }
 
 
