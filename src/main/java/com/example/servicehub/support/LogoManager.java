@@ -18,8 +18,10 @@ import java.util.UUID;
 
 @Slf4j
 public class LogoManager {
+
     @Value("${logo.dir}")
     private String logoDir;
+
     private final static List<String> imageExtension = new ArrayList<>(List.of("png","bmp","rle","dib","jpeg","jpg","gif","tif","tiff","raw"));
 
     public String getFullPath (String logoName){
@@ -62,9 +64,9 @@ public class LogoManager {
                 .findFirst().orElseThrow(()->new IllegalStateException("지원하지 않는 파일형식입니다"));
     }
 
-
     private String createUniqueName(){
         String uuid = UUID.randomUUID().toString();
         return uuid;
     }
+
 }

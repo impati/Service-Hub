@@ -34,4 +34,5 @@ public class ProjectConfig {
     public KeycloakUsernameUniqueValidator keycloakUsernameUniqueValidator(){
         return new KeycloakUsernameUniqueValidator(clientRepository);
     }
+
 }

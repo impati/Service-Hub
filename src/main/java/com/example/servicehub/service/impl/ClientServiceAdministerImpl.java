@@ -80,6 +80,7 @@ public class ClientServiceAdministerImpl implements ClientServiceAdminister {
 
     @Override
     public String countClickAndReturnUrl(Long clientId, Long serviceId) {
+
         ClientAndService clientAndService = createBy(clientId,serviceId);
 
         ClientService clientService = clientServiceRepository.findClientServiceByClientAndServices(clientAndService.getClient(), clientAndService.getServices())
@@ -91,6 +92,7 @@ public class ClientServiceAdministerImpl implements ClientServiceAdminister {
     }
 
     private ClientAndService createBy(Long clientId,Long serviceId){
+
         Client client = clientRepository.findById(clientId)
                 .orElseThrow(()->new EntityNotFoundException("유효하지 않은 사용자입니다."));
 

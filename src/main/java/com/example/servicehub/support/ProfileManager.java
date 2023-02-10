@@ -13,6 +13,7 @@ import java.util.UUID;
 public class ProfileManager {
 
     public static final String DEFAULT = "default.png";
+
     @Value("${profile.dir}")
     private String profileDir;
 
@@ -52,4 +53,5 @@ public class ProfileManager {
         String uuid = UUID.randomUUID().toString();
         return uuid;
     }
+
 }

@@ -10,6 +10,6 @@ public abstract class ClientPrincipalUtil {
     }
 
     private ClientPrincipalUtil(){
-
     }
+
 }

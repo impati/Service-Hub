@@ -10,6 +10,9 @@ import java.util.Optional;
 
 
 public interface ServiceSearch {
+
     Page<PopularityServiceDto> search(ServiceSearchConditionForm serviceSearchConditionForm, Optional<Long> optionalClientId, Pageable pageable);
+
     SingleServiceWithCommentsDto searchSingleService(Long serviceId , Optional<Long> optionalClientId);
+
 }

@@ -102,9 +102,6 @@ public class ClientController {
         return "Ok";
     }
 
-
-
-
     @GetMapping("/click")
     public String clickService(
             @RequestParam Long serviceId,

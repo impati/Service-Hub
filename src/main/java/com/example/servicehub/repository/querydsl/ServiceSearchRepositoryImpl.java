@@ -20,15 +20,6 @@ import static com.example.servicehub.domain.QClientService.clientService;
 import static com.example.servicehub.domain.QServiceCategory.serviceCategory;
 import static com.example.servicehub.domain.QServices.services;
 
-/**
- * select count(*) , s.service_name,s.service_URL
- * from client_service cs
- * join services s on s.service_id = cs.service_id
- * join service_category sc on sc.service_id = s.service_id
- * where s.service_name like '%잡%'  and sc.category_id in(5)
- * group by cs.service_id
- * order by count(*) desc
- */
 @Slf4j
 @RequiredArgsConstructor
 public class ServiceSearchRepositoryImpl implements ServiceSearchRepository{

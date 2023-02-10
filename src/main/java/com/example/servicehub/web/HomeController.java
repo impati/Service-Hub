@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @Slf4j
@@ -44,7 +46,8 @@ public class HomeController {
     @PostMapping("/signup")
     public String signup(@Valid @ModelAttribute SignupForm signupForm,
                          BindingResult bindingResult,
-                         RedirectAttributes redirectAttributes){
+                         RedirectAttributes redirectAttributes,
+                         HttpServletRequest request, HttpServletResponse response){
 
         if(!signupForm.isSamePassword()) bindingResult.rejectValue("repeatPassword",null,"비밀번호가 일치하지 않습니다.");
 
