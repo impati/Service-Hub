@@ -62,20 +62,11 @@ public class SignupManager {
         return response.getBody().getAccess_token();
     }
 
-
     private KeycloakSignupForm signUpFormMapping(HttpServletRequest  request){
-        validPassword(request);
         return new KeycloakSignupForm(request.getParameter("username"),
                 request.getParameter("email"),
                 request.getParameter("password"));
     }
-
-    private void validPassword(HttpServletRequest request){
-        String password = request.getParameter("password");
-        String repeatPassword = request.getParameter("repeatPassword");
-        if(!password.equals(repeatPassword)) throw new PasswordNotMatchException("두 패스워드가 일치하지 않습니다.");
-    }
-
 
     @Data
     @NoArgsConstructor
