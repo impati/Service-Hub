@@ -13,7 +13,12 @@
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
 
 </head>
-
+<style>
+    .field-error {
+        border-color: #dc3545;
+        color: #dc3545;
+    }
+</style>
 <body class="">
 
 <div class="container" >
@@ -42,6 +47,7 @@
                                         <input type="password" class="form-control form-control-user"
                                                id="exampleInputPassword" name="password" placeholder="Password">
                                     </div>
+                                    <small class="field-error" th:if="${error}" th:text="|아이디 혹은 비밀번호가 맞지 않습니다.|" ></small>
                                     <div class="form-group">
                                         <div class="custom-control custom-checkbox small">
                                             <input type="checkbox" class="custom-control-input" id="customCheck">
