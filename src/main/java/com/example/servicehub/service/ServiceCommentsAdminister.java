@@ -1,7 +1,6 @@
 package com.example.servicehub.service;
 
 
-import com.example.servicehub.domain.ServiceComment;
 import com.example.servicehub.dto.ServiceCommentForm;
 import com.example.servicehub.dto.ServiceCommentUpdateForm;
 import com.example.servicehub.dto.ServiceCommentsDto;

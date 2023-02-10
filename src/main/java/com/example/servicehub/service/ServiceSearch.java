@@ -1,6 +1,5 @@
 package com.example.servicehub.service;
 
-import com.example.servicehub.domain.Client;
 import com.example.servicehub.dto.PopularityServiceDto;
 import com.example.servicehub.dto.ServiceSearchConditionForm;
 import com.example.servicehub.dto.SingleServiceWithCommentsDto;

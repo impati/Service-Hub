@@ -1,26 +1,19 @@
 package com.example.servicehub.repository.querydsl;
 
-import com.example.servicehub.domain.*;
 import com.example.servicehub.dto.ClickServiceDto;
 import com.example.servicehub.dto.PopularityServiceDto;
-import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
-import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.OrderComparator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.querydsl.QuerydslUtils;
 
 import java.util.List;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 import static com.example.servicehub.domain.QClient.client;
 import static com.example.servicehub.domain.QClientService.clientService;

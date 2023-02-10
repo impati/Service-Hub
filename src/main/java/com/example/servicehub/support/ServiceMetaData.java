@@ -1,6 +1,5 @@
 package com.example.servicehub.support;
 
-import lombok.Data;
 import lombok.ToString;
 
 @ToString

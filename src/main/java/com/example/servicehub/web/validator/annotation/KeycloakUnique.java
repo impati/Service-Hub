@@ -1,6 +1,5 @@
 package com.example.servicehub.web.validator.annotation;
 
-import com.example.servicehub.web.validator.FileSizeValidator;
 import com.example.servicehub.web.validator.KeycloakUsernameUniqueValidator;
 import com.example.servicehub.web.validator.UniqueType;
 

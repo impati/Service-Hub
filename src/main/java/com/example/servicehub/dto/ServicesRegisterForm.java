@@ -1,14 +1,10 @@
 package com.example.servicehub.dto;
 
-import com.example.servicehub.domain.Services;
 import com.example.servicehub.web.validator.annotation.FileSize;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;

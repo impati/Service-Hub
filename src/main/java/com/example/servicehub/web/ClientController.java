@@ -1,9 +1,7 @@
 package com.example.servicehub.web;
 
-import com.example.servicehub.domain.Client;
 import com.example.servicehub.dto.ClientEditForm;
 import com.example.servicehub.dto.ServiceSearchConditionForm;
-import com.example.servicehub.dto.ServicesRegisterForm;
 import com.example.servicehub.dto.SimpleClientDto;
 import com.example.servicehub.security.authentication.ClientPrincipal;
 import com.example.servicehub.service.CategoryAdminister;
@@ -11,7 +9,6 @@ import com.example.servicehub.service.ClientAdminister;
 import com.example.servicehub.service.ClientServiceAdminister;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.validator.constraints.ModCheck;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Controller

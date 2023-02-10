@@ -1,6 +1,5 @@
 package com.example.servicehub.repository;
 
-import com.example.servicehub.domain.Category;
 import com.example.servicehub.domain.ServiceCategory;
 import com.example.servicehub.domain.Services;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ServiceCategoryRepository extends JpaRepository<ServiceCategory,Long> {
 
