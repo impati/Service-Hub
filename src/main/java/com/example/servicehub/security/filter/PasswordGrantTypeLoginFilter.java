@@ -1,10 +1,13 @@
 package com.example.servicehub.security.filter;
 
 import com.example.servicehub.security.authentication.CustomOAuth2UserService;
+import org.springframework.security.access.event.AuthenticationCredentialsNotFoundEvent;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.ClientAuthorizationException;
 import org.springframework.security.oauth2.client.OAuth2AuthorizeRequest;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -13,10 +16,12 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
+import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.OAuth2RefreshToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.RequestMatcherRedirectFilter;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.util.matcher.AndRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
@@ -44,18 +49,27 @@ public class PasswordGrantTypeLoginFilter extends AbstractAuthenticationProcessi
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, ServletException, IOException {
+        try {
+            return attemptAuthenticationOrThrow(request,response);
+        }catch (ClientAuthorizationException e){
+            getFailureHandler().onAuthenticationFailure(request,response,new InsufficientAuthenticationException("invalid username or password"));
+        }
+        return null;
+    }
 
-        OAuth2AuthorizedClient oAuth2AuthorizedClient = oAuth2AuthorizedClientManager.authorize(getOAuth2AuthorizeRequest(request,response));
 
-        if(isExist(oAuth2AuthorizedClient)) {
+    private Authentication attemptAuthenticationOrThrow(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        OAuth2AuthorizedClient oAuth2AuthorizedClient = oAuth2AuthorizedClientManager.authorize(getOAuth2AuthorizeRequest(request, response));
 
+        if (isExist(oAuth2AuthorizedClient)) {
             OAuth2User oauth2User = customOAuth2UserService.loadUser(new OAuth2UserRequest(
                     oAuth2AuthorizedClient.getClientRegistration(), oAuth2AuthorizedClient.getAccessToken()));
 
             return new OAuth2AuthenticationToken(oauth2User, oauth2User.getAuthorities(), REGISTRATION_ID);
         }
-        return null;
+
+        throw new ClientAuthorizationException(new OAuth2Error("keycloak Error"),REGISTRATION_ID);
     }
 
     private OAuth2AuthorizeRequest getOAuth2AuthorizeRequest(HttpServletRequest request,HttpServletResponse response){
@@ -70,6 +84,12 @@ public class PasswordGrantTypeLoginFilter extends AbstractAuthenticationProcessi
     private boolean isExist(OAuth2AuthorizedClient oAuth2AuthorizedClient){
         if(oAuth2AuthorizedClient != null) return true;
         return false;
+    }
+
+
+    @Override
+    public void setAuthenticationFailureHandler(AuthenticationFailureHandler failureHandler) {
+        super.setAuthenticationFailureHandler(failureHandler);
     }
 
 }

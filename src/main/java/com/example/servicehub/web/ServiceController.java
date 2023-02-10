@@ -1,6 +1,7 @@
 package com.example.servicehub.web;
 
 import com.example.servicehub.dto.PopularityServiceDto;
+import com.example.servicehub.dto.ServiceCommentForm;
 import com.example.servicehub.dto.ServiceSearchConditionForm;
 import com.example.servicehub.dto.ServicesRegisterForm;
 import com.example.servicehub.security.authentication.ClientPrincipal;
@@ -9,6 +10,7 @@ import com.example.servicehub.service.CategoryAdminister;
 import com.example.servicehub.service.ServiceSearch;
 import com.example.servicehub.service.ServicesRegister;
 import com.example.servicehub.support.MetaDataCrawler;
+import com.example.servicehub.support.ServiceMetaData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -19,8 +21,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Slf4j
@@ -40,9 +46,15 @@ public class ServiceController {
     public String renderServiceRegistrationPage(@RequestParam(value = "serviceUrl",required = false) String serviceUrl,
                                                     Model model){
 
-        model.addAttribute("metaData",metaDataCrawler.tryToGetMetaData(serviceUrl));
+        ServiceMetaData serviceMetaData = metaDataCrawler.tryToGetMetaData(serviceUrl);
 
-        model.addAttribute("serviceRegisterForm",new ServicesRegisterForm());
+        model.addAttribute("serviceRegisterForm",ServicesRegisterForm.of(
+                serviceMetaData.getSiteName(),
+                serviceMetaData.getUrl(),
+                serviceMetaData.getTitle(),
+                serviceMetaData.getDescription(),
+                serviceMetaData.getImage()
+        ));
 
         model.addAttribute("categories",categoryAdminister.getAllCategories());
 
@@ -50,7 +62,14 @@ public class ServiceController {
     }
 
     @PostMapping("/registration")
-    public String RegisterService(@ModelAttribute ServicesRegisterForm servicesRegisterForm){
+    public String RegisterService(@Valid @ModelAttribute("serviceRegisterForm")ServicesRegisterForm servicesRegisterForm,
+                                  BindingResult bindingResult,
+                                  Model model){
+
+        if(bindingResult.hasErrors()){
+            model.addAttribute("categories",categoryAdminister.getAllCategories());
+            return "service/registration";
+        }
 
         servicesRegister.registerServices(servicesRegisterForm);
 

@@ -13,12 +13,15 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
 public class LogoManager {
     @Value("${logo.dir}")
     private String logoDir;
+    private final static List<String> imageExtension = new ArrayList<>(List.of("png","bmp","rle","dib","jpeg","jpg","gif","tif","tiff","raw"));
 
     public String getFullPath (String logoName){
         return logoDir + logoName;
@@ -54,9 +57,12 @@ public class LogoManager {
 
 
     private String extractExtension(String originFileName){
-        String[] splitStringByPoint = originFileName.split("\\.");
-        return "." + splitStringByPoint[splitStringByPoint.length - 1];
+        return "." + imageExtension
+                .stream()
+                .filter(originFileName.toLowerCase()::contains)
+                .findFirst().orElseThrow(()->new IllegalStateException("지원하지 않는 파일형식입니다"));
     }
+
 
     private String createUniqueName(){
         String uuid = UUID.randomUUID().toString();

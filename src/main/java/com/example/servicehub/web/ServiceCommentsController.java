@@ -11,8 +11,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.Optional;
 
 @Slf4j
@@ -25,10 +28,18 @@ public class ServiceCommentsController {
     private final ServiceSearch serviceSearch;
 
     @PostMapping
-    public String addServiceComments(@ModelAttribute ServiceCommentForm serviceCommentForm,
+    public String addServiceComments(@Valid @ModelAttribute ServiceCommentForm serviceCommentForm,
+                                     BindingResult bindingResult,
+                                     RedirectAttributes redirectAttributes,
                                      @AuthenticationPrincipal ClientPrincipal clientPrincipal){
 
-        serviceCommentForm.assignAnAuthor(clientPrincipal.getId());
+        if(bindingResult.hasErrors()){
+            redirectAttributes.addAttribute("contentError",bindingResult.getFieldError().getDefaultMessage());
+            redirectAttributes.addAttribute("hasError",true);
+            return "redirect:/service/" + serviceCommentForm.getServiceId();
+        }
+
+        serviceCommentForm.assignAuthor(clientPrincipal.getId());
 
         serviceCommentsAdminister.addServiceComment(serviceCommentForm);
 
@@ -51,8 +62,11 @@ public class ServiceCommentsController {
     }
 
     @PostMapping("/edit")
-    public String updateComment(@ModelAttribute ServiceCommentUpdateForm serviceCommentUpdateForm,
+    public String updateComment(@Valid @ModelAttribute ServiceCommentUpdateForm serviceCommentUpdateForm,
+                                BindingResult bindingResult,
                                 @AuthenticationPrincipal ClientPrincipal clientPrincipal){
+
+        if(bindingResult.hasErrors()) return "/service/service-edit-page";
 
         serviceCommentUpdateForm.assignClient(clientPrincipal.getId());
 

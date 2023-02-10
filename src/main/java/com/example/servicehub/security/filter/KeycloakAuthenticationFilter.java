@@ -36,4 +36,6 @@ public class KeycloakAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request,response);
     }
 
+
+
 }

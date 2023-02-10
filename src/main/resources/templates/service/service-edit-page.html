@@ -4,7 +4,12 @@
   <div th:insert="~{fragment/header :: header}"></div>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/3.0.1/github-markdown.css" rel="stylesheet">
 </head>
-
+<style>
+  .field-error {
+    border-color: #dc3545;
+    color: #dc3545;
+  }
+</style>
 <body>
 
 
@@ -99,11 +104,12 @@
 
 
         <div class="mb-1">
-          <form th:action="@{/comments/edit}" method="post">
+          <form th:action="@{/comments/edit}" method="post" th:object="${serviceCommentUpdateForm}">
             <input type="hidden" id="serviceId" th:value="${singleServiceWithCommentsDto.serviceId}" name="serviceId">
 
             <input type="hidden" id="commentId" th:value="${commentId}" name="commentId">
-            <input type="text" class="form-control" name="content"  th:value="${commentContent}" id="content" rows="1"></input>
+            <input type="text" class="form-control" name="content"  th:value="${commentContent}" id="content" rows="1">
+            <small class="field-error" th:field="*{content}"></small>
             <br>
             <div style="text-align: right">
               <button class="btn btn-dark" type="submit" id="button-addon2">게시</button>
