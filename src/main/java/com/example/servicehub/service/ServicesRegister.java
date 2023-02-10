@@ -20,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional
 public class ServicesRegister {
+
     private final ServicesRepository servicesRepository;
     private final CategoryRepository categoryRepository;
     private final ServiceCategoryRepository serviceCategoryRepository;

@@ -1,6 +1,5 @@
 package com.example.servicehub.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
 

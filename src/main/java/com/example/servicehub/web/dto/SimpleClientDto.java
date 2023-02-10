@@ -1,4 +1,4 @@
-package com.example.servicehub.dto;
+package com.example.servicehub.web.dto;
 
 import com.example.servicehub.domain.Client;
 import lombok.AllArgsConstructor;
@@ -15,6 +15,7 @@ public class SimpleClientDto {
     private String blogUrl;
     private String profileUrl;
     private String introComment;
+
     public static SimpleClientDto from(Client client){
         return new SimpleClientDto(client.getNickname(),client.getId(),client.getBlogUrl(),client.getProfileImageUrl(),client.getIntroduceComment());
     }

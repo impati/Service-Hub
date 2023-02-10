@@ -58,7 +58,7 @@
 
           <div class="col-md-2">
             <a class="card-link"  th:href="${service.serviceUrl}">
-              <img class="img-fluid rounded-start" width="50%" height="100%" th:src='@{/logo/{store} (store=${service.logoStoreName})}' alt="image">
+              <img class="img-fluid rounded-start" width="50%" height="100%" th:src='@{/file/logo/{store} (store=${service.logoStoreName})}' alt="image">
             </a>
           </div>
 
@@ -101,7 +101,7 @@
 
     $.ajax({
       type: 'POST',
-      url:'http://impatient.iptime.org:9090/client/add-service/' + serviceId,
+      url: domain + '/client/add-service/' + serviceId,
       beforeSend : function(xhr)
       {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
         xhr.setRequestHeader(header, token);
@@ -125,7 +125,7 @@
 
     $.ajax({
       type: 'POST',
-      url:'http://impatient.iptime.org:9090/client/delete-service/' + serviceId,
+      url: domain + '/client/delete-service/' + serviceId,
       beforeSend : function(xhr)
       {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
         xhr.setRequestHeader(header, token);

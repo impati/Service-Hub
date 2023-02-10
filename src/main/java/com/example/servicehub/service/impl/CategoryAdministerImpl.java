@@ -1,5 +1,6 @@
 package com.example.servicehub.service.impl;
 
+import com.example.servicehub.domain.Category;
 import com.example.servicehub.repository.CategoryRepository;
 import com.example.servicehub.service.CategoryAdminister;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class CategoryAdministerImpl implements CategoryAdminister {
     public List<String> getAllCategories() {
         return categoryRepository.findAll()
                 .stream()
-                .map(category -> category.getName())
+                .map(Category::getName)
                 .collect(Collectors.toList());
     }
 

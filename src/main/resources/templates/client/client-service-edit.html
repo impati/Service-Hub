@@ -44,7 +44,7 @@
           <div class="card" style="width: 60%; height: 100%;border: none;justify-content: center">
             <button th:onclick="|deleteAction('${service.serviceId}')|" style="width: 50%" class="btn btn-outline-danger">-</button>
             <a class="card-link" style="display: block;width: 100%" th:href="@{/client/click/(serviceId=${service.serviceId},serviceUrl=${service.serviceUrl})}">
-              <img style="width: 50px; display: block" th:src="@{/logo/{logoStoreName} (logoStoreName=${service.logoStoreName})}" class="card-img" alt="image">
+              <img style="width: 50px; display: block" th:src="@{/file/logo/{logoStoreName} (logoStoreName=${service.logoStoreName})}" class="card-img" alt="image">
             </a>
             <a class="tile" th:text="${service.serviceName}"  th:href="@{/service/{serviceId} (serviceId=${service.serviceId})}">
             </a>
@@ -69,7 +69,7 @@
 
     $.ajax({
       type: 'POST',
-      url:'http://impatient.iptime.org:9090/client/service/delete/' + serviceId,
+      url: domain + '/client/service/delete/' + serviceId,
       beforeSend : function(xhr)
       {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
         xhr.setRequestHeader(header, token);

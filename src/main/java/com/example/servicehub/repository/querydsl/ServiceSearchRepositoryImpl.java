@@ -1,41 +1,25 @@
 package com.example.servicehub.repository.querydsl;
 
-import com.example.servicehub.domain.*;
 import com.example.servicehub.dto.ClickServiceDto;
 import com.example.servicehub.dto.PopularityServiceDto;
-import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
-import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.OrderComparator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.querydsl.QuerydslUtils;
 
 import java.util.List;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 import static com.example.servicehub.domain.QClient.client;
 import static com.example.servicehub.domain.QClientService.clientService;
 import static com.example.servicehub.domain.QServiceCategory.serviceCategory;
 import static com.example.servicehub.domain.QServices.services;
 
-/**
- * select count(*) , s.service_name,s.service_URL
- * from client_service cs
- * join services s on s.service_id = cs.service_id
- * join service_category sc on sc.service_id = s.service_id
- * where s.service_name like '%잡%'  and sc.category_id in(5)
- * group by cs.service_id
- * order by count(*) desc
- */
 @Slf4j
 @RequiredArgsConstructor
 public class ServiceSearchRepositoryImpl implements ServiceSearchRepository{

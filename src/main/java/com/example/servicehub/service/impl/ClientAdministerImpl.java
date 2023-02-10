@@ -45,7 +45,7 @@ public class ClientAdministerImpl implements ClientAdminister {
 
     private String convertImageUrl(Client client , String storeName){
         if(storeName.equals(ProfileManager.DEFAULT) && client.getProfileImageUrl() != null) return client.getProfileImageUrl();
-        return ProjectUtils.getDomain() + "/profile/" + storeName;
+        return ProjectUtils.getDomain() + "/file/profile/" + storeName;
     }
 
 }

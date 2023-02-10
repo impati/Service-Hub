@@ -16,6 +16,5 @@ public @interface FileSize {
     Class<? extends Payload> [] payload() default{};
     Class<?>[] groups() default {};
     long maxSizeInMB() default 512;
-
     String message() default "Max file size exceed.";
 }

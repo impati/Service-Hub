@@ -1,11 +1,14 @@
 package com.example.servicehub.service.impl;
 
-import com.example.servicehub.domain.*;
+import com.example.servicehub.domain.Client;
+import com.example.servicehub.domain.ClientService;
+import com.example.servicehub.domain.Services;
 import com.example.servicehub.dto.ClickServiceDto;
-import com.example.servicehub.dto.PopularityServiceDto;
 import com.example.servicehub.dto.ServiceSearchConditionForm;
-import com.example.servicehub.repository.*;
-import com.example.servicehub.repository.querydsl.ServiceSearchRepository;
+import com.example.servicehub.repository.ClientRepository;
+import com.example.servicehub.repository.ClientServiceRepository;
+import com.example.servicehub.repository.ServiceCategoryRepository;
+import com.example.servicehub.repository.ServicesRepository;
 import com.example.servicehub.service.ClientServiceAdminister;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.List;
 import java.util.Optional;
 
 import static com.example.servicehub.domain.ServicePage.*;
@@ -78,6 +80,7 @@ public class ClientServiceAdministerImpl implements ClientServiceAdminister {
 
     @Override
     public String countClickAndReturnUrl(Long clientId, Long serviceId) {
+
         ClientAndService clientAndService = createBy(clientId,serviceId);
 
         ClientService clientService = clientServiceRepository.findClientServiceByClientAndServices(clientAndService.getClient(), clientAndService.getServices())
@@ -89,6 +92,7 @@ public class ClientServiceAdministerImpl implements ClientServiceAdminister {
     }
 
     private ClientAndService createBy(Long clientId,Long serviceId){
+
         Client client = clientRepository.findById(clientId)
                 .orElseThrow(()->new EntityNotFoundException("유효하지 않은 사용자입니다."));
 

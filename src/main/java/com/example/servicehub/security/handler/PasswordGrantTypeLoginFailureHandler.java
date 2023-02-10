@@ -1,7 +1,6 @@
 package com.example.servicehub.security.handler;
 
 import com.example.servicehub.util.ProjectUtils;
-import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;

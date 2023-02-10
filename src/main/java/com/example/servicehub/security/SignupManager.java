@@ -1,6 +1,5 @@
 package com.example.servicehub.security;
 
-import com.example.servicehub.exception.PasswordNotMatchException;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

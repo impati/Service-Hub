@@ -1,7 +1,6 @@
 package com.example.servicehub.web;
 
-import com.example.servicehub.dto.LoginForm;
-import com.example.servicehub.dto.SignupForm;
+import com.example.servicehub.web.dto.SignupForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -13,12 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.IOException;
 
 @Slf4j
 @Controller
@@ -50,7 +46,8 @@ public class HomeController {
     @PostMapping("/signup")
     public String signup(@Valid @ModelAttribute SignupForm signupForm,
                          BindingResult bindingResult,
-                         RedirectAttributes redirectAttributes){
+                         RedirectAttributes redirectAttributes,
+                         HttpServletRequest request, HttpServletResponse response){
 
         if(!signupForm.isSamePassword()) bindingResult.rejectValue("repeatPassword",null,"비밀번호가 일치하지 않습니다.");
 

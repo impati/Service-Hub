@@ -1,10 +1,10 @@
 package com.example.servicehub.support;
 
-import lombok.Data;
 import lombok.ToString;
 
 @ToString
 public class ServiceMetaData {
+
     private String siteName;
     private String title;
     private String url;
