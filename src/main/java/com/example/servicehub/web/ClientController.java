@@ -44,7 +44,7 @@ public class ClientController {
 
         model.addAttribute("simpleClient", SimpleClientDto.from(clientAdminister.findClientByClientId(clientId)));
 
-        return "/client/client-page";
+        return "client/client-page";
     }
 
     @GetMapping("/edit")
@@ -55,7 +55,7 @@ public class ClientController {
         model.addAttribute("clientEditForm",
                 ClientEditForm.from(clientAdminister.findClientByClientId(clientPrincipal.getId())));
 
-        return "/client/client-edit-page";
+        return "client/client-edit-page";
     }
 
     @PostMapping("/edit")
@@ -64,7 +64,7 @@ public class ClientController {
             @Valid @ModelAttribute ClientEditForm clientEditForm , BindingResult bindingResult){
 
         if(bindingResult.hasErrors()){
-            return "/client/client-edit-page";
+            return "client/client-edit-page";
         }
 
         clientAdminister.editClientProfile(clientPrincipal.getId(),clientEditForm);

@@ -60,7 +60,7 @@ public class ServiceCommentsController {
 
         model.addAttribute("commentContent",serviceCommentsAdminister.getCommentContent(serviceCommentUpdateForm.getCommentId()));
 
-        return "/service/service-edit-page";
+        return "service/service-edit-page";
     }
 
     @PostMapping("/edit")
