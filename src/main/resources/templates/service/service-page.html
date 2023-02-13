@@ -25,6 +25,7 @@
 
             <button class="btn btn-primary" th:onclick="|javascript:addAction('${singleServiceWithCommentsDto.serviceId}')|"  th:unless="${singleServiceWithCommentsDto.isPossess}" sec:authorize="isAuthenticated()" > 내 서비스 추가 </button>
             <button class="btn btn-primary" th:onclick="|javascript:deleteAction('${singleServiceWithCommentsDto.serviceId}')|"  th:if="${singleServiceWithCommentsDto.isPossess}" sec:authorize="isAuthenticated()" > 내 서비스 삭제 </button>
+            <button class="btn btn-primary" th:onclick="|location.href='@{/service/{serviceId}/update (serviceId=${singleServiceWithCommentsDto.serviceId}) }'|"  sec:authorize="hasRole('ADMIN')" > 서비스 수정 </button>
 
         </div><!--//container-->
     </section>

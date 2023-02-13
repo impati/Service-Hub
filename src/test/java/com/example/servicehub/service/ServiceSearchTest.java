@@ -194,5 +194,16 @@ class ServiceSearchTest {
                 .isEqualTo(1);
     }
 
+    @Test
+    @DisplayName("단일 서비스 조회 - 수정 페이지")
+    public void givenServiceID_whenSearchFetchCategories_thenServiceWithCategories() throws Exception{
+        // given
+        // when
+        Services search = serviceSearch.search(1L);
+        // then
+        assertThat(search.getServiceCategories().size())
+                .isEqualTo(2);
+    }
+
 
 }

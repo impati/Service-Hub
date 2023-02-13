@@ -1,5 +1,6 @@
 package com.example.servicehub.service;
 
+import com.example.servicehub.domain.Services;
 import com.example.servicehub.dto.PopularityServiceDto;
 import com.example.servicehub.dto.ServiceSearchConditionForm;
 import com.example.servicehub.dto.SingleServiceWithCommentsDto;
@@ -15,4 +16,5 @@ public interface ServiceSearch {
 
     SingleServiceWithCommentsDto searchSingleService(Long serviceId , Optional<Long> optionalClientId);
 
+    Services search(Long serviceId);
 }

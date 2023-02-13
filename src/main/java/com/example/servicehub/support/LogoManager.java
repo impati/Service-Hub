@@ -32,7 +32,7 @@ public class LogoManager extends AbstractFileManager{
         try{
             return restore(logo);
         }catch (Exception e){
-            throw new FileStoreException("[" + logo + "] 로고 이미지 저장 실패 ");
+            throw new FileStoreException(e.getMessage() + "[" + logo + "] 로고 이미지 저장 실패 ");
         }
     }
 

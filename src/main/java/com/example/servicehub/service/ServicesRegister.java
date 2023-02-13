@@ -14,6 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @Service
@@ -47,10 +50,13 @@ public class ServicesRegister {
         if(logoUrl != null) return true;
         return false;
     }
-    private void  addCategoriesToServices(List<String> categories,Services services){
-        categoryRepository.findByNames(categories)
+
+    private void addCategoriesToServices(List<String> categories,Services services){
+        serviceCategoryRepository.saveAll(
+                categoryRepository.findByNames(categories)
                 .stream()
-                .forEach(category -> serviceCategoryRepository.save(ServiceCategory.of(services,category)));
+                .map(category -> ServiceCategory.of(services,category))
+                .collect(toList()));
     }
 
 }

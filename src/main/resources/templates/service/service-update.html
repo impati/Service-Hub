@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:insert="~{fragment/header :: header}"></div>
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.2.13/dist/semantic.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/3.0.1/github-markdown.css" rel="stylesheet">
+
+</head>
+<style>
+    .field-error {
+        border-color: #dc3545;
+        color: #dc3545;
+    }
+</style>
+<body>
+
+<div class="container">
+
+    <div th:insert="~{fragment/toolbar :: toolbar}"></div>
+
+    <!-- 헤딩 -->
+    <section class="cta-section theme-bg-light py-5">
+        <div class="container text-center">
+            <h2 class="heading">Service Registration</h2>
+        </div><!--//container-->
+    </section>
+
+    <section class="contact-section px-3 py-5 p-md-5">
+
+        <div class="container">
+            <form th:object="${serviceUpdateForm}" class="contact-form col-lg-8 mx-lg-auto" th:action method="post" enctype="multipart/form-data">
+
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="sr-only" for="serviceName">serviceName</label>
+                        <input type="text" class="form-control" id="serviceName" name="serviceName"  th:field="*{serviceName}" placeholder="serviceName" required="" aria-required="true">
+                        <small class="form-text text-muted pt-1"><i class="fas fa-info-circle me-2 text-primary"></i>서비스 이름을 입력해주세요</small>
+                        <small class="field-error" th:errors="*{serviceName}"></small>
+                    </div>
+
+
+                    <div class="col-12 col-md-6">
+                        <label class="sr-only" for="logoFile">LOGO</label>
+                        <input type="file" class="form-control" id="logoFile" name="logoFile" th:field="*{logoFile}" placeholder="LOGO">
+                        <small class="form-text text-muted pt-1"><i class="fas fa-info-circle me-2 text-primary"></i>서비스 로고를 선택해주세요</small>
+                        <small class="field-error" th:errors="*{logoFile}"></small>
+                    </div>
+
+
+                    <div class="col-12 col-md-6">
+                        <label class="sr-only" for="url">URL</label>
+                        <input type="url" class="form-control" id="url" name="servicesUrl" placeholder="URL" th:field="*{serviceUrl}"required="" aria-required="true" >
+                        <small class="form-text text-muted pt-1"><i class="fas fa-info-circle me-2 text-primary"></i>서비스 URL을 작성해주세요</small>
+                        <small class="field-error" th:errors="*{serviceUrl}"></small>
+                    </div>
+
+
+                    <div class="col-12 markdown-body">
+                        <label class="sr-only" for="title">Title</label>
+                        <input type="text" class="form-control" id="title" name="title" placeholder="Title" th:field="*{title}" required="" aria-required="true">
+                        <small class="form-text text-muted pt-1"><i class="fas fa-info-circle me-2 text-primary"></i>간단한 서비스 설명해주세요</small>
+                        <small class="field-error" th:errors="*{title}"></small>
+                    </div>
+
+
+                    <div class="col-12">
+                        <label class="sr-only" for="content">explain About Service ... </label>
+                        <textarea class="form-control" id="content" name="content" placeholder="explain About Service ... " th:field="*{description}" rows="10" required="" aria-required="true"></textarea>
+                        <small class="form-text text-muted pt-1"><i class="fas fa-info-circle me-2 text-primary"></i>서비스를 설명해주세요</small>
+                        <small class="field-error" th:errors="*{description}"></small>
+                    </div>
+
+                    <div class="col-12">
+                        <script type="text/javascript">
+                            $('#example-multiple-selected').multiselect();
+                        </script>
+                        <div>
+                            <label>Select category</label>
+                            <select name="categoryNames" th:field="*{categoryNames}" multiple="" class="label ui selection fluid dropdown" required="" aria-required="true">
+                                <option value="">카테고리 선택</option>
+                                <option th:each="category : ${categories}"
+                                        th:value="${category}"
+                                        th:text="${category}"></option>
+                            </select>
+                        </div>
+                        <small class="form-text text-muted pt-1"><i class="fas fa-info-circle me-2 text-primary"></i>서비스의 카테고리를 선택해주세요</small>
+                        <small class="field-error" th:errors="*{categoryNames}"></small>
+                    </div>
+
+                    <hr>
+                    <br>
+
+                    <div class="form-group col-12">
+                        <button type="submit"  class="btn btn-block btn-primary py-2">수정</button>
+                        <a class="btn btn-block btn-primary py-2" th:onclick="|location.href='@{/service/{serviceId} (serviceId=${serviceId}) }'|">취소</a>
+                    </div>
+
+                </div><!--//form-row-->
+            </form>
+        </div><!--//container-->
+    </section>
+
+    <div th:insert="~{fragment/footer :: footer}"></div>
+
+</div><!--//main-wrapper-->
+
+<script src="/js/jquery.min.js"></script>
+<script src="/js/popper.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.2.13/dist/semantic.min.js"></script>
+<script src="/js/main.js"></script>
+
+<div th:insert="~{fragment/library :: libraries}"></div>
+
+</body>
+</html>
+

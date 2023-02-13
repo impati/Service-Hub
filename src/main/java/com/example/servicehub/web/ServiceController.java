@@ -1,12 +1,11 @@
 package com.example.servicehub.web;
 
-import com.example.servicehub.dto.PopularityServiceDto;
-import com.example.servicehub.dto.ServiceSearchConditionForm;
-import com.example.servicehub.dto.ServicesRegisterForm;
+import com.example.servicehub.dto.*;
 import com.example.servicehub.security.authentication.ClientPrincipal;
 import com.example.servicehub.security.authentication.ClientPrincipalUtil;
 import com.example.servicehub.service.CategoryAdminister;
 import com.example.servicehub.service.ServiceSearch;
+import com.example.servicehub.service.ServiceUpdate;
 import com.example.servicehub.service.ServicesRegister;
 import com.example.servicehub.support.MetaDataCrawler;
 import com.example.servicehub.support.ServiceMetaData;
@@ -20,8 +19,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -34,7 +35,7 @@ public class ServiceController {
     private final ServicesRegister servicesRegister;
     private final ServiceSearch serviceSearch;
     private final MetaDataCrawler metaDataCrawler;
-
+    private final ServiceUpdate serviceUpdate;
 
     @GetMapping("/registration")
     public String renderServiceRegistrationPage(@RequestParam(value = "serviceUrl",required = false) String serviceUrl,
@@ -54,6 +55,33 @@ public class ServiceController {
 
         return "service/registration";
     }
+
+    @GetMapping("/{serviceId}/update")
+    public String renderServiceUpdatePage(@PathVariable Long serviceId , Model model){
+
+        model.addAttribute("serviceUpdateForm", ServiceUpdateForm.from(serviceSearch.search(serviceId)));
+
+        model.addAttribute("categories",categoryAdminister.getAllCategories());
+
+        return "service/service-update";
+    }
+
+    @PostMapping("/{serviceId}/update")
+    public String serviceUpdate(@PathVariable String serviceId ,
+                                @ModelAttribute ServiceUpdateForm serviceUpdateForm,
+                                BindingResult bindingResult,
+                                Model model){
+
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("categories",categoryAdminister.getAllCategories());
+            return "service/service-update";
+        }
+
+        serviceUpdate.update(serviceUpdateForm);
+
+        return "redirect:/service/" + serviceId;
+    }
+
 
     @PostMapping("/registration")
     public String RegisterService(@Valid @ModelAttribute("serviceRegisterForm")ServicesRegisterForm servicesRegisterForm,
