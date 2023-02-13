@@ -73,4 +73,10 @@ public class ServiceSearchImpl implements ServiceSearch {
         return SingleServiceWithCommentsDto.of(services,isPossess,comments);
     }
 
+    @Override
+    public Services search(Long serviceId) {
+        return servicesRepository.findByIdUseFetchJoin(serviceId)
+                .orElseThrow(() -> new EntityNotFoundException("유효하지 않은 서비스 조회입니다."));
+    }
+
 }
