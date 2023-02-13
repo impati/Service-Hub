@@ -41,7 +41,13 @@ public class Services extends BaseEntity{
     private List<ClientService> clientServices = new ArrayList<>();
 
 
-
+    public void update(String serviceName,String logo,String serviceUrl,String title,String content){
+        this.serviceName = serviceName;
+        this.logoStoreName = logo;
+        this.serviceUrl = serviceUrl;
+        this.title = title;
+        this.content = content;
+    }
 
     public void mappingAssociations(ServiceCategory serviceCategory){
         serviceCategories.add(serviceCategory);

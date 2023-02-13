@@ -17,4 +17,9 @@ public interface ServiceCategoryRepository extends JpaRepository<ServiceCategory
             " join sc.category c " +
             " where s.serviceName =:serviceName ")
     List<String> findByServiceName(@Param("serviceName") String serviceName);
+
+    @Query(" select sc from ServiceCategory sc " +
+            " join sc.category c " +
+            " where c.name in(:categoryNames)")
+    List<ServiceCategory> findByCategoryNames(@Param("categoryNames") List<String> categoryNames);
 }
