@@ -4,12 +4,14 @@
   <div th:insert="~{fragment/header :: header}"></div>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/3.0.1/github-markdown.css" rel="stylesheet">
 </head>
+
 <style>
   .field-error {
     border-color: #dc3545;
     color: #dc3545;
   }
 </style>
+
 <body>
 
 
@@ -24,8 +26,8 @@
     </div><!--//container-->
   </section>
 
-  <div class="container resume-container">
-    <article class="resume-wrapper mx-auto theme-bg-light  shadow-lg">
+  <div class="container resume-container px-3 px-lg-5">
+    <article class="resume-wrapper mx-auto theme-bg-light p-5 mb-5 my-5 shadow-lg">
 
       <div class="resume-header">
         <div class="row align-items-center">
@@ -94,7 +96,6 @@
                 <img src="assets/images/clients/profile-4.png" alt="image"/> //TODO : 사용자 프로필 기능이 추가되면
             </div> -->
             <div class="meta" style="text-align: right">
-              <div class="name"th:text="${comment.createBy}">James Lee</div>
               <div class="info"th:text="${comment.createAt}">James Lee</div>
             </div>
           </div>
@@ -112,7 +113,8 @@
             <small class="field-error" th:field="*{content}"></small>
             <br>
             <div style="text-align: right">
-              <button class="btn btn-dark" type="submit" id="button-addon2">게시</button>
+              <a class="btn btn-block btn-primary py-2" th:onclick="|location.href='@{/service/{serviceId} (serviceId=${singleServiceWithCommentsDto.serviceId}) }'|">취소</a>
+              <button class="btn btn-dark" type="submit" id="button-addon2">수정</button>
             </div>
           </form>
         </div>
