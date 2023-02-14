@@ -69,7 +69,7 @@ public class ClientServiceAdministerImpl implements ClientServiceAdminister {
     public Page<ClickServiceDto> servicesOfClient(Long clientId, ServiceSearchConditionForm serviceSearchConditionForm) {
 
         Page<ClickServiceDto> servicesWithClick = servicesRepository.searchByClient(clientId, serviceSearchConditionForm.getCategories(), serviceSearchConditionForm.getServiceName(),
-                PageRequest.of(DEFAULT_START_PAGE, DEFAULT_SIZE, Sort.by(Sort.Direction.DESC, CLICK.getName())));
+                PageRequest.of(DEFAULT_START_PAGE, 30, Sort.by(Sort.Direction.DESC, CLICK.getName())));
 
         for(var service : servicesWithClick.getContent()){
             service.setCategories(serviceCategoryRepository.findByServiceName(service.getServiceName()));
