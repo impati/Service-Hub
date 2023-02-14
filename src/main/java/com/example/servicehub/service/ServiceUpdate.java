@@ -37,22 +37,24 @@ public class ServiceUpdate {
                 .orElseThrow(() -> new EntityNotFoundException("유효하지 않은 서비스입니다."));
 
         updateCategories(services,serviceUpdateForm.getCategoryNames());
+
+        String storeName = getStoreName(serviceUpdateForm);
+
+        if(isDefaultFile(storeName)) storeName = services.getLogoStoreName();
+
         services.update(
-                serviceUpdateForm.getServiceName(), convertStoreName(services,serviceUpdateForm),
+                serviceUpdateForm.getServiceName(), storeName,
                 serviceUpdateForm.getServiceUrl(), serviceUpdateForm.getTitle(),
                 serviceUpdateForm.getDescription());
 
     }
 
-    private String convertStoreName(Services services, ServiceUpdateForm serviceUpdateForm) {
-        String newFileName = logoManager.tryToRestore(serviceUpdateForm.getLogoFile());
-        String storeName = services.getLogoStoreName();
-        if (isExistFile(newFileName)) storeName = newFileName;
-        return storeName;
+    private String getStoreName(ServiceUpdateForm serviceUpdateForm) {
+        return logoManager.tryToRestore(serviceUpdateForm.getLogoFile());
     }
 
-    private boolean isExistFile(String newFileName) {
-        if (!newFileName.equals(AbstractFileManager.DEFAULT)) return true;
+    private boolean isDefaultFile(String fileName) {
+        if (fileName.equals(AbstractFileManager.DEFAULT)) return true;
         return false;
     }
 

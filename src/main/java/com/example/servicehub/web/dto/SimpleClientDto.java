@@ -20,5 +20,4 @@ public class SimpleClientDto {
         return new SimpleClientDto(client.getNickname(),client.getId(),client.getBlogUrl(),client.getProfileImageUrl(),client.getIntroduceComment());
     }
 
-
 }

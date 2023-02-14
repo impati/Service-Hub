@@ -63,7 +63,6 @@ public class SecurityConfig {
                 .deleteCookies("JSESSIONID", "remember-me")
                 .logoutSuccessUrl("/login");
 
-
         httpSecurity.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
 
