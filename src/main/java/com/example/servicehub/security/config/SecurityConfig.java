@@ -60,8 +60,8 @@ public class SecurityConfig {
                 .logout()
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
-                .logoutSuccessUrl("/login")
-                .deleteCookies("JSESSIONID", "remember-me");
+                .deleteCookies("JSESSIONID", "remember-me")
+                .logoutSuccessUrl("/login");
 
         httpSecurity.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.ALWAYS);

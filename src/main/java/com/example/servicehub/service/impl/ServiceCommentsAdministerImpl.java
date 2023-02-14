@@ -33,8 +33,10 @@ public class ServiceCommentsAdministerImpl implements ServiceCommentsAdminister 
     public void addServiceComment(ServiceCommentForm commentsForm) {
         Services services = servicesRepository
                 .findById(commentsForm.getServiceId()).orElseThrow(()-> new EntityNotFoundException("유효하지 않는 서비스 입니다"));
+
         Client client = clientRepository
                 .findById(commentsForm.getClientId()).orElseThrow(()-> new EntityNotFoundException("유효하지 않은 사용자입니다."));
+
         serviceCommentRepository.save(ServiceComment.of(
                 commentsForm.getContent(),services,client));
     }

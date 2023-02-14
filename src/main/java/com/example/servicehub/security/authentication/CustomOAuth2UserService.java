@@ -25,11 +25,16 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
+        Map<String,Object> attributes = oAuth2User.getAttributes();
+
         ProviderUser providerUser = ProviderUserFactory.create(getProviderType(userRequest), oAuth2User.getAttributes());
 
-        Optional<Client> optionalClient = clientRepository.findByUserId(providerUser.getId());
+        Optional<Client> client = clientRepository.findByUserId(providerUser.getId());
 
-        return returnPrincipalOrSave(optionalClient,oAuth2User.getAttributes(),providerUser);
+        if(client.isPresent())
+            return ClientPrincipal.create(client.get(),attributes);
+
+        return returnAfterSaveClient(providerUser,attributes);
     }
 
     private ProviderType getProviderType(OAuth2UserRequest userRequest){
@@ -39,10 +44,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .toUpperCase());
     }
 
-    private OAuth2User returnPrincipalOrSave(Optional<Client> optionalClient, Map<String,Object> attributes,ProviderUser providerUser){
-        if(optionalClient.isPresent()) return ClientPrincipal.create(optionalClient.get(),attributes);
+    private OAuth2User returnAfterSaveClient(ProviderUser providerUser,Map<String,Object> attributes){
         Client client = providerUser.toClient();
         clientRepository.save(client);
         return ClientPrincipal.create(client,attributes);
     }
+
 }

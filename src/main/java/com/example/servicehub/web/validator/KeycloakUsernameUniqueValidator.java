@@ -20,14 +20,11 @@ public class KeycloakUsernameUniqueValidator implements ConstraintValidator<Keyc
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        if(uniqueType == UniqueType.USERNAME) {
-            if (clientRepository.findByUsername(value).isPresent()) return false;
-            return true;
+        switch (uniqueType){
+            case USERNAME: return !clientRepository.existsClientByUsername(value);
+            case EMAIL: return !clientRepository.existsClientByEmail(value);
         }
-        else {
-            if (clientRepository.findByEmail(value).isPresent()) return false;
-            return true;
-        }
+        throw new IllegalStateException("유일해야하는 키 값이 잘못들어왔습니다");
     }
 
 }

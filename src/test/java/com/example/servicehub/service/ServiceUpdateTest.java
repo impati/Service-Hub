@@ -26,7 +26,7 @@ import static java.util.stream.Collectors.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("서비스 등록 테스트")
+@DisplayName("서비스 수정 테스트")
 @DataJpaTest
 @Import({TestJpaConfig.class,ServiceUpdate.class, LogoManager.class})
 class ServiceUpdateTest {
