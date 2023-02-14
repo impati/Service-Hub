@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 public class ServiceCommentsDto {
+
     private Long commentId;
     private String content;
     private Long clientId;
