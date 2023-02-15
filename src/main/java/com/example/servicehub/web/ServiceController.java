@@ -111,7 +111,7 @@ public class ServiceController {
 
         model.addAttribute("currentPage",pageable.getPageNumber());
 
-        model.addAttribute("endPage",searchedServices.getTotalPages() - 1);
+        model.addAttribute("endPage", Math.max(searchedServices.getTotalPages() - 1, 0));
 
         model.addAttribute("searchedServices",searchedServices.getContent());
 
