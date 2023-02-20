@@ -1,4 +1,4 @@
-package com.example.servicehub.web;
+package com.example.servicehub.web.controller;
 
 import com.example.servicehub.dto.ServiceCommentForm;
 import com.example.servicehub.dto.ServiceCommentUpdateForm;
