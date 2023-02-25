@@ -91,13 +91,14 @@ class dClientServiceAdministerImplTest {
         // given
         Client client = clientRepository.findById(1L).get();
         Services services = servicesRepository.findById(1L).get();
-        clientServiceAdminister.countClickAndReturnUrl(1L,1L);
+        String serviceUrl = clientServiceAdminister.countClickAndReturnUrl(1L,1L);
         clientServiceAdminister.countClickAndReturnUrl(1L,1L);
         clientServiceAdminister.countClickAndReturnUrl(1L,1L);
         // when
         ClientService clientService = clientServiceRepository.findClientServiceByClientAndServices(client, services).get();
         // then
         assertThat(clientService.getClickCount()).isEqualTo(8);
+        assertThat(serviceUrl).isEqualTo("https://notion.so/");
 
     }
 

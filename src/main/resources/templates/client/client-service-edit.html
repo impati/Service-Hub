@@ -44,7 +44,7 @@
         <div class="isotope-item col-md-6 mb-5" style="width: 20%;justify-content: center"  th:classappend="${service.getCategories()}" th:each="service : ${serviceWithClick}">
           <div class="card" style="width: 60%; height: 100%;border: none;justify-content: center">
             <button th:onclick="|deleteAction('${service.serviceId}')|" style="width: 50%" class="btn btn-outline-danger">-</button>
-            <a class="card-link" style="display: block;width: 100%" th:href="@{/client/click/(serviceId=${service.serviceId},serviceUrl=${service.serviceUrl})}">
+            <a class="card-link" style="display: block;width: 100%" th:href="@{/client/click/(serviceId=${service.serviceId})}">
               <img style="width: 50px; display: block" th:src="@{/file/logo/{logoStoreName} (logoStoreName=${service.logoStoreName})}" class="card-img" alt="image">
             </a>
             <a class="tile" th:text="${service.serviceName}"  th:href="@{/service/{serviceId} (serviceId=${service.serviceId})}">
