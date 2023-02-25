@@ -2,6 +2,9 @@ package com.example.servicehub.web.controller;
 
 import com.example.servicehub.config.TestSecurityConfig;
 import com.example.servicehub.repository.ClientRepository;
+import com.example.servicehub.util.FormDataEncoder;
+import com.example.servicehub.web.dto.SignupForm;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
@@ -31,6 +34,13 @@ class HomeControllerTest {
     @MockBean
     private ClientRepository clientRepository;
 
+    private FormDataEncoder formDataEncoder;
+
+    @BeforeEach
+    void setUp(){
+        formDataEncoder = new FormDataEncoder();
+    }
+
     @Test
     @DisplayName("루트 페이지 테스트")
     @WithMockUser
@@ -59,46 +69,45 @@ class HomeControllerTest {
     @WithAnonymousUser(setupBefore = TestExecutionEvent.TEST_EXECUTION)
     public void givenSignupForm_whenValidAndSignup_thenSignupAndLogin() throws Exception{
 
-        String testUsername = "test";
-        String testEmail = "test@test.com";
+        SignupForm signupForm = createSignupForm("test","test@test.com","123sadcxz1@","123sadcxz1@");
 
-        BDDMockito.given(clientRepository.existsClientByUsername(testUsername))
+        BDDMockito.given(clientRepository.existsClientByUsername(signupForm.getUsername()))
                 .willReturn(false);
 
-        BDDMockito.given(clientRepository.existsClientByEmail(testEmail))
+        BDDMockito.given(clientRepository.existsClientByEmail(signupForm.getEmail()))
                 .willReturn(false);
 
         mockMvc.perform(
                 post("/signup")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .content(createSignUpOnFORM_URLENCODED(testUsername,testEmail,"password123!@#","password123!@#"))
+                        .content(formDataEncoder.encode(signupForm,SignupForm.class))
                         .with(SecurityMockMvcRequestPostProcessors.csrf())
                 )
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
                 .andExpect(MockMvcResultMatchers.view().name("redirect:/keycloak/signup"));
                 //.andExpect(MockMvcResultMatchers.redirectedUrl("/keycloak/signup"))// TODO: 회원 가입 방식을 변경 후 테스트 변경
 
-        BDDMockito.then(clientRepository).should().existsClientByUsername(testUsername);
-        BDDMockito.then(clientRepository).should().existsClientByEmail(testEmail);
+        BDDMockito.then(clientRepository).should().existsClientByUsername(signupForm.getUsername());
+        BDDMockito.then(clientRepository).should().existsClientByEmail(signupForm.getEmail());
 
     }
 
     @Test
     @DisplayName("회원 가입 테스트 실패 - 이미 존재하는 유저 네임과 이메일")
     public void givenSignupForm_whenValidFailCaseOfExistUsernameAndEmail_thenRenderSignupFormPageWithValidMessage() throws Exception{
-        String testUsername = "test";
-        String testEmail = "test@test.com";
 
-        BDDMockito.given(clientRepository.existsClientByUsername(testUsername))
+        SignupForm signupForm = createSignupForm("test","test@test.com","123sadcxz1@","123sadcxz1@");
+
+        BDDMockito.given(clientRepository.existsClientByUsername(signupForm.getUsername()))
                 .willReturn(true);
 
-        BDDMockito.given(clientRepository.existsClientByEmail(testEmail))
+        BDDMockito.given(clientRepository.existsClientByEmail(signupForm.getEmail()))
                 .willReturn(true);
 
         mockMvc.perform(
                         post("/signup")
                                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                                .content(createSignUpOnFORM_URLENCODED(testUsername,testEmail,"password123!@#","password123!@#"))
+                                .content(formDataEncoder.encode(signupForm,SignupForm.class))
                                 .with(SecurityMockMvcRequestPostProcessors.csrf())
                 )
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -108,26 +117,27 @@ class HomeControllerTest {
                 .andExpect(MockMvcResultMatchers.view().name("client/signup"));
 
 
-        BDDMockito.then(clientRepository).should().existsClientByUsername(testUsername);
-        BDDMockito.then(clientRepository).should().existsClientByEmail(testEmail);
+        BDDMockito.then(clientRepository).should().existsClientByUsername(signupForm.getUsername());
+        BDDMockito.then(clientRepository).should().existsClientByEmail(signupForm.getEmail());
     }
 
     @Test
     @DisplayName("회원 가입 테스트 실패 - 패스워드")
     public void givenSignupForm_whenValidFailCaseOfPassword_thenRenderSignupFormPageWithValidMessage() throws Exception{
-        String testUsername = "test";
-        String testEmail = "test@test.com";
 
-        BDDMockito.given(clientRepository.existsClientByUsername(testUsername))
+
+        SignupForm signupForm = createSignupForm("test","test@test.com","123","1232412");
+
+        BDDMockito.given(clientRepository.existsClientByUsername(signupForm.getUsername()))
                 .willReturn(false);
 
-        BDDMockito.given(clientRepository.existsClientByEmail(testEmail))
+        BDDMockito.given(clientRepository.existsClientByEmail(signupForm.getEmail()))
                 .willReturn(false);
 
         mockMvc.perform(
                         post("/signup")
                                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                                .content(createSignUpOnFORM_URLENCODED(testUsername,testEmail,"31!@#","31@#"))
+                                .content(formDataEncoder.encode(signupForm,SignupForm.class))
                                 .with(SecurityMockMvcRequestPostProcessors.csrf())
                 )
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -137,22 +147,13 @@ class HomeControllerTest {
                 .andExpect(MockMvcResultMatchers.view().name("client/signup"));
 
 
-        BDDMockito.then(clientRepository).should().existsClientByUsername(testUsername);
-        BDDMockito.then(clientRepository).should().existsClientByEmail(testEmail);
+        BDDMockito.then(clientRepository).should().existsClientByUsername(signupForm.getUsername());
+        BDDMockito.then(clientRepository).should().existsClientByEmail(signupForm.getEmail());
     }
 
-    private String createSignUpOnFORM_URLENCODED(String username , String email , String password,String repeatPassword){
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("username=")
-                .append(username).append("&")
-                .append("email=")
-                .append(email).append("&")
-                .append("password=").append(password).append("&")
-                .append("repeatPassword=")
-                .append(repeatPassword);
-        return stringBuilder.toString();
+    private SignupForm createSignupForm(String username , String email , String password , String repeatPassword){
+        return new SignupForm(username,email,password,repeatPassword);
     }
-
 
     @Test
     @DisplayName("로그인 페이지 테스트")
