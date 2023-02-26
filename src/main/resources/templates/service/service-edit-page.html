@@ -68,7 +68,7 @@
               <h3 class="text-uppercase resume-section-heading mb-4">Description</h3>
               <div class="item mb-3">
                 <div class="item-content">
-                  <p th:text="${singleServiceWithCommentsDto.content}">Role description goes here ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Donec pede justo, fringilla vel. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis.</p>
+                  <p th:text="${singleServiceWithCommentsDto.content}">Role description goes here ipsum dolor sit amet, consectetuer adipiscing elit.@
                 </div>
               </div><!--//item-->
             </section><!--//work-section-->
@@ -85,7 +85,7 @@
 
         <label for="content" class="form-label">댓글</label>
 
-        <div class="client-quote border p-2 border-opacity-10 mb-1 " style="height: 4%" th:if="${commentId != comment.commentId}" th:each="comment :${singleServiceWithCommentsDto.comments}">
+        <div class="client-quote border p-2 border-opacity-10 mb-1 " style="height: 4%" th:if="${serviceCommentUpdateForm.commentId != comment.commentId}" th:each="comment :${singleServiceWithCommentsDto.comments}">
           <div class="quote-holder" style="height: 1px">
             <blockquote class="com"  th:text="${comment.content}">
               Simon is a brilliant software engineer! Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis.
@@ -108,8 +108,8 @@
         <div class="mb-1">
           <form th:action="@{/comments/edit}" method="post" th:object="${serviceCommentUpdateForm}">
             <input type="hidden" id="serviceId" th:value="${singleServiceWithCommentsDto.serviceId}" name="serviceId">
-
-            <input type="hidden" id="commentId" th:value="${commentId}" name="commentId">
+            <input type="hidden" name="clientId" th:value="${#authentication.principal.id}">
+            <input type="hidden" id="commentId" th:value="*{commentId}" name="commentId">
             <input type="text" class="form-control" name="content"  th:value="${commentContent}" id="content" rows="1">
             <small class="field-error" th:field="*{content}"></small>
             <br>
