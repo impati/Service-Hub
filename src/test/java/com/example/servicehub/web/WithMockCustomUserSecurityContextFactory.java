@@ -14,16 +14,27 @@ import java.util.Collections;
 
 public class WithMockCustomUserSecurityContextFactory implements WithSecurityContextFactory<WithMockCustomUser> {
 
+    private final static String prefix = "ROLE_";
+
     @Override
     public SecurityContext createSecurityContext(WithMockCustomUser customUser) {
         String username = customUser.username();
+
+        String role = prefix + customUser.role();
+
         ClientPrincipal clientPrincipal = new ClientPrincipal(
-                customUser.id(),username,"test", ProviderType.KEYCLOAK, RoleType.ADMIN, Collections.singletonList(new SimpleGrantedAuthority(RoleType.ADMIN.getName())),"test","test","test"
+                customUser.id(),username,"test", ProviderType.KEYCLOAK, RoleType.of(role), Collections.singletonList(new SimpleGrantedAuthority(role)),"test","test","test"
         );
         Authentication authentication = UsernamePasswordAuthenticationToken.authenticated(clientPrincipal,clientPrincipal.getPassword(),clientPrincipal.getAuthorities());
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authentication);
         return context;
     }
+
+
+
+
+
+
 
 }

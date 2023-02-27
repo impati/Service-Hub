@@ -14,5 +14,7 @@ public @interface WithMockCustomUser {
 
     String name() default "Rob Winch";
 
+    String role() default "USER";
+
     long id() default 1L;
 }
