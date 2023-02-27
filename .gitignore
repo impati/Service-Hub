@@ -43,4 +43,5 @@ out/
 /src/main/resources/static/
 /src/main/resources/*.yml
 /src/test/resources/image/
+/src/test/resources/profile/
 /src/main/generated/
