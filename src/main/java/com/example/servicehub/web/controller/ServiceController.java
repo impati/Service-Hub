@@ -1,4 +1,4 @@
-package com.example.servicehub.web;
+package com.example.servicehub.web.controller;
 
 import com.example.servicehub.dto.*;
 import com.example.servicehub.security.authentication.ClientPrincipal;
@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -56,7 +57,23 @@ public class ServiceController {
         return "service/registration";
     }
 
+    @PostMapping("/registration")
+    public String RegisterService(@Valid @ModelAttribute("serviceRegisterForm")ServicesRegisterForm servicesRegisterForm,
+                                  BindingResult bindingResult,
+                                  Model model){
+
+        if(bindingResult.hasErrors()){
+            model.addAttribute("categories",categoryAdminister.getAllCategories());
+            return "service/registration";
+        }
+
+        servicesRegister.registerServices(servicesRegisterForm);
+
+        return "redirect:/";
+    }
+
     @GetMapping("/{serviceId}/update")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public String renderServiceUpdatePage(@PathVariable Long serviceId , Model model){
 
         model.addAttribute("serviceUpdateForm", ServiceUpdateForm.from(serviceSearch.search(serviceId)));
@@ -67,6 +84,7 @@ public class ServiceController {
     }
 
     @PostMapping("/{serviceId}/update")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public String serviceUpdate(@PathVariable String serviceId ,
                                 @ModelAttribute ServiceUpdateForm serviceUpdateForm,
                                 BindingResult bindingResult,
@@ -82,21 +100,6 @@ public class ServiceController {
         return "redirect:/service/" + serviceId;
     }
 
-
-    @PostMapping("/registration")
-    public String RegisterService(@Valid @ModelAttribute("serviceRegisterForm")ServicesRegisterForm servicesRegisterForm,
-                                  BindingResult bindingResult,
-                                  Model model){
-
-        if(bindingResult.hasErrors()){
-            model.addAttribute("categories",categoryAdminister.getAllCategories());
-            return "service/registration";
-        }
-
-        servicesRegister.registerServices(servicesRegisterForm);
-
-        return "redirect:/";
-    }
 
     @GetMapping("/search")
     public String renderServiceSearch(@ModelAttribute ServiceSearchConditionForm serviceSearchConditionForm,

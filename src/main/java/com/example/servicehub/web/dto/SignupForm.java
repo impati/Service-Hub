@@ -32,7 +32,6 @@ public class SignupForm {
     private String repeatPassword;
 
     public boolean isSamePassword(){
-        if(password.equals(repeatPassword)) return true;
-        return false;
+        return password.equals(repeatPassword);
     }
 }

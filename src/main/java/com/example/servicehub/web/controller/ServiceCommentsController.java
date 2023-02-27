@@ -1,4 +1,4 @@
-package com.example.servicehub.web;
+package com.example.servicehub.web.controller;
 
 import com.example.servicehub.dto.ServiceCommentForm;
 import com.example.servicehub.dto.ServiceCommentUpdateForm;
@@ -11,10 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -32,16 +29,13 @@ public class ServiceCommentsController {
     @PostMapping
     public String addServiceComments(@Valid @ModelAttribute ServiceCommentForm serviceCommentForm,
                                      BindingResult bindingResult,
-                                     RedirectAttributes redirectAttributes,
-                                     @AuthenticationPrincipal ClientPrincipal clientPrincipal){
+                                     RedirectAttributes redirectAttributes){
 
         if(bindingResult.hasErrors()){
             redirectAttributes.addAttribute("contentError",bindingResult.getFieldError().getDefaultMessage());
             redirectAttributes.addAttribute("hasError",true);
             return "redirect:/service/" + serviceCommentForm.getServiceId();
         }
-
-        serviceCommentForm.assignAuthor(clientPrincipal.getId());
 
         serviceCommentsAdminister.addServiceComment(serviceCommentForm);
 
@@ -55,8 +49,6 @@ public class ServiceCommentsController {
 
         model.addAttribute("singleServiceWithCommentsDto"
                 ,serviceSearch.searchSingleService(serviceCommentUpdateForm.getServiceId(), Optional.ofNullable(clientPrincipal.getId())));
-
-        model.addAttribute("commentId",serviceCommentUpdateForm.getCommentId());
 
         model.addAttribute("commentContent",serviceCommentsAdminister.getCommentContent(serviceCommentUpdateForm.getCommentId()));
 
@@ -77,13 +69,14 @@ public class ServiceCommentsController {
         return "redirect:/service/" + serviceCommentUpdateForm.getServiceId();
     }
 
-    @GetMapping("/delete")
+    @ResponseBody
+    @DeleteMapping("/delete")
     public String deleteComment(@ModelAttribute ServiceCommentUpdateForm serviceCommentUpdateForm,
                                 @AuthenticationPrincipal ClientPrincipal clientPrincipal){
 
         serviceCommentsAdminister.deleteServiceComment(serviceCommentUpdateForm.getCommentId(),clientPrincipal.getId());
 
-        return "redirect:/service/" + serviceCommentUpdateForm.getServiceId();
+        return "OK";
     }
 
 

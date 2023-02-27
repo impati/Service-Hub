@@ -1,4 +1,4 @@
-package com.example.servicehub.web;
+package com.example.servicehub.web.controller;
 
 import com.example.servicehub.dto.ClientEditForm;
 import com.example.servicehub.dto.ServiceSearchConditionForm;
@@ -36,7 +36,7 @@ public class ClientController {
 
         List<String> allCategories = categoryAdminister.getAllCategories();
 
-        ServiceSearchConditionForm serviceSearchConditionForm = ServiceSearchConditionForm.of(categoryAdminister.getAllCategories(), serviceName);
+        ServiceSearchConditionForm serviceSearchConditionForm = ServiceSearchConditionForm.of(allCategories, serviceName);
 
         model.addAttribute("serviceWithClick",clientServiceAdminister.servicesOfClient(clientId, serviceSearchConditionForm).getContent());
 
@@ -48,7 +48,7 @@ public class ClientController {
     }
 
     @GetMapping("/edit")
-    public String renderClientEditPage(
+    public String renderClientProfileEditPage(
             @AuthenticationPrincipal ClientPrincipal clientPrincipal,
             Model model){
 
@@ -59,7 +59,7 @@ public class ClientController {
     }
 
     @PostMapping("/edit")
-    public String editClient(
+    public String editClientProfile(
             @AuthenticationPrincipal ClientPrincipal clientPrincipal,
             @Valid @ModelAttribute ClientEditForm clientEditForm , BindingResult bindingResult){
 
@@ -89,7 +89,7 @@ public class ClientController {
 
         model.addAttribute("simpleClient", SimpleClientDto.from(clientAdminister.findClientByClientId(clientPrincipal.getId())));
 
-        return "/client/client-service-edit";
+        return "client/client-service-edit";
     }
 
     @ResponseBody
@@ -105,28 +105,27 @@ public class ClientController {
     @GetMapping("/click")
     public String clickService(
             @RequestParam Long serviceId,
-            @RequestParam String serviceUrl,
             @AuthenticationPrincipal ClientPrincipal clientPrincipal){
 
-        clientServiceAdminister.countClickAndReturnUrl(clientPrincipal.getId(),serviceId);
+        String serviceUrl = clientServiceAdminister.countClickAndReturnUrl(clientPrincipal.getId(),serviceId);
 
         return "redirect:" + serviceUrl;
     }
 
     @ResponseBody
     @PostMapping("/add-service/{serviceId}")
-    public String addClientService(@PathVariable Long serviceId, @AuthenticationPrincipal ClientPrincipal clientContext){
+    public String addClientService(@PathVariable Long serviceId, @AuthenticationPrincipal ClientPrincipal clientPrincipal){
 
-        clientServiceAdminister.addClientService(clientContext.getId(), serviceId);
+        clientServiceAdminister.addClientService(clientPrincipal.getId(), serviceId);
 
         return "Ok";
     }
 
     @ResponseBody
     @PostMapping("/delete-service/{serviceId}")
-    public String deleteClientService(@PathVariable Long serviceId, @AuthenticationPrincipal ClientPrincipal clientContext){
+    public String deleteClientService(@PathVariable Long serviceId, @AuthenticationPrincipal ClientPrincipal clientPrincipal){
 
-        clientServiceAdminister.deleteClientService(clientContext.getId(), serviceId);
+        clientServiceAdminister.deleteClientService(clientPrincipal.getId(), serviceId);
 
         return "Ok";
     }

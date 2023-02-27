@@ -104,7 +104,7 @@
                             <div class="name"th:text="${comment.nickname}">James Lee</div>
                             <div class="info"th:text="${comment.createAt}">James Lee</div>
                             <span><a class="text-link" th:if="${#authentication.principal.id == comment.clientId}" th:href="@{/comments/edit (serviceId = ${singleServiceWithCommentsDto.serviceId},commentId=${comment.commentId})}">수정</a></span>
-                            <span><a class="text-link" th:if="${#authentication.principal.id == comment.clientId}" th:href="@{/comments/delete (serviceId = ${singleServiceWithCommentsDto.serviceId},commentId=${comment.commentId})}">삭제</a></span>
+                            <span><a class="text-link" th:onclick="|deleteComment('${singleServiceWithCommentsDto.serviceId}','${comment.commentId}')|" th:if="${#authentication.principal.id == comment.clientId}">삭제</a></span>
                         </div>
                     </div>
                     <br>
@@ -114,6 +114,7 @@
                 <div class="mb-1">
                     <form th:action="@{/comments}" method="post" th:object="${serviceCommentForm}">
                         <input type="hidden" id="serviceId" th:value="${singleServiceWithCommentsDto.serviceId}" name="serviceId">
+                        <input type="hidden" name="clientId" th:value="${#authentication.principal.id}">
                         <textarea class="form-control" name="content"  id="exampleFormControlTextarea1" placeholder="comments..." rows="1"></textarea>
                         <small class="field-error" th:if="${#request.getParameter('hasError')}" th:text="${#request.getParameter('contentError')}"></small>
                         <br>
@@ -162,7 +163,7 @@
         });
     }
 
-    function deleteAction(serviceId){
+    function deleteAction(serviceId) {
 
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
@@ -170,18 +171,40 @@
         $.ajax({
             type: 'POST',
             url: domain + '/client/delete-service/' + serviceId,
+            beforeSend: function (xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                xhr.setRequestHeader(header, token);
+            },
+            async: false, //동기, 비동기 여부
+            cache: false, // 캐시 여부
+            success: function (data) {
+                console.log(data.name);
+                window.location = domain + "/service/" + serviceId;
+            },
+            error: function (xhr, status, error) {
+                console.log('error:' + error);
+            }
+        });
+    }
+
+
+     function deleteComment(serviceId,commentId){
+
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+
+        var params = "serviceId=" + serviceId + "&commentId=" + commentId;
+        $.ajax({
+            type: 'DELETE',
+            url: domain + '/comments/delete?' + params,
             beforeSend : function(xhr)
             {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
                 xhr.setRequestHeader(header, token);
             },
-            async: false, //동기, 비동기 여부
-            cache :false, // 캐시 여부
-            success: function(data){
-                console.log(data.name);
-                window.location= domain + "/service/" + serviceId;
+            success: function () {
+                window.location.href="/service/" + serviceId;
             },
-            error:function(xhr,status,error){
-                console.log('error:'+error);
+            error: function (xhr, status, error) {
+                console.log('error:' + error);
             }
         });
     }
