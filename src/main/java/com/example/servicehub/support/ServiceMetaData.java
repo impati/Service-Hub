@@ -1,8 +1,12 @@
 package com.example.servicehub.support;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class ServiceMetaData {
 
     private String siteName;

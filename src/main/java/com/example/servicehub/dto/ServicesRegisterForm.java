@@ -18,7 +18,6 @@ import java.util.List;
 @NoArgsConstructor
 public class ServicesRegisterForm {
 
-    @NotNull(message = "적어도 한개 이상의 카테고리를 선택해주세요")
     @NotEmpty(message = "적어도 한개 이상의 카테고리를 선택해주세요")
     private List<String> categoryNames;
 
