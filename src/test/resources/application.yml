@@ -22,3 +22,6 @@ spring:
 
 logo:
   dir: /Users/jun-yeongchoe/Desktop/project/ServiceHub/src/test/resources/image/
+
+profile:
+  dir: /Users/jun-yeongchoe/Desktop/project/ServiceHub/src/test/resources/profile/
