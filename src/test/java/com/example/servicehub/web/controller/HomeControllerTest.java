@@ -2,6 +2,7 @@ package com.example.servicehub.web.controller;
 
 import com.example.servicehub.config.TestSecurityConfig;
 import com.example.servicehub.repository.ClientRepository;
+import com.example.servicehub.security.SignupManager;
 import com.example.servicehub.util.FormDataEncoder;
 import com.example.servicehub.web.dto.SignupForm;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +19,7 @@ import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -35,6 +37,8 @@ class HomeControllerTest {
     private ClientRepository clientRepository;
 
     private FormDataEncoder formDataEncoder;
+
+    @MockBean private SignupManager signupManager;
 
     @BeforeEach
     void setUp(){
@@ -77,6 +81,8 @@ class HomeControllerTest {
         BDDMockito.given(clientRepository.existsClientByEmail(signupForm.getEmail()))
                 .willReturn(false);
 
+        BDDMockito.willDoNothing().given(signupManager).signup(signupForm);
+
         mockMvc.perform(
                 post("/signup")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -84,8 +90,9 @@ class HomeControllerTest {
                         .with(SecurityMockMvcRequestPostProcessors.csrf())
                 )
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.view().name("redirect:/keycloak/signup"));
-                //.andExpect(MockMvcResultMatchers.redirectedUrl("/keycloak/signup"))// TODO: 회원 가입 방식을 변경 후 테스트 변경
+                .andExpect(MockMvcResultMatchers.view().name("redirect:/login"))
+                .andExpect(MockMvcResultMatchers.redirectedUrl("/login"))
+                .andDo(MockMvcResultHandlers.print());
 
         BDDMockito.then(clientRepository).should().existsClientByUsername(signupForm.getUsername());
         BDDMockito.then(clientRepository).should().existsClientByEmail(signupForm.getEmail());

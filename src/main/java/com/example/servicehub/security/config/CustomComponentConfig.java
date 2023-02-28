@@ -3,7 +3,6 @@ package com.example.servicehub.security.config;
 import com.example.servicehub.repository.ClientRepository;
 import com.example.servicehub.security.SignupManager;
 import com.example.servicehub.security.authentication.CustomOAuth2UserService;
-import com.example.servicehub.security.filter.KeycloakAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -49,11 +48,6 @@ public class CustomComponentConfig {
     }
 
     @Bean
-    public KeycloakAuthenticationFilter keycloakAuthenticationFilter(){
-        return new KeycloakAuthenticationFilter(signupManager());
-    }
-
-    @Bean
     public CustomOAuth2UserService customOAuth2UserService(){
         return new CustomOAuth2UserService(clientRepository);
     }
@@ -87,7 +81,6 @@ public class CustomComponentConfig {
             String password = servletRequest.getParameter(OAuth2ParameterNames.PASSWORD);
             if (StringUtils.hasText(username) && StringUtils.hasText(password)) {
                 contextAttributes = new HashMap<>();
-
                 contextAttributes.put(OAuth2AuthorizationContext.USERNAME_ATTRIBUTE_NAME, username);
                 contextAttributes.put(OAuth2AuthorizationContext.PASSWORD_ATTRIBUTE_NAME, password);
             }
