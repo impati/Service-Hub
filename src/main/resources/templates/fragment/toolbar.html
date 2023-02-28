@@ -14,8 +14,11 @@
 
 
             <div style="text-align: left">
-            <a class="btn btn-outline-primary me-3 w-100" sec:authorize="hasRole('ADMIN')" th:href="@{/service/registration}">서비스등록</a>
-            <a class="btn btn-outline-primary me-3 w-100" th:href="@{/service/search}">서비스검색</a>
+            <a class="btn btn-outline-primary me-2 w-100" sec:authorize="hasRole('ADMIN')" th:href="@{/service/registration}">서비스등록</a>
+            </div>
+
+            <div style="text-align: left">
+                <a class="btn btn-outline-primary me-2 w-100" th:href="@{/service/search}">서비스검색</a>
             </div>
 
             <div style="text-align: right">
