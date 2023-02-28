@@ -44,7 +44,6 @@ public class ServiceUpdateForm {
     @NotBlank(message = "서비스에 대해 설명해주세요")
     private String description;
 
-    @NotNull(message = "적어도 한개 이상의 카테고리를 선택해주세요")
     @NotEmpty(message = "적어도 하나 이상의 카테고리를 설정해주세요")
     private List<String> categoryNames;
 

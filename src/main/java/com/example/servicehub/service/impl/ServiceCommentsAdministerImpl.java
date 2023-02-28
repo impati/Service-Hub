@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ServiceCommentsAdministerImpl implements ServiceCommentsAdminister {
 
@@ -30,6 +30,7 @@ public class ServiceCommentsAdministerImpl implements ServiceCommentsAdminister 
     private final ClientRepository clientRepository;
 
     @Override
+    @Transactional
     public void addServiceComment(ServiceCommentForm commentsForm) {
         Services services = servicesRepository
                 .findById(commentsForm.getServiceId()).orElseThrow(()-> new EntityNotFoundException("유효하지 않는 서비스 입니다"));
@@ -42,6 +43,7 @@ public class ServiceCommentsAdministerImpl implements ServiceCommentsAdminister 
     }
 
     @Override
+    @Transactional
     public void updateServiceComment(ServiceCommentUpdateForm serviceCommentUpdateForm) {
         ServiceComment serviceComment  = serviceCommentRepository.findById(serviceCommentUpdateForm.getCommentId())
                 .orElseThrow(()-> new EntityNotFoundException("유효하지 않은 댓글을 수정 시도했습니다"));
@@ -51,6 +53,7 @@ public class ServiceCommentsAdministerImpl implements ServiceCommentsAdminister 
     }
 
     @Override
+    @Transactional
     public void deleteServiceComment(Long serviceCommentsId, Long clientId) {
         ServiceComment serviceComment  = serviceCommentRepository.findById(serviceCommentsId)
                 .orElseThrow(()-> new EntityNotFoundException("유효하지 않은 댓글을 수정 시도했습니다"));

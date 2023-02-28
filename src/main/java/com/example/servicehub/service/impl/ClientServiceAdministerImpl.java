@@ -27,7 +27,7 @@ import static com.example.servicehub.domain.ServicePage.*;
 
 @Slf4j
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ClientServiceAdministerImpl implements ClientServiceAdminister {
 
@@ -37,14 +37,13 @@ public class ClientServiceAdministerImpl implements ClientServiceAdminister {
     private final ServiceCategoryRepository serviceCategoryRepository;
 
     @Override
+    @Transactional
     public void addClientService(Long clientId, Long serviceId) {
-
         ClientAndService clientAndService = createBy(clientId,serviceId);
 
         if(alreadyExistForClient(clientAndService.getClient(),clientAndService.getServices()))return ;
 
         clientServiceRepository.save(ClientService.of(clientAndService.getClient(),clientAndService.getServices()));
-
     }
 
     private boolean alreadyExistForClient(Client client ,Services services){
@@ -53,6 +52,7 @@ public class ClientServiceAdministerImpl implements ClientServiceAdminister {
     }
 
     @Override
+    @Transactional
     public void deleteClientService(Long clientId, Long serviceId) {
 
         ClientAndService clientAndService = createBy(clientId,serviceId);
@@ -79,6 +79,7 @@ public class ClientServiceAdministerImpl implements ClientServiceAdminister {
     }
 
     @Override
+    @Transactional
     public String countClickAndReturnUrl(Long clientId, Long serviceId) {
 
         ClientAndService clientAndService = createBy(clientId,serviceId);

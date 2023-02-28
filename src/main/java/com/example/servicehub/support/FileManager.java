@@ -9,5 +9,4 @@ public interface FileManager {
     String getFullPath(String profileName);
 
     String tryToRestore(MultipartFile profile);
-
 }

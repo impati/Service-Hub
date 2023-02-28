@@ -26,15 +26,7 @@ public class ClickServiceDto {
         this.title = title;
     }
 
-    public void setCategories(List<String> categories) {
-        this.categories = categories;
-    }
-
     public String getCategories(){
-        StringBuilder stringBuilder = new StringBuilder();
-        for(var category: categories){
-            stringBuilder.append(category + " ");
-        }
-        return stringBuilder.toString();
+        return String.join(" ",categories);
     }
 }

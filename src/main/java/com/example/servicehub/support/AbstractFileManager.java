@@ -6,7 +6,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
+
+import static java.util.Objects.requireNonNull;
 
 public abstract class AbstractFileManager implements FileManager{
 
@@ -15,7 +18,7 @@ public abstract class AbstractFileManager implements FileManager{
 
     protected String restore(MultipartFile file) throws IOException {
         if(isContainFile(file)){
-            String storeName = createUniqueName() + extractExtension(file.getOriginalFilename());
+            String storeName = createUniqueName() + extractExtension(requireNonNull(file.getOriginalFilename()));
             file.transferTo(new File(getFullPath(storeName)));
             return storeName;
         }
@@ -36,8 +39,6 @@ public abstract class AbstractFileManager implements FileManager{
 
     protected boolean isContainFile(MultipartFile profile){
         if(profile == null) return false;
-        if(profile.isEmpty()) return false;
-        return true;
+        return !profile.isEmpty();
     }
-
 }

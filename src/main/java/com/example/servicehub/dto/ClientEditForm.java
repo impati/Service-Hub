@@ -16,17 +16,17 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class ClientEditForm {
 
-    @FileSize(maxSizeInMB = 3,message = "프로필 이미지 사이즈는 3MB이하로 업로드 해주세요")
+    @FileSize(maxSizeInMB = 3,message = "프로필 이미지 사이즈는 3MB이하로 업로드 해주세요.")
     private MultipartFile profileImage;
 
     @NotBlank
     @Length(min = 1 , max = 20,message = "넥네임 길이는 1이상 20이하여야 합니다.")
     private String nickname;
 
-    @Length(max = 1000,message = "소개말은 1000글자 미만으로 작성해주세요")
+    @Length(max = 1000,message = "소개말은 1000글자 미만으로 작성해주세요.")
     private String introComment;
 
-    @URL(message = "URL을 입력해야합니다")
+    @URL(message = "URL을 입력해야합니다.")
     private String blogUri;
 
     public ClientEditForm(String nickname, String introComment, String blogUri) {
@@ -36,7 +36,9 @@ public class ClientEditForm {
     }
 
     public static ClientEditForm from(Client client){
-       return new ClientEditForm(client.getNickname(),client.getIntroduceComment(),
+       return new ClientEditForm(
+               client.getNickname(),
+               client.getIntroduceComment(),
                client.getBlogUrl());
     }
 

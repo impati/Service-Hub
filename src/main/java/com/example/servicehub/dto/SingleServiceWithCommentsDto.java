@@ -4,6 +4,7 @@ import com.example.servicehub.domain.Services;
 import lombok.Data;
 import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,8 +18,8 @@ public class SingleServiceWithCommentsDto {
     private String serviceUrl;
     private String title;
     private String content;
-    private List<String> categories;
-    private List<ServiceCommentsDto> comments;
+    private List<String> categories = new ArrayList<>();
+    private List<ServiceCommentsDto> comments = new ArrayList<>();
     private boolean isPossess;
 
     public static SingleServiceWithCommentsDto of(Services services , boolean isPossess , List<ServiceCommentsDto> comments){
