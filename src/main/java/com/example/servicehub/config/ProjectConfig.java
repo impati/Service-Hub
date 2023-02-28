@@ -1,8 +1,9 @@
 package com.example.servicehub.config;
 
-import com.example.servicehub.repository.ClientRepository;
-import com.example.servicehub.support.*;
-import com.example.servicehub.web.validator.KeycloakUsernameUniqueValidator;
+import com.example.servicehub.support.JsoupMetaDataCrawler;
+import com.example.servicehub.support.LogoManager;
+import com.example.servicehub.support.MetaDataCrawler;
+import com.example.servicehub.support.ProfileManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,12 +12,8 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class ProjectConfig {
 
-    private final ClientRepository clientRepository;
-
     @Bean
-    public MetaDataCrawler metaDataCrawler(){
-        return new MetaDataCrawler();
-    }
+    public MetaDataCrawler metaDataCrawler(){ return new JsoupMetaDataCrawler(); }
 
     @Bean(name= "logo")
     public LogoManager logoManager(){
@@ -26,11 +23,6 @@ public class ProjectConfig {
     @Bean(name= "profile")
     public ProfileManager profileManager(){
         return new ProfileManager();
-    }
-
-    @Bean
-    public KeycloakUsernameUniqueValidator keycloakUsernameUniqueValidator(){
-        return new KeycloakUsernameUniqueValidator(clientRepository);
     }
 
 }

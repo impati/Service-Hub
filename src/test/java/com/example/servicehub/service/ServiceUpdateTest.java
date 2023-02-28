@@ -4,11 +4,9 @@ import com.example.servicehub.config.TestJpaConfig;
 import com.example.servicehub.domain.Category;
 import com.example.servicehub.domain.ServiceCategory;
 import com.example.servicehub.domain.Services;
-import com.example.servicehub.dto.ServiceCommentUpdateForm;
 import com.example.servicehub.dto.ServiceUpdateForm;
 import com.example.servicehub.repository.ServicesRepository;
 import com.example.servicehub.support.LogoManager;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +15,11 @@ import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockMultipartFile;
 
 import javax.persistence.EntityManager;
-
 import java.io.FileInputStream;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("서비스 수정 테스트")
 @DataJpaTest

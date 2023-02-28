@@ -48,7 +48,7 @@ public class ServiceComment extends BaseEntity{
         if (this == o) return true;
         if (!(o instanceof ServiceComment)) return false;
         ServiceComment that = (ServiceComment) o;
-        return Objects.equals(id, that.id);
+        return this.getId() != null && Objects.equals(id, that.id);
     }
 
     @Override

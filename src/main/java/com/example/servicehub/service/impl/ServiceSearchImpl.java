@@ -58,8 +58,6 @@ public class ServiceSearchImpl implements ServiceSearch {
         }
     }
 
-
-
     @Override
     public SingleServiceWithCommentsDto searchSingleService(Long serviceId, Optional<Long> optionalClientId) {
 

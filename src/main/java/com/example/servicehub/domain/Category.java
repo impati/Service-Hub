@@ -47,7 +47,7 @@ public class Category extends BaseEntity{
         if (this == o) return true;
         if (!(o instanceof Category)) return false;
         Category category = (Category) o;
-        return Objects.equals(id, category.id);
+        return this.getId() != null && Objects.equals(id, category.id);
     }
 
     @Override

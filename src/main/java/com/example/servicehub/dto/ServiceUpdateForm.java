@@ -3,23 +3,18 @@ package com.example.servicehub.dto;
 import com.example.servicehub.domain.Category;
 import com.example.servicehub.domain.ServiceCategory;
 import com.example.servicehub.domain.Services;
-import com.example.servicehub.util.ProjectUtils;
 import com.example.servicehub.web.validator.annotation.FileSize;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toList;
 
 @Data
 @Builder
@@ -44,7 +39,6 @@ public class ServiceUpdateForm {
     @NotBlank(message = "서비스에 대해 설명해주세요")
     private String description;
 
-    @NotNull(message = "적어도 한개 이상의 카테고리를 선택해주세요")
     @NotEmpty(message = "적어도 하나 이상의 카테고리를 설정해주세요")
     private List<String> categoryNames;
 

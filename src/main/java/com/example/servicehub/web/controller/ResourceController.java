@@ -3,8 +3,6 @@ package com.example.servicehub.web.controller;
 
 import com.example.servicehub.support.FileManager;
 import com.example.servicehub.support.FileType;
-import com.example.servicehub.support.LogoManager;
-import com.example.servicehub.support.ProfileManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;

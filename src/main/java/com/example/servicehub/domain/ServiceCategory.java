@@ -42,7 +42,7 @@ public class ServiceCategory extends BaseEntity{
         if (this == o) return true;
         if (!(o instanceof ServiceCategory)) return false;
         ServiceCategory that = (ServiceCategory) o;
-        return Objects.equals(id, that.id);
+        return this.getId() != null && Objects.equals(id, that.id);
     }
 
     @Override

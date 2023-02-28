@@ -22,7 +22,8 @@ import org.springframework.context.annotation.Import;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 @DataJpaTest
 @DisplayName("댓글 기능 구현 테스트")
