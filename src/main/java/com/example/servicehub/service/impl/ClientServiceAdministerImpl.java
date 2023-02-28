@@ -23,7 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
-import static com.example.servicehub.domain.ServicePage.*;
+import static com.example.servicehub.domain.ServicePage.CLICK;
+import static com.example.servicehub.domain.ServicePage.DEFAULT_START_PAGE;
 
 @Slf4j
 @Service

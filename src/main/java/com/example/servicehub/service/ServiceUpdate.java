@@ -1,6 +1,5 @@
 package com.example.servicehub.service;
 
-import com.example.servicehub.domain.Category;
 import com.example.servicehub.domain.ServiceCategory;
 import com.example.servicehub.domain.Services;
 import com.example.servicehub.dto.ServiceUpdateForm;
@@ -16,9 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @Service

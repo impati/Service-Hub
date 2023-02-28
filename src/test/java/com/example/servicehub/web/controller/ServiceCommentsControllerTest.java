@@ -4,12 +4,10 @@ import com.example.servicehub.config.TestSecurityConfig;
 import com.example.servicehub.dto.ServiceCommentForm;
 import com.example.servicehub.dto.ServiceCommentUpdateForm;
 import com.example.servicehub.dto.SingleServiceWithCommentsDto;
-import com.example.servicehub.repository.ServiceCommentRepository;
 import com.example.servicehub.service.ServiceCommentsAdminister;
 import com.example.servicehub.service.ServiceSearch;
 import com.example.servicehub.util.FormDataEncoder;
 import com.example.servicehub.web.WithMockCustomUser;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
@@ -24,8 +22,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("ServiceCommentsController 테스트")
 @Import(TestSecurityConfig.class)

@@ -3,23 +3,18 @@ package com.example.servicehub.dto;
 import com.example.servicehub.domain.Category;
 import com.example.servicehub.domain.ServiceCategory;
 import com.example.servicehub.domain.Services;
-import com.example.servicehub.util.ProjectUtils;
 import com.example.servicehub.web.validator.annotation.FileSize;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toList;
 
 @Data
 @Builder
