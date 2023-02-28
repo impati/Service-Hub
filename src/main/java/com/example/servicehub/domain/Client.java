@@ -76,7 +76,7 @@ public class Client extends BaseEntity{
         if (this == o) return true;
         if (!(o instanceof Client)) return false;
         Client client = (Client) o;
-        return Objects.equals(id, client.id);
+        return this.getId() != null && Objects.equals(id, client.id);
     }
 
     @Override

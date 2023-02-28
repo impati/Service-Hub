@@ -15,8 +15,8 @@ import java.util.Objects;
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Services extends BaseEntity{
-
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name ="service_id")
     private Long id;
 
@@ -70,7 +70,7 @@ public class Services extends BaseEntity{
         if (this == o) return true;
         if (!(o instanceof Services)) return false;
         Services services = (Services) o;
-        return Objects.equals(id, services.id);
+        return this.getId() != null && Objects.equals(id, services.id);
     }
 
     @Override
