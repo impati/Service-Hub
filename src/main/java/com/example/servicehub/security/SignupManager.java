@@ -1,5 +1,6 @@
 package com.example.servicehub.security;
 
+import com.example.servicehub.web.dto.SignupForm;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,16 +30,14 @@ public class SignupManager {
     @Value("${keycloak.create.user}")
     private String createUserEndPoint;
 
-
-    public void signup(HttpServletRequest request){
+    public void signup(SignupForm signupForm){
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         headers.setBearerAuth(returnAccessToken());
         restTemplate.postForEntity(createUserEndPoint,
-                new HttpEntity<>(signUpFormMapping(request), headers), Void.class);
-
+                new HttpEntity<>(signUpFormMapping(signupForm), headers), Void.class);
 
     }
 
@@ -61,10 +60,10 @@ public class SignupManager {
         return response.getBody().getAccess_token();
     }
 
-    private KeycloakSignupForm signUpFormMapping(HttpServletRequest  request){
-        return new KeycloakSignupForm(request.getParameter("username"),
-                request.getParameter("email"),
-                request.getParameter("password"));
+    private KeycloakSignupForm signUpFormMapping(SignupForm  signupForm){
+        return new KeycloakSignupForm(signupForm.getUsername(),
+                signupForm.getEmail(),
+                signupForm.getPassword());
     }
 
     @Data

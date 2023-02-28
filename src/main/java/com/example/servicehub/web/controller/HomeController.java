@@ -1,7 +1,9 @@
 package com.example.servicehub.web.controller;
 
+import com.example.servicehub.security.SignupManager;
 import com.example.servicehub.util.ProjectUtils;
 import com.example.servicehub.web.dto.SignupForm;
+import jdk.jfr.Frequency;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,8 @@ import java.io.IOException;
 @Controller
 @RequiredArgsConstructor
 public class HomeController {
+
+    private final SignupManager signupManager;
 
     @GetMapping("/")
     public String home(){
@@ -46,9 +50,7 @@ public class HomeController {
     }
 
     @PostMapping("/signup")
-    public String signup(@Valid @ModelAttribute SignupForm signupForm,
-                         BindingResult bindingResult,
-                         RedirectAttributes redirectAttributes){
+    public String signup(@Valid @ModelAttribute SignupForm signupForm, BindingResult bindingResult){
 
         if(!signupForm.isSamePassword()) bindingResult.rejectValue("repeatPassword",null,"비밀번호가 일치하지 않습니다.");
 
@@ -56,11 +58,9 @@ public class HomeController {
             return "client/signup";
         }
 
-        redirectAttributes.addAttribute("username",signupForm.getUsername());
-        redirectAttributes.addAttribute("email",signupForm.getEmail());
-        redirectAttributes.addAttribute("password",signupForm.getPassword());
+        signupManager.signup(signupForm);
 
-        return "redirect:/keycloak/signup";
+        return "redirect:/login";
     }
 
 }
