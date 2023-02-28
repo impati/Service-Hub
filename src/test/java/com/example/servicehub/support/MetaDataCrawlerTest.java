@@ -13,7 +13,7 @@ class MetaDataCrawlerTest {
     public void given_when_then() throws Exception{
 
         // given
-        MetaDataCrawler metaDataCrawler = new MetaDataCrawler();
+        MetaDataCrawler metaDataCrawler = new DefaultMetaDataCrawler();
         // when
         ServiceMetaData serviceMetaData = metaDataCrawler.tryToGetMetaData("https://papago.naver.com/");
 

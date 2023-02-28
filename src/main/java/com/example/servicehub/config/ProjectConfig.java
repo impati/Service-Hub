@@ -14,9 +14,7 @@ public class ProjectConfig {
     private final ClientRepository clientRepository;
 
     @Bean
-    public MetaDataCrawler metaDataCrawler(){
-        return new MetaDataCrawler();
-    }
+    public MetaDataCrawler metaDataCrawler(){ return new DefaultMetaDataCrawler(); }
 
     @Bean(name= "logo")
     public LogoManager logoManager(){
