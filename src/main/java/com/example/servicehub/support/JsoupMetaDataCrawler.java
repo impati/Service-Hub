@@ -6,7 +6,7 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 
-public class DefaultMetaDataCrawler implements MetaDataCrawler{
+public class JsoupMetaDataCrawler implements MetaDataCrawler{
 
     public ServiceMetaData tryToGetMetaData(String serviceUrl){
         if(serviceUrl == null) return new ServiceMetaData();

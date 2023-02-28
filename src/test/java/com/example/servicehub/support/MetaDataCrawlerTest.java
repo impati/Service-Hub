@@ -4,8 +4,6 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class MetaDataCrawlerTest {
 
     @Test
@@ -13,7 +11,7 @@ class MetaDataCrawlerTest {
     public void given_when_then() throws Exception{
 
         // given
-        MetaDataCrawler metaDataCrawler = new DefaultMetaDataCrawler();
+        MetaDataCrawler metaDataCrawler = new JsoupMetaDataCrawler();
         // when
         ServiceMetaData serviceMetaData = metaDataCrawler.tryToGetMetaData("https://papago.naver.com/");
 
