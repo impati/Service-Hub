@@ -73,13 +73,13 @@ class ClientControllerTest {
         return List.of("IT","BLOG","JOB");
     }
 
-    private Page<ClickServiceDto> serviceWithClick(){
-        return new PageImpl<>(
+    private List<ClickServiceDto> serviceWithClick(){
+        return
               List.of(
                       new ClickServiceDto(1L,1L,"test","test","test","test"),
                       new ClickServiceDto(100L,2L,"test","test","test","test")
-              )
-        );
+              );
+
     }
 
     private Client subClient(){

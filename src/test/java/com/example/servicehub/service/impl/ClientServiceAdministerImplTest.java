@@ -111,12 +111,11 @@ class dClientServiceAdministerImplTest {
         ServiceSearchConditionForm serviceSearchConditionForm =
                 ServiceSearchConditionForm.of(categories,null);
         // when
-        Page<ClickServiceDto> popularityServiceDtos = clientServiceAdminister.servicesOfClient(1L, serviceSearchConditionForm);
+        List<ClickServiceDto> popularityServiceDtos = clientServiceAdminister.servicesOfClient(1L, serviceSearchConditionForm);
         // then
-        assertThat(popularityServiceDtos.getTotalElements()).isEqualTo(2);
-        assertThat(popularityServiceDtos.getContent().get(0).getServiceName())
+        assertThat(popularityServiceDtos.get(0).getServiceName())
                 .isEqualTo("노션");
-        assertThat(popularityServiceDtos.getContent().get(1).getServiceName())
+        assertThat(popularityServiceDtos.get(1).getServiceName())
                 .isEqualTo("깃허브");
     }
 }

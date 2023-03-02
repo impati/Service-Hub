@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.Optional;
 
 import static com.example.servicehub.domain.ServicePage.CLICK;
@@ -67,12 +68,11 @@ public class ClientServiceAdministerImpl implements ClientServiceAdminister {
 
 
     @Override
-    public Page<ClickServiceDto> servicesOfClient(Long clientId, ServiceSearchConditionForm serviceSearchConditionForm) {
+    public List<ClickServiceDto> servicesOfClient(Long clientId, ServiceSearchConditionForm serviceSearchConditionForm) {
 
-        Page<ClickServiceDto> servicesWithClick = servicesRepository.searchByClient(clientId, serviceSearchConditionForm.getCategories(), serviceSearchConditionForm.getServiceName(),
-                PageRequest.of(DEFAULT_START_PAGE, 30, Sort.by(Sort.Direction.DESC, CLICK.getName())));
+        List<ClickServiceDto> servicesWithClick = servicesRepository.searchByClient(clientId, serviceSearchConditionForm.getCategories(), serviceSearchConditionForm.getServiceName());
 
-        for(var service : servicesWithClick.getContent()){
+        for(var service : servicesWithClick){
             service.setCategories(serviceCategoryRepository.findByServiceName(service.getServiceName()));
         }
 

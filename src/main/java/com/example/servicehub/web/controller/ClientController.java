@@ -38,7 +38,7 @@ public class ClientController {
 
         ServiceSearchConditionForm serviceSearchConditionForm = ServiceSearchConditionForm.of(allCategories, serviceName);
 
-        model.addAttribute("serviceWithClick",clientServiceAdminister.servicesOfClient(clientId, serviceSearchConditionForm).getContent());
+        model.addAttribute("serviceWithClick",clientServiceAdminister.servicesOfClient(clientId, serviceSearchConditionForm));
 
         model.addAttribute("allCategories",allCategories);
 
@@ -83,7 +83,7 @@ public class ClientController {
 
         ServiceSearchConditionForm serviceSearchConditionForm = ServiceSearchConditionForm.of(categoryAdminister.getAllCategories(), serviceName);
 
-        model.addAttribute("serviceWithClick",clientServiceAdminister.servicesOfClient(clientPrincipal.getId(), serviceSearchConditionForm).getContent());
+        model.addAttribute("serviceWithClick",clientServiceAdminister.servicesOfClient(clientPrincipal.getId(), serviceSearchConditionForm));
 
         model.addAttribute("allCategories",allCategories);
 
