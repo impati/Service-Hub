@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 <header class="header text-center" th:fragment="sidebar">
+
     <div class="force-overflow">
         <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html" th:text="${simpleClient.nickname}">SERVICE HUB</a></h1>
 
@@ -34,6 +35,10 @@
                         <a class="nav-link" th:if="${#authentication.getPrincipal().getId() == simpleClient.clientId}" th:href="@{/client/service/edit}"><i class="fas fa-laptop-code fa-fw me-2"></i>내서비스 수정</a>
                     </li>
 
+                    <li class="nav-item">
+                        <a href="#myModal" class="nav-link" data-bs-toggle="modal"><i class="fas fa-laptop-code fa-fw me-2"></i>커스텀 서비스 추가</a>
+                    </li>
+
                 </ul>
 
                 <div class="my-2">
@@ -52,6 +57,8 @@
             </div>
         </nav>
     </div><!--//force-overflow-->
+
+
 </header>
 
 </body>
