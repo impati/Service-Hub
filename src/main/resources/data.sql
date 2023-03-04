@@ -26,6 +26,7 @@ insert into category(name,parent_id,created_by,created_at,updated_at) values('se
 insert into category(name,parent_id,created_by,created_at,updated_at) values('translation',null,'impati',now(),now());
 insert into category(name,parent_id,created_by,created_at,updated_at) values('framework',1,'impati',now(),now());
 insert into category(name,parent_id,created_by,created_at,updated_at) values('cloud',1,'impati',now(),now());
+insert into category(name,parent_id,created_by,created_at,updated_at) values('CUSTOM',null,'impati',now(),now());
 
 
 insert into service_comment(content,service_id,client_id,created_by,created_at,updated_at) values('안녕 노션',1,1,'impati',now(),now());
