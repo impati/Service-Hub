@@ -5,10 +5,12 @@ import com.example.servicehub.domain.Client;
 import com.example.servicehub.domain.ProviderType;
 import com.example.servicehub.dto.ClickServiceDto;
 import com.example.servicehub.dto.ClientEditForm;
+import com.example.servicehub.dto.CustomServiceForm;
 import com.example.servicehub.dto.ServiceSearchConditionForm;
 import com.example.servicehub.service.CategoryAdminister;
 import com.example.servicehub.service.ClientAdminister;
 import com.example.servicehub.service.ClientServiceAdminister;
+import com.example.servicehub.service.CustomServiceAdminister;
 import com.example.servicehub.util.FormDataEncoder;
 import com.example.servicehub.web.WithMockCustomUser;
 import org.junit.jupiter.api.DisplayName;
@@ -24,6 +26,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
@@ -45,6 +48,9 @@ class ClientControllerTest {
 
     @MockBean
     private ClientAdminister clientAdminister;
+
+    @MockBean
+    private CustomServiceAdminister customServiceAdminister;
 
     private FormDataEncoder formDataEncoder = new FormDataEncoder();
 
@@ -151,7 +157,7 @@ class ClientControllerTest {
     @WithMockCustomUser(id = 2L)
     public void givenDeleteButtonInClientServiceEditPage_whenClickDeleteButton_thenDeleteClientService() throws Exception{
 
-        BDDMockito.willDoNothing().given(clientServiceAdminister).deleteClientService(2L,99L);
+        BDDMockito.willDoNothing().given(clientServiceAdminister).deleteClientService(2L,99L,false);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/client/service/delete/{serviceId}",99L)
@@ -170,7 +176,7 @@ class ClientControllerTest {
 
         String serviceUrl = "https://notion.so";
 
-        BDDMockito.given(clientServiceAdminister.countClickAndReturnUrl(2L,99L))
+        BDDMockito.given(clientServiceAdminister.countClickAndReturnUrl(2L,99L,false))
                         .willReturn(serviceUrl);
 
         mockMvc.perform(
@@ -206,7 +212,7 @@ class ClientControllerTest {
     public void givenServiceSearchPage_whenClickServiceDeleteButton_thenDeleteClientService() throws Exception{
 
 
-        BDDMockito.willDoNothing().given(clientServiceAdminister).deleteClientService(2L,99L);
+        BDDMockito.willDoNothing().given(clientServiceAdminister).deleteClientService(2L,99L,false);
 
         mockMvc.perform(
                         MockMvcRequestBuilders.post("/client/delete-service/{serviceId}",99L)
@@ -216,7 +222,74 @@ class ClientControllerTest {
                 .andExpect(MockMvcResultMatchers.content().string("Ok"));
 
 
-        BDDMockito.then(clientServiceAdminister).should().deleteClientService(2L,99L);
+        BDDMockito.then(clientServiceAdminister).should().deleteClientService(2L,99L,false);
     }
+
+    @Test
+    @DisplayName("사용자 페이지에서 커스텀 서비스 추가 테스트")
+    @WithMockCustomUser
+    public void givenClickButtonAboutCustomService_whenInputCustomServiceUrlAndName_thenAddCustomServiceOfClient() throws Exception{
+
+        BDDMockito.willDoNothing().given(customServiceAdminister)
+                .addCustomService(1L,new CustomServiceForm("serviceHub","https://service-hub.org"));
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders.post("/client/add-custom")
+                                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                                .param("serviceName","serviceHub")
+                                .param("serviceUrl","https://service-hub.org")
+                                .with(SecurityMockMvcRequestPostProcessors.csrf())
+                )
+                .andExpect(MockMvcResultMatchers.content().contentType("text/plain;charset=UTF-8"))
+                .andExpect(MockMvcResultMatchers.content().string("Ok"))
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    @DisplayName("사용자가 커스텀 서비스를 클릭 - 테스트")
+    @WithMockCustomUser(id = 2L)
+    public void givenCustomServiceInClientPage_whenClickService_thenCallClickServiceMethod() throws Exception{
+
+        String serviceUrl = "https://service-hub.org";
+
+        BDDMockito.given(clientServiceAdminister.countClickAndReturnUrl(2L,99L,true))
+                .willReturn(serviceUrl);
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get("/client/click")
+                                .param("serviceId","99")
+                                .param("isCustom","true")
+                                .with(SecurityMockMvcRequestPostProcessors.csrf()))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers.view().name("redirect:" + serviceUrl));
+    }
+
+    @Test
+    @DisplayName("커스텀 서비스 수정 - 삭제 테스트")
+    @WithMockCustomUser(id = 2L)
+    public void givenDeleteButtonInClientServiceEditPage_whenClickDeleteButton_thenDeleteCustomService() throws Exception{
+
+        BDDMockito.willDoNothing().given(clientServiceAdminister).deleteClientService(2L,99L,true);
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders.post("/client/service/delete/{serviceId}",99L)
+                                .param("isCustom","true")
+                                .with(SecurityMockMvcRequestPostProcessors.csrf())
+                )
+                .andExpect(MockMvcResultMatchers.content().contentType("text/plain;charset=UTF-8"))
+                .andExpect(MockMvcResultMatchers.content().string("Ok"));
+
+    }
+
+
+
+
+
+
+
+
+
+
+
 
 }

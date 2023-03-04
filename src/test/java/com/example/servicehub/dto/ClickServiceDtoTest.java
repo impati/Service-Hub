@@ -16,7 +16,7 @@ class ClickServiceDtoTest {
         List<String>  categories = List.of("IT","BLOG");
         // when
         ClickServiceDto clickServiceDto =
-                new ClickServiceDto(null, null, null, null, null, null, categories);
+                new ClickServiceDto(null, null, null, null, null, null, categories,false);
         // then
         assertThat(clickServiceDto.getCategories())
                 .isEqualTo("IT BLOG");
