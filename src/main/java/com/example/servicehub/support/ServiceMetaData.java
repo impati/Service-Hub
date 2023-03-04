@@ -1,5 +1,6 @@
 package com.example.servicehub.support;
 
+import com.example.servicehub.util.ProjectUtils;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -8,6 +9,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ServiceMetaData {
+
+    private final String defaultLogoURI = "/file/logo/default.png";
 
     private String siteName;
     private String title;
@@ -41,7 +44,7 @@ public class ServiceMetaData {
                 this.image = content;return;
             case "description" :
                 if(this.description != null) return;
-                this.description = content;return;
+                this.description = content;
         }
     }
 
@@ -57,9 +60,15 @@ public class ServiceMetaData {
         return getNullOrBlank(this.url);
     }
 
-    public String getImage(){
+
+    /**
+     * service 의 로고의 URL 이 있다면 반환하고 없다면 해당 서버의 Default Logo URL 을 반환한다.
+     * @return 로고 url
+     */
+
+    public String getImageUrl(){
         if(isUrl(getNullOrBlank(this.image))) return this.image;
-        return null;
+        return ProjectUtils.getDomain() + defaultLogoURI;
     }
 
     public String getDescription() {

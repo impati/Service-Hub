@@ -1,11 +1,13 @@
 package com.example.servicehub.web.controller;
 
 import com.example.servicehub.dto.ClientEditForm;
+import com.example.servicehub.dto.CustomServiceForm;
 import com.example.servicehub.dto.ServiceSearchConditionForm;
 import com.example.servicehub.security.authentication.ClientPrincipal;
 import com.example.servicehub.service.CategoryAdminister;
 import com.example.servicehub.service.ClientAdminister;
 import com.example.servicehub.service.ClientServiceAdminister;
+import com.example.servicehub.service.CustomServiceAdminister;
 import com.example.servicehub.web.dto.SimpleClientDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +29,7 @@ public class ClientController {
     private final ClientServiceAdminister clientServiceAdminister;
     private final CategoryAdminister categoryAdminister;
     private final ClientAdminister clientAdminister;
+    private final CustomServiceAdminister customServiceAdminister;
 
     @GetMapping("/{clientId}")
     public String renderClientPage(
@@ -38,7 +41,7 @@ public class ClientController {
 
         ServiceSearchConditionForm serviceSearchConditionForm = ServiceSearchConditionForm.of(allCategories, serviceName);
 
-        model.addAttribute("serviceWithClick",clientServiceAdminister.servicesOfClient(clientId, serviceSearchConditionForm).getContent());
+        model.addAttribute("serviceWithClick",clientServiceAdminister.servicesOfClient(clientId, serviceSearchConditionForm));
 
         model.addAttribute("allCategories",allCategories);
 
@@ -83,7 +86,7 @@ public class ClientController {
 
         ServiceSearchConditionForm serviceSearchConditionForm = ServiceSearchConditionForm.of(categoryAdminister.getAllCategories(), serviceName);
 
-        model.addAttribute("serviceWithClick",clientServiceAdminister.servicesOfClient(clientPrincipal.getId(), serviceSearchConditionForm).getContent());
+        model.addAttribute("serviceWithClick",clientServiceAdminister.servicesOfClient(clientPrincipal.getId(), serviceSearchConditionForm));
 
         model.addAttribute("allCategories",allCategories);
 
@@ -94,10 +97,11 @@ public class ClientController {
 
     @ResponseBody
     @PostMapping("/service/delete/{serviceId}")
-    public String renderClientServiceEdit(@PathVariable Long serviceId,
-                                          @AuthenticationPrincipal ClientPrincipal clientPrincipal){
+    public String editClientService(@PathVariable Long serviceId,
+                                    @RequestParam(defaultValue = "false") boolean isCustom,
+                                    @AuthenticationPrincipal ClientPrincipal clientPrincipal){
 
-        clientServiceAdminister.deleteClientService(clientPrincipal.getId(),serviceId);
+        clientServiceAdminister.deleteClientService(clientPrincipal.getId(),serviceId,isCustom);
 
         return "Ok";
     }
@@ -105,9 +109,11 @@ public class ClientController {
     @GetMapping("/click")
     public String clickService(
             @RequestParam Long serviceId,
+            @RequestParam(defaultValue = "false") boolean isCustom,
             @AuthenticationPrincipal ClientPrincipal clientPrincipal){
 
-        String serviceUrl = clientServiceAdminister.countClickAndReturnUrl(clientPrincipal.getId(),serviceId);
+
+        String serviceUrl = clientServiceAdminister.countClickAndReturnUrl(clientPrincipal.getId(),serviceId,isCustom);
 
         return "redirect:" + serviceUrl;
     }
@@ -125,7 +131,19 @@ public class ClientController {
     @PostMapping("/delete-service/{serviceId}")
     public String deleteClientService(@PathVariable Long serviceId, @AuthenticationPrincipal ClientPrincipal clientPrincipal){
 
-        clientServiceAdminister.deleteClientService(clientPrincipal.getId(), serviceId);
+        clientServiceAdminister.deleteClientService(clientPrincipal.getId(), serviceId,false);
+
+        return "Ok";
+    }
+
+
+
+    @ResponseBody
+    @PostMapping("/add-custom")
+    public String addCustomService(@ModelAttribute CustomServiceForm customServiceForm,
+                                   @AuthenticationPrincipal ClientPrincipal clientPrincipal){
+
+        customServiceAdminister.addCustomService(clientPrincipal.getId(),customServiceForm);
 
         return "Ok";
     }

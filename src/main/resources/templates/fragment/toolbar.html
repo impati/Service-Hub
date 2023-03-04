@@ -11,8 +11,6 @@
                 <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
             </a>
 
-
-
             <div style="text-align: left">
             <a class="btn btn-outline-primary me-2 w-100" sec:authorize="hasRole('ADMIN')" th:href="@{/service/registration}">서비스등록</a>
             </div>
@@ -32,7 +30,7 @@
                 </a>
             </div>
     </nav>
-        <script  type="text/javascript">
+        <script type="text/javascript">
             function logout(){
                 var token = $("meta[name='_csrf']").attr("content");
                 var header = $("meta[name='_csrf_header']").attr("content");
@@ -62,4 +60,5 @@
     </header>
 </div>
 </body>
+
 </html>

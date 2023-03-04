@@ -1,16 +1,16 @@
 package com.example.servicehub.service.impl;
 
 import com.example.servicehub.config.TestJpaConfig;
-import com.example.servicehub.domain.Client;
-import com.example.servicehub.domain.ClientService;
-import com.example.servicehub.domain.ProviderType;
-import com.example.servicehub.domain.Services;
+import com.example.servicehub.domain.*;
 import com.example.servicehub.dto.ClickServiceDto;
 import com.example.servicehub.dto.ServiceSearchConditionForm;
 import com.example.servicehub.repository.ClientRepository;
 import com.example.servicehub.repository.ClientServiceRepository;
+import com.example.servicehub.repository.CustomServiceRepository;
 import com.example.servicehub.repository.ServicesRepository;
 import com.example.servicehub.service.ClientServiceAdminister;
+import com.example.servicehub.support.JsoupMetaDataCrawler;
+import com.example.servicehub.support.LogoManager;
 import com.example.servicehub.util.ProjectUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,18 +21,24 @@ import org.springframework.data.domain.Page;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName(" 사용자 서비스 기능 ")
 @DataJpaTest
-@Import({TestJpaConfig.class , ClientServiceAdministerImpl.class})
-class dClientServiceAdministerImplTest {
+@Import({TestJpaConfig.class , ClientServiceAdministerImpl.class,
+        CustomServiceAdministerImpl.class, JsoupMetaDataCrawler.class,
+        LogoManager.class
+})
+class ClientServiceAdministerImplTest {
 
     @Autowired private ClientServiceAdminister clientServiceAdminister;
     @Autowired private ClientRepository clientRepository;
     @Autowired private ClientServiceRepository clientServiceRepository;
     @Autowired private ServicesRepository servicesRepository;
+    @Autowired private CustomServiceRepository customServiceRepository;
 
     @Test
     @DisplayName("사용자 서비스 추가")
@@ -78,8 +84,8 @@ class dClientServiceAdministerImplTest {
         clientServiceAdminister.addClientService(1L, 2L);
         clientServiceAdminister.addClientService(1L, 3L);
         // when
-        clientServiceAdminister.deleteClientService(1L,1L);
-        clientServiceAdminister.deleteClientService(1L,1L);
+        clientServiceAdminister.deleteClientService(1L,1L,false);
+        clientServiceAdminister.deleteClientService(1L,1L,false);
         // then
         assertThat(clientServiceRepository.findServiceByClientId(1L).size())
                 .isEqualTo(2);
@@ -91,9 +97,9 @@ class dClientServiceAdministerImplTest {
         // given
         Client client = clientRepository.findById(1L).get();
         Services services = servicesRepository.findById(1L).get();
-        String serviceUrl = clientServiceAdminister.countClickAndReturnUrl(1L,1L);
-        clientServiceAdminister.countClickAndReturnUrl(1L,1L);
-        clientServiceAdminister.countClickAndReturnUrl(1L,1L);
+        String serviceUrl = clientServiceAdminister.countClickAndReturnUrl(1L,1L,false);
+        clientServiceAdminister.countClickAndReturnUrl(1L,1L,false);
+        clientServiceAdminister.countClickAndReturnUrl(1L,1L,false);
         // when
         ClientService clientService = clientServiceRepository.findClientServiceByClientAndServices(client, services).get();
         // then
@@ -111,12 +117,71 @@ class dClientServiceAdministerImplTest {
         ServiceSearchConditionForm serviceSearchConditionForm =
                 ServiceSearchConditionForm.of(categories,null);
         // when
-        Page<ClickServiceDto> popularityServiceDtos = clientServiceAdminister.servicesOfClient(1L, serviceSearchConditionForm);
+        List<ClickServiceDto> popularityServiceDtos = clientServiceAdminister.servicesOfClient(1L, serviceSearchConditionForm);
         // then
-        assertThat(popularityServiceDtos.getTotalElements()).isEqualTo(2);
-        assertThat(popularityServiceDtos.getContent().get(0).getServiceName())
+        assertThat(popularityServiceDtos.get(0).getServiceName())
                 .isEqualTo("노션");
-        assertThat(popularityServiceDtos.getContent().get(1).getServiceName())
+        assertThat(popularityServiceDtos.get(1).getServiceName())
                 .isEqualTo("깃허브");
+    }
+
+    @Test
+    @DisplayName("사용자 서비스 조회 - 커스텀 서비스와 함께 조회 - 커스텀 서비스 먼저")
+    public void givenClientAndServiceSearchCondition_whenSearchingCustomServiceFirstDefaultSortByClickNumber_thenSearchedService() throws Exception{
+        // given
+        Client client = clientRepository.findById(1L).get();
+        List<String> categories = new ArrayList<>();
+        ServiceSearchConditionForm serviceSearchConditionForm =
+                ServiceSearchConditionForm.of(categories,"");
+
+        addCustomService(client,"test");
+        addCustomService(client,"service");
+        addCustomService(client,"sql");
+        // when
+        List<ClickServiceDto> clickServiceDtos = clientServiceAdminister.servicesOfClient(client.getId(), serviceSearchConditionForm);
+        // then
+
+        assertThat(clickServiceDtos.size())
+                .isEqualTo(clientServiceRepository.findServiceByClientId(client.getId()).size() + 3);
+
+        assertThat(clickServiceDtos.subList(0,3).stream().map(ClickServiceDto::getServiceName).collect(Collectors.toList()))
+                .containsAnyOf("test","service","sql");
+    }
+
+    @Test
+    @DisplayName("사용자 서비스 조회 - 커스텀 서비스와 함께 조회 - 커스텀 서비스를 먼저 조회 - 서비스 이름 필터 추가")
+    public void givenClientAndServiceSearchCondition_whenSearchingCustomServiceFirstDefaultSortByClickNumber_thenSearchedServiceVersion2() throws Exception{
+        // given
+        Client client = clientRepository.findById(1L).get();
+        List<String> categories = new ArrayList<>();
+        ServiceSearchConditionForm serviceSearchConditionForm =
+                ServiceSearchConditionForm.of(categories,"test");
+
+        addCustomService(client,"test");
+        addCustomService(client,"service");
+        addCustomService(client,"sql");
+        // when
+        List<ClickServiceDto> clickServiceDtos = clientServiceAdminister.servicesOfClient(client.getId(), serviceSearchConditionForm);
+        // then
+
+        assertThat(clickServiceDtos.size())
+                .isEqualTo(1);
+
+        assertThat(clickServiceDtos.get(0).getServiceName())
+                .isEqualTo("test");
+    }
+
+
+
+    private void addCustomService(Client client,String serviceName){
+        customServiceRepository.save(
+                CustomService.builder()
+                        .serviceUrl("https://test.com")
+                        .client(client)
+                        .logoStoreName(UUID.randomUUID().toString())
+                        .serviceUrl("")
+                        .title("")
+                        .serviceName(serviceName)
+                        .build());
     }
 }

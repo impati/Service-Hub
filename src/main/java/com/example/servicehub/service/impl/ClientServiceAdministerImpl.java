@@ -2,6 +2,7 @@ package com.example.servicehub.service.impl;
 
 import com.example.servicehub.domain.Client;
 import com.example.servicehub.domain.ClientService;
+import com.example.servicehub.domain.CustomService;
 import com.example.servicehub.domain.Services;
 import com.example.servicehub.dto.ClickServiceDto;
 import com.example.servicehub.dto.ServiceSearchConditionForm;
@@ -10,6 +11,7 @@ import com.example.servicehub.repository.ClientServiceRepository;
 import com.example.servicehub.repository.ServiceCategoryRepository;
 import com.example.servicehub.repository.ServicesRepository;
 import com.example.servicehub.service.ClientServiceAdminister;
+import com.example.servicehub.service.CustomServiceAdminister;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +23,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.example.servicehub.domain.ServicePage.CLICK;
 import static com.example.servicehub.domain.ServicePage.DEFAULT_START_PAGE;
@@ -36,6 +41,7 @@ public class ClientServiceAdministerImpl implements ClientServiceAdminister {
     private final ClientRepository clientRepository;
     private final ServicesRepository servicesRepository;
     private final ServiceCategoryRepository serviceCategoryRepository;
+    private final CustomServiceAdminister customServiceAdminister;
 
     @Override
     @Transactional
@@ -54,7 +60,12 @@ public class ClientServiceAdministerImpl implements ClientServiceAdminister {
 
     @Override
     @Transactional
-    public void deleteClientService(Long clientId, Long serviceId) {
+    public void deleteClientService(Long clientId, Long serviceId,boolean isCustom) {
+
+        if(isCustom) {
+            customServiceAdminister.deleteCustomService(clientId,serviceId);
+            return ;
+        }
 
         ClientAndService clientAndService = createBy(clientId,serviceId);
 
@@ -67,21 +78,45 @@ public class ClientServiceAdministerImpl implements ClientServiceAdminister {
 
 
     @Override
-    public Page<ClickServiceDto> servicesOfClient(Long clientId, ServiceSearchConditionForm serviceSearchConditionForm) {
+    public List<ClickServiceDto> servicesOfClient(Long clientId, ServiceSearchConditionForm serviceSearchConditionForm) {
 
-        Page<ClickServiceDto> servicesWithClick = servicesRepository.searchByClient(clientId, serviceSearchConditionForm.getCategories(), serviceSearchConditionForm.getServiceName(),
-                PageRequest.of(DEFAULT_START_PAGE, 30, Sort.by(Sort.Direction.DESC, CLICK.getName())));
+        List<ClickServiceDto> servicesWithClick = searchCustomServicesFirstOrEmptyList(clientId,serviceSearchConditionForm);
 
-        for(var service : servicesWithClick.getContent()){
+        servicesWithClick.addAll(servicesRepository.searchByClient(clientId, serviceSearchConditionForm.getCategories(), serviceSearchConditionForm.getServiceName()));
+
+        for(var service : servicesWithClick){
             service.setCategories(serviceCategoryRepository.findByServiceName(service.getServiceName()));
         }
 
         return servicesWithClick;
     }
 
+
+    private List<ClickServiceDto> searchCustomServicesFirstOrEmptyList(Long clientId , ServiceSearchConditionForm serviceSearchConditionForm){
+        List<ClickServiceDto> servicesWithClick = new ArrayList<>();
+
+        if(isCustomSearch(serviceSearchConditionForm.getCategories())){
+            servicesWithClick.addAll(customServiceAdminister.customServicesOfClient(clientId,serviceSearchConditionForm.getServiceName())
+                    .stream()
+                    .map(ClickServiceDto::from)
+                    .collect(Collectors.toList()));
+        }
+
+        return servicesWithClick;
+    }
+
+    private boolean isCustomSearch(List<String> categories){
+        if(categories == null) return true;
+        if(categories.isEmpty()) return true;
+        if(categories.contains("CUSTOM")) return true;
+        return false;
+    }
+
     @Override
     @Transactional
-    public String countClickAndReturnUrl(Long clientId, Long serviceId) {
+    public String countClickAndReturnUrl(Long clientId, Long serviceId,boolean isCustom) {
+
+        if(isCustom) return customServiceAdminister.countClickAndReturnUrl(clientId,serviceId);
 
         ClientAndService clientAndService = createBy(clientId,serviceId);
 

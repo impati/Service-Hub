@@ -63,8 +63,8 @@ public class ServiceSearchRepositoryImpl implements ServiceSearchRepository{
     }
 
     @Override
-    public Page<ClickServiceDto> searchByClient(Long clientId, List<String> categories, String serviceName, Pageable pageable){
-        List<ClickServiceDto> result = queryFactory
+    public List<ClickServiceDto> searchByClient(Long clientId, List<String> categories, String serviceName){
+        return queryFactory
                 .selectDistinct(Projections.constructor(
                         ClickServiceDto.class,
                         clientService.clickCount,
@@ -80,20 +80,8 @@ public class ServiceSearchRepositoryImpl implements ServiceSearchRepository{
                 .join(services.serviceCategories,serviceCategory)
                 .where(client.id.eq(clientId), categoriesSearch(categories), nameSearch(serviceName))
                 .orderBy(clientService.clickCount.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
                 .fetch();
 
-        return new PageImpl<>(result,pageable,
-                computeTotalCountQuery(()-> queryFactory
-                        .selectDistinct(clientService)
-                        .from(clientService)
-                        .join(clientService.client,client)
-                        .join(clientService.services,services)
-                        .join(services.serviceCategories,serviceCategory)
-                        .where(client.id.eq(clientId), categoriesSearch(categories), nameSearch(serviceName))
-                        .fetch().size()
-        ));
     }
 
     private int computeTotalCountQuery(Supplier<Integer> supplier){
