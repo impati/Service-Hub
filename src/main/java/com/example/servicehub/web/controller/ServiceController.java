@@ -50,7 +50,7 @@ public class ServiceController {
                 serviceMetaData.getUrl(),
                 serviceMetaData.getTitle(),
                 serviceMetaData.getDescription(),
-                serviceMetaData.getImageUrl()
+                serviceMetaData.getImage()
         ));
 
         model.addAttribute("categories",categoryAdminister.getAllCategories());
