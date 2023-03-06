@@ -12,7 +12,7 @@ import lombok.ToString;
 @Getter
 public class ServiceMetaData {
 
-    private final String DEFAULT_LOGO_URL = ProjectUtils.getDomain() + "/file/logo/default.png";
+    private final String DEFAULT_LOGO_URL = "https://service-hub.org/file/logo/default.png";
     private final String DEFAULT = "default";
 
     private String siteName;
@@ -66,7 +66,8 @@ public class ServiceMetaData {
     }
 
     private void setImage(String image) {
-        if(this.image.equals(DEFAULT)) this.image = image;
+        if(!image.contains("http")) return;
+        if(this.image.equals(DEFAULT_LOGO_URL)) this.image = image;
     }
 
     private void setDescription(String description) {

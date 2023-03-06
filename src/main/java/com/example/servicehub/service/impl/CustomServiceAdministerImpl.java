@@ -34,7 +34,7 @@ public class CustomServiceAdministerImpl implements CustomServiceAdminister {
 
         ServiceMetaData serviceMetaData = metaDataCrawler.tryToGetMetaData(request.getServiceUrl());
 
-        String logoStoreName = logoManager.download(serviceMetaData.getUrl());
+        String logoStoreName = logoManager.download(serviceMetaData.getImage());
 
         Client client = clientRepository.findById(clientId).orElseThrow(IllegalStateException::new);
 
