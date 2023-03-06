@@ -52,7 +52,7 @@
                                 <a class="card-link" style="display: block;width: 100%" th:href="@{/client/click/(serviceId=${service.serviceId},isCustom=${service.isCustom()})}">
                                     <img style="width: 50px; display: block" th:src="@{/file/logo/{logoStoreName} (logoStoreName=${service.logoStoreName})}" class="card-img" alt="image">
                                 </a>
-                                <a class="tile" th:text="${service.serviceName}"  th:href="@{/service/{serviceId} (serviceId=${service.serviceId})}">
+                                <a class="tile" th:text="${service.serviceName}">
                                 </a>
                         </div><!--//card-->
                 </div>
