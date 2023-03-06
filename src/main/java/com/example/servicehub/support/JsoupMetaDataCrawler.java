@@ -20,13 +20,15 @@ public class JsoupMetaDataCrawler implements MetaDataCrawler{
     private ServiceMetaData getMetaData(String serviceUrl) throws IOException {
         Elements elements = Jsoup
                 .connect(serviceUrl)
+                .userAgent("Mozilla/5.0")
                 .get()
                 .getElementsByTag("meta");
-        ServiceMetaData serviceMetaData = new ServiceMetaData();
+        ServiceMetaData serviceMetaData = new ServiceMetaData(serviceUrl);
         for (var element : elements) {
             serviceMetaData.setAttributeByProperty(element.attr("property"),element.attr("content"));
             serviceMetaData.setAttributeByName(element.attr("name"),element.attr("content"));
         }
+
         return serviceMetaData ;
     }
 

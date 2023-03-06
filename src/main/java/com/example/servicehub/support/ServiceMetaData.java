@@ -2,15 +2,18 @@ package com.example.servicehub.support;
 
 import com.example.servicehub.util.ProjectUtils;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 public class ServiceMetaData {
 
-    private final String defaultLogoURI = "/file/logo/default.png";
+    private final String DEFAULT_LOGO_URL = "https://service-hub.org/file/logo/default.png";
+    private final String DEFAULT = "default";
 
     private String siteName;
     private String title;
@@ -18,70 +21,56 @@ public class ServiceMetaData {
     private String image;
     private String description;
 
+    public ServiceMetaData(String serviceUrl){
+        this.url = serviceUrl;
+        this.title = DEFAULT;
+        this.siteName = DEFAULT;
+        this.description = DEFAULT;
+        this.image = DEFAULT_LOGO_URL;
+    }
+
     public void setAttributeByProperty(String property, String content){
+        if(content == null) return ;
         switch (property){
-            case "og:site_name" : this.siteName = content;return;
-            case "og:title" : this.title = content;return;
-            case "og:url" : this.url = content;return;
-            case "og:image" : this.image = content;return;
-            case "og:description" : this.description = content;return;
+            case "og:site_name" : setSiteName(content); break;
+            case "og:title" : setTitle(content); break;
+            case "og:image" : setImage(content); break;
+            case "og:description" : setDescription(content); break;
         }
     }
 
     public void setAttributeByName(String name , String content){
+        if(content == null) return ;
         switch (name){
             case "site_name" :
-                if(this.siteName != null) return;
-                this.siteName = content;return;
+            case "twitter:site" :
+                setSiteName(content); break;
             case "title" :
-                if(this.title != null) return;
-                this.title = content;return;
-            case "url" :
-                if(this.url != null) return;
-                this.url = content;return;
+            case "twitter:title" :
+                setTitle(content); break;
             case "image" :
-                if(this.image != null) return;
-                this.image = content;return;
+            case "twitter:image" :
+                setImage(content); break;
             case "description" :
-                if(this.description != null) return;
-                this.description = content;
+            case "twitter:description" :
+                setDescription(content); break;
         }
     }
 
-    public String getSiteName() {
-        return getNullOrBlank(this.siteName);
+    private void setSiteName(String siteName) {
+        if(this.siteName.equals(DEFAULT)) this.siteName = siteName;
     }
 
-    public String getTitle() {
-        return getNullOrBlank(this.title);
+    private void setTitle(String title) {
+        if(this.title.equals(DEFAULT)) this.title = title;
     }
 
-    public String getUrl() {
-        return getNullOrBlank(this.url);
+    private void setImage(String image) {
+        if(!image.contains("http")) return;
+        if(this.image.equals(DEFAULT_LOGO_URL)) this.image = image;
     }
 
-
-    /**
-     * service 의 로고의 URL 이 있다면 반환하고 없다면 해당 서버의 Default Logo URL 을 반환한다.
-     * @return 로고 url
-     */
-
-    public String getImageUrl(){
-        if(isUrl(getNullOrBlank(this.image))) return this.image;
-        return ProjectUtils.getDomain() + defaultLogoURI;
-    }
-
-    public String getDescription() {
-        return getNullOrBlank(this.description);
-    }
-
-    private String getNullOrBlank(String str){
-        if(str == null) return "";
-        return str;
-    }
-
-    private boolean isUrl(String path){
-        if(path.contains("http"))return true;
-        return false;
+    private void setDescription(String description) {
+        if(this.description.equals(DEFAULT)) this.description = description;
     }
 }
