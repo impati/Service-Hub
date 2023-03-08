@@ -6,6 +6,7 @@ import com.example.servicehub.domain.ServiceCategory;
 import com.example.servicehub.domain.Services;
 import com.example.servicehub.dto.ServiceUpdateForm;
 import com.example.servicehub.repository.ServicesRepository;
+import com.example.servicehub.support.DefaultImageResizer;
 import com.example.servicehub.support.LogoManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("서비스 수정 테스트")
 @DataJpaTest
-@Import({TestJpaConfig.class,ServiceUpdate.class, LogoManager.class})
+@Import({TestJpaConfig.class,ServiceUpdate.class, LogoManager.class, DefaultImageResizer.class})
 class ServiceUpdateTest {
 
     @Autowired

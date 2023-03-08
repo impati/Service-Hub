@@ -7,6 +7,7 @@ import com.example.servicehub.domain.Services;
 import com.example.servicehub.dto.ServicesRegisterForm;
 import com.example.servicehub.repository.ServiceCategoryRepository;
 import com.example.servicehub.repository.ServicesRepository;
+import com.example.servicehub.support.DefaultImageResizer;
 import com.example.servicehub.support.LogoManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("서비스 등록 테스트")
 @DataJpaTest
-@Import({TestJpaConfig.class,ServicesRegister.class, LogoManager.class})
+@Import({TestJpaConfig.class,ServicesRegister.class,
+        LogoManager.class, DefaultImageResizer.class})
 class ServicesRegisterTest {
 
     @Autowired private ServicesRegister servicesRegister;

@@ -9,6 +9,7 @@ import com.example.servicehub.repository.ClientServiceRepository;
 import com.example.servicehub.repository.CustomServiceRepository;
 import com.example.servicehub.repository.ServicesRepository;
 import com.example.servicehub.service.ClientServiceAdminister;
+import com.example.servicehub.support.DefaultImageResizer;
 import com.example.servicehub.support.JsoupMetaDataCrawler;
 import com.example.servicehub.support.LogoManager;
 import com.example.servicehub.util.ProjectUtils;
@@ -30,7 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @Import({TestJpaConfig.class , ClientServiceAdministerImpl.class,
         CustomServiceAdministerImpl.class, JsoupMetaDataCrawler.class,
-        LogoManager.class
+        LogoManager.class, DefaultImageResizer.class
 })
 class ClientServiceAdministerImplTest {
 

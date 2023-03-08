@@ -13,6 +13,7 @@ import java.util.Optional;
 @EnableJpaAuditing
 @TestConfiguration
 public class TestJpaConfig {
+
     @PersistenceContext  private EntityManager em;
 
     @Bean
