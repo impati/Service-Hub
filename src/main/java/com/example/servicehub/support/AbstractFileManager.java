@@ -13,11 +13,10 @@ import static java.util.Objects.requireNonNull;
 public abstract class AbstractFileManager implements FileManager{
 
     public  final static String DEFAULT = "default.png";
-    private final static List<String> imageExtension = new ArrayList<>(List.of("png","bmp","rle","dib","jpeg","jpg","gif","tif","tiff","raw"));
 
     protected String restore(MultipartFile file) throws IOException {
         if(isContainFile(file)){
-            String storeName = createUniqueName() + extractExtension(requireNonNull(file.getOriginalFilename()));
+            String storeName = createUniqueName() + ImageExtension.extractExtension(requireNonNull(file.getOriginalFilename()));
             file.transferTo(new File(getFullPath(storeName)));
             return storeName;
         }
@@ -25,19 +24,12 @@ public abstract class AbstractFileManager implements FileManager{
     }
 
     protected String createUniqueName(){
-        String uuid = UUID.randomUUID().toString();
-        return uuid;
+        return UUID.randomUUID().toString();
     }
 
-    protected String extractExtension(String originFileName){
-        return "." + imageExtension
-                .stream()
-                .filter(originFileName.toLowerCase()::contains)
-                .findFirst().orElseThrow(()->new IllegalStateException("지원하지 않는 파일형식입니다"));
+    protected boolean isContainFile(MultipartFile file){
+        if(file == null) return false;
+        return !file.isEmpty();
     }
 
-    protected boolean isContainFile(MultipartFile profile){
-        if(profile == null) return false;
-        return !profile.isEmpty();
-    }
 }

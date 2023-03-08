@@ -19,7 +19,6 @@ spring:
       data-locations: classpath:data.sql
       mode: always
 
-
 logo:
   dir: /Users/jun-yeongchoe/Desktop/project/ServiceHub/src/test/resources/image/
 

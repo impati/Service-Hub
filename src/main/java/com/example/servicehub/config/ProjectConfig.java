@@ -1,9 +1,6 @@
 package com.example.servicehub.config;
 
-import com.example.servicehub.support.JsoupMetaDataCrawler;
-import com.example.servicehub.support.LogoManager;
-import com.example.servicehub.support.MetaDataCrawler;
-import com.example.servicehub.support.ProfileManager;
+import com.example.servicehub.support.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +14,7 @@ public class ProjectConfig {
 
     @Bean(name= "logo")
     public LogoManager logoManager(){
-        return new LogoManager();
+        return new LogoManager(imageResizer());
     }
 
     @Bean(name= "profile")
@@ -25,4 +22,6 @@ public class ProjectConfig {
         return new ProfileManager();
     }
 
+    @Bean
+    public ImageResizer imageResizer(){ return new DefaultImageResizer(); }
 }

@@ -8,6 +8,7 @@ import com.example.servicehub.dto.CustomServiceForm;
 import com.example.servicehub.repository.ClientRepository;
 import com.example.servicehub.repository.CustomServiceRepository;
 import com.example.servicehub.service.impl.CustomServiceAdministerImpl;
+import com.example.servicehub.support.DefaultImageResizer;
 import com.example.servicehub.support.JsoupMetaDataCrawler;
 import com.example.servicehub.support.LogoManager;
 import com.example.servicehub.support.MetaDataCrawler;
@@ -34,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @Import({TestJpaConfig.class, JsoupMetaDataCrawler.class,
-        CustomServiceAdministerImpl.class, LogoManager.class})
+        CustomServiceAdministerImpl.class, LogoManager.class, DefaultImageResizer.class})
 class CustomServiceAdministerTest {
 
     @Autowired
