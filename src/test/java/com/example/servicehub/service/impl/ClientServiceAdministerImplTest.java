@@ -172,6 +172,22 @@ class ClientServiceAdministerImplTest {
                 .isEqualTo("test");
     }
 
+    @Test
+    @DisplayName("사용자 서비스 조회 - 카테고리")
+    public void givenClientAndServiceSearchCondition_whenSearchingCustomServiceFirstDefaultSortByClickNumber_thenSearchWithEachCategories() throws Exception{
+        // given
+        Client client = clientRepository.findById(1L).get();
+        ServiceSearchConditionForm serviceSearchConditionForm = ServiceSearchConditionForm.of(new ArrayList<>(List.of("CUSTOM")),null);
+        // when
+        addCustomService(client,"test");
+        List<ClickServiceDto> clickServiceDtos = clientServiceAdminister.servicesOfClient(client.getId(), serviceSearchConditionForm);
+        // then
+        assertThat(clickServiceDtos.size())
+                .isEqualTo(1);
+
+        assertThat(clickServiceDtos.get(0).getCategories())
+                .isEqualTo("CUSTOM");
+    }
 
 
     private void addCustomService(Client client,String serviceName){
