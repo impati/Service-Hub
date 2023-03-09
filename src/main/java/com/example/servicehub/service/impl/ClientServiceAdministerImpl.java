@@ -2,7 +2,6 @@ package com.example.servicehub.service.impl;
 
 import com.example.servicehub.domain.Client;
 import com.example.servicehub.domain.ClientService;
-import com.example.servicehub.domain.CustomService;
 import com.example.servicehub.domain.Services;
 import com.example.servicehub.dto.ClickServiceDto;
 import com.example.servicehub.dto.ServiceSearchConditionForm;
@@ -16,9 +15,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,9 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static com.example.servicehub.domain.ServicePage.CLICK;
-import static com.example.servicehub.domain.ServicePage.DEFAULT_START_PAGE;
 
 @Slf4j
 @Service

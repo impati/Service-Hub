@@ -1,6 +1,5 @@
 package com.example.servicehub.support;
 
-import com.example.servicehub.util.ProjectUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

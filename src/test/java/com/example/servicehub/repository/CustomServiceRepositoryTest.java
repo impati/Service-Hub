@@ -3,8 +3,6 @@ package com.example.servicehub.repository;
 import com.example.servicehub.config.TestJpaConfig;
 import com.example.servicehub.domain.Client;
 import com.example.servicehub.domain.CustomService;
-import com.example.servicehub.support.ServiceMetaData;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,6 @@ import org.springframework.context.annotation.Import;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @Import(TestJpaConfig.class)

@@ -1,37 +1,23 @@
 package com.example.servicehub.service;
 
 import com.example.servicehub.config.TestJpaConfig;
-import com.example.servicehub.domain.Client;
 import com.example.servicehub.domain.CustomService;
-import com.example.servicehub.domain.ProviderType;
 import com.example.servicehub.dto.CustomServiceForm;
-import com.example.servicehub.repository.ClientRepository;
 import com.example.servicehub.repository.CustomServiceRepository;
 import com.example.servicehub.service.impl.CustomServiceAdministerImpl;
 import com.example.servicehub.support.DefaultImageResizer;
 import com.example.servicehub.support.JsoupMetaDataCrawler;
 import com.example.servicehub.support.LogoManager;
-import com.example.servicehub.support.MetaDataCrawler;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @Import({TestJpaConfig.class, JsoupMetaDataCrawler.class,
