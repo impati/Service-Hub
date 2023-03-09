@@ -80,19 +80,17 @@ public class ClientServiceAdministerImpl implements ClientServiceAdminister {
     @Override
     public List<ClickServiceDto> servicesOfClient(Long clientId, ServiceSearchConditionForm serviceSearchConditionForm) {
 
-        List<ClickServiceDto> servicesWithClick = searchCustomServicesFirstOrEmptyList(clientId,serviceSearchConditionForm);
+        List<ClickServiceDto> servicesWithClick = firstSearchCustomServices(clientId,serviceSearchConditionForm);
 
-        servicesWithClick.addAll(servicesRepository.searchByClient(clientId, serviceSearchConditionForm.getCategories(), serviceSearchConditionForm.getServiceName()));
+        List<ClickServiceDto> services = secondSearchServices(clientId, serviceSearchConditionForm);
 
-        for(var service : servicesWithClick){
-            service.setCategories(serviceCategoryRepository.findByServiceName(service.getServiceName()));
-        }
+        servicesWithClick.addAll(services);
 
         return servicesWithClick;
     }
 
 
-    private List<ClickServiceDto> searchCustomServicesFirstOrEmptyList(Long clientId , ServiceSearchConditionForm serviceSearchConditionForm){
+    private List<ClickServiceDto> firstSearchCustomServices(Long clientId , ServiceSearchConditionForm serviceSearchConditionForm){
         List<ClickServiceDto> servicesWithClick = new ArrayList<>();
 
         if(isCustomSearch(serviceSearchConditionForm.getCategories())){
@@ -103,6 +101,16 @@ public class ClientServiceAdministerImpl implements ClientServiceAdminister {
         }
 
         return servicesWithClick;
+    }
+
+    private List<ClickServiceDto> secondSearchServices(Long clientId, ServiceSearchConditionForm serviceSearchConditionForm){
+        List<ClickServiceDto> services = servicesRepository.searchByClient(clientId, serviceSearchConditionForm.getCategories(), serviceSearchConditionForm.getServiceName());
+
+        for(var service : services){
+            service.setCategories(serviceCategoryRepository.findByServiceName(service.getServiceName()));
+        }
+
+        return services;
     }
 
     private boolean isCustomSearch(List<String> categories){
