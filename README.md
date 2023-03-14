@@ -12,7 +12,7 @@ https://service-hub.org
 
 ## 기술 세부 스택
 
-Spring Boot
+* Spring Boot
 * Spring Web
 * Spring Data JPA
 * Thymeleaf
