@@ -1,13 +1,11 @@
 package com.example.servicehub.web.dto;
 
-import com.example.servicehub.domain.Client;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class SimpleClientDto {
 
     private String nickname;
@@ -16,8 +14,12 @@ public class SimpleClientDto {
     private String profileUrl;
     private String introComment;
 
-    public static SimpleClientDto from(Client client){
-        return new SimpleClientDto(client.getNickname(),client.getId(),client.getBlogUrl(),client.getProfileImageUrl(),client.getIntroduceComment());
+    @Builder
+    public SimpleClientDto(String nickname, Long clientId, String blogUrl, String profileUrl, String introComment) {
+        this.nickname = nickname;
+        this.clientId = clientId;
+        this.blogUrl = blogUrl;
+        this.profileUrl = profileUrl;
+        this.introComment = introComment;
     }
-
 }

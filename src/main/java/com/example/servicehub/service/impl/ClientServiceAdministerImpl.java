@@ -1,11 +1,9 @@
 package com.example.servicehub.service.impl;
 
-import com.example.servicehub.domain.Client;
 import com.example.servicehub.domain.ClientService;
 import com.example.servicehub.domain.Services;
 import com.example.servicehub.dto.ClickServiceDto;
 import com.example.servicehub.dto.ServiceSearchConditionForm;
-import com.example.servicehub.repository.ClientRepository;
 import com.example.servicehub.repository.ClientServiceRepository;
 import com.example.servicehub.repository.ServiceCategoryRepository;
 import com.example.servicehub.repository.ServicesRepository;
@@ -31,7 +29,6 @@ import java.util.stream.Collectors;
 public class ClientServiceAdministerImpl implements ClientServiceAdminister {
 
     private final ClientServiceRepository clientServiceRepository;
-    private final ClientRepository clientRepository;
     private final ServicesRepository servicesRepository;
     private final ServiceCategoryRepository serviceCategoryRepository;
     private final CustomServiceAdminister customServiceAdminister;
@@ -39,41 +36,28 @@ public class ClientServiceAdministerImpl implements ClientServiceAdminister {
     @Override
     @Transactional
     public void addClientService(Long clientId, Long serviceId) {
-        ClientAndService clientAndService = createBy(clientId,serviceId);
-
-        if(alreadyExistForClient(clientAndService.getClient(),clientAndService.getServices()))return ;
-
-        clientServiceRepository.save(ClientService.of(clientAndService.getClient(),clientAndService.getServices()));
+        Services services = findService(serviceId);
+        if (alreadyExistForClient(clientId, services)) return;
+        clientServiceRepository.save(ClientService.of(clientId, services));
     }
 
-    private boolean alreadyExistForClient(Client client ,Services services){
-        if(clientServiceRepository.alreadyExistsServiceForClient(client,services))return true;
-        return false;
+    private boolean alreadyExistForClient(Long clientId, Services services) {
+        return clientServiceRepository.alreadyExistsServiceForClient(clientId, services);
     }
 
     @Override
     @Transactional
-    public void deleteClientService(Long clientId, Long serviceId,boolean isCustom) {
-
-        if(isCustom) {
-            customServiceAdminister.deleteCustomService(clientId,serviceId);
-            return ;
-        }
-
-        ClientAndService clientAndService = createBy(clientId,serviceId);
-
-        Optional<ClientService> optionalClientService = clientServiceRepository
-                .findClientServiceByClientAndServices(clientAndService.getClient(),clientAndService.getServices());
-
+    public void deleteClientService(Long clientId, Long serviceId) {
+        Services services = findService(serviceId);
+        Optional<ClientService> optionalClientService = clientServiceRepository.findClientServiceByClientIdAndServices(clientId, services);
         optionalClientService.ifPresent(clientServiceRepository::delete);
-
     }
 
 
     @Override
     public List<ClickServiceDto> servicesOfClient(Long clientId, ServiceSearchConditionForm serviceSearchConditionForm) {
 
-        List<ClickServiceDto> servicesWithClick = firstSearchCustomServices(clientId,serviceSearchConditionForm);
+        List<ClickServiceDto> servicesWithClick = firstSearchCustomServices(clientId, serviceSearchConditionForm);
 
         List<ClickServiceDto> services = secondSearchServices(clientId, serviceSearchConditionForm);
 
@@ -83,11 +67,11 @@ public class ClientServiceAdministerImpl implements ClientServiceAdminister {
     }
 
 
-    private List<ClickServiceDto> firstSearchCustomServices(Long clientId , ServiceSearchConditionForm serviceSearchConditionForm){
+    private List<ClickServiceDto> firstSearchCustomServices(Long clientId, ServiceSearchConditionForm serviceSearchConditionForm) {
         List<ClickServiceDto> servicesWithClick = new ArrayList<>();
 
-        if(isCustomSearch(serviceSearchConditionForm.getCategories())){
-            servicesWithClick.addAll(customServiceAdminister.customServicesOfClient(clientId,serviceSearchConditionForm.getServiceName())
+        if (isCustomSearch(serviceSearchConditionForm.getCategories())) {
+            servicesWithClick.addAll(customServiceAdminister.customServicesOfClient(clientId, serviceSearchConditionForm.getServiceName())
                     .stream()
                     .map(ClickServiceDto::from)
                     .collect(Collectors.toList()));
@@ -96,32 +80,27 @@ public class ClientServiceAdministerImpl implements ClientServiceAdminister {
         return servicesWithClick;
     }
 
-    private List<ClickServiceDto> secondSearchServices(Long clientId, ServiceSearchConditionForm serviceSearchConditionForm){
+    private List<ClickServiceDto> secondSearchServices(Long clientId, ServiceSearchConditionForm serviceSearchConditionForm) {
         List<ClickServiceDto> services = servicesRepository.searchByClient(clientId, serviceSearchConditionForm.getCategories(), serviceSearchConditionForm.getServiceName());
 
-        for(var service : services){
+        for (var service : services) {
             service.setCategories(serviceCategoryRepository.findByServiceName(service.getServiceName()));
         }
 
         return services;
     }
 
-    private boolean isCustomSearch(List<String> categories){
-        if(categories == null) return true;
-        if(categories.isEmpty()) return true;
-        if(categories.contains("CUSTOM")) return true;
-        return false;
+    private boolean isCustomSearch(List<String> categories) {
+        if (categories == null) return true;
+        if (categories.isEmpty()) return true;
+        return categories.contains("CUSTOM");
     }
 
     @Override
     @Transactional
-    public String countClickAndReturnUrl(Long clientId, Long serviceId,boolean isCustom) {
+    public String countClickAndReturnUrl(Long clientId, Long serviceId) {
 
-        if(isCustom) return customServiceAdminister.countClickAndReturnUrl(clientId,serviceId);
-
-        ClientAndService clientAndService = createBy(clientId,serviceId);
-
-        ClientService clientService = clientServiceRepository.findClientServiceByClientAndServices(clientAndService.getClient(), clientAndService.getServices())
+        ClientService clientService = clientServiceRepository.findClientServiceByClientIdAndServices(clientId, findService(serviceId))
                 .orElseThrow(() -> new EntityNotFoundException("유효하지 않은 메서드 호출입니다."));
 
         clientService.click();
@@ -129,21 +108,23 @@ public class ClientServiceAdministerImpl implements ClientServiceAdminister {
         return clientService.getServices().getServiceUrl();
     }
 
-    private ClientAndService createBy(Long clientId,Long serviceId){
+    private Services findService(Long serviceId) {
+        return servicesRepository.findById(serviceId)
+                .orElseThrow(() -> new EntityNotFoundException("유효하지 않은 서비스입니다."));
+    }
 
-        Client client = clientRepository.findById(clientId)
-                .orElseThrow(()->new EntityNotFoundException("유효하지 않은 사용자입니다."));
+    private ClientAndService createBy(Long clientId, Long serviceId) {
 
         Services services = servicesRepository.findById(serviceId)
-                .orElseThrow(()->new EntityNotFoundException("유효하지 않은 서비스입니다."));
+                .orElseThrow(() -> new EntityNotFoundException("유효하지 않은 서비스입니다."));
 
-        return new ClientAndService(client,services);
+        return new ClientAndService(clientId, services);
     }
 
     @Data
     @AllArgsConstructor
-    private static class ClientAndService{
-        private Client client;
+    private static class ClientAndService {
+        private Long clientId;
         private Services services;
     }
 }

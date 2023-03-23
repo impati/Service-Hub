@@ -15,19 +15,18 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.function.Supplier;
 
-import static com.example.servicehub.domain.QClient.client;
 import static com.example.servicehub.domain.QClientService.clientService;
 import static com.example.servicehub.domain.QServiceCategory.serviceCategory;
 import static com.example.servicehub.domain.QServices.services;
 
 @Slf4j
 @RequiredArgsConstructor
-public class ServiceSearchRepositoryImpl implements ServiceSearchRepository{
+public class ServiceSearchRepositoryImpl implements ServiceSearchRepository {
 
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<PopularityServiceDto> search(List<String> categories, String serviceName,Pageable pageable) {
+    public Page<PopularityServiceDto> search(List<String> categories, String serviceName, Pageable pageable) {
         List<PopularityServiceDto> result = queryFactory
                 .select(Projections.constructor(
                         PopularityServiceDto.class,
@@ -39,31 +38,31 @@ public class ServiceSearchRepositoryImpl implements ServiceSearchRepository{
                         services.id
                 ))
                 .from(services)
-                .leftJoin(services.clientServices,clientService)
+                .leftJoin(services.clientServices, clientService)
                 .where(services.in(
                         JPAExpressions
                                 .selectDistinct(services)
                                 .from(serviceCategory)
-                                .join(serviceCategory.services,services)
-                                .where(categoriesSearch(categories),nameSearch(serviceName))))
+                                .join(serviceCategory.services, services)
+                                .where(categoriesSearch(categories), nameSearch(serviceName))))
                 .groupBy(services.id)
                 .orderBy(clientService.count().desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        return new PageImpl<>(result,pageable,
-                computeTotalCountQuery(()-> queryFactory
-                    .selectDistinct(services)
-                    .from(serviceCategory)
-                    .join(serviceCategory.services,services)
-                    .where(categoriesSearch(categories),nameSearch(serviceName))
-                    .fetch().size()
+        return new PageImpl<>(result, pageable,
+                computeTotalCountQuery(() -> queryFactory
+                        .selectDistinct(services)
+                        .from(serviceCategory)
+                        .join(serviceCategory.services, services)
+                        .where(categoriesSearch(categories), nameSearch(serviceName))
+                        .fetch().size()
                 ));
     }
 
     @Override
-    public List<ClickServiceDto> searchByClient(Long clientId, List<String> categories, String serviceName){
+    public List<ClickServiceDto> searchByClient(Long clientId, List<String> categories, String serviceName) {
         return queryFactory
                 .selectDistinct(Projections.constructor(
                         ClickServiceDto.class,
@@ -75,27 +74,26 @@ public class ServiceSearchRepositoryImpl implements ServiceSearchRepository{
                         services.title
                 ))
                 .from(clientService)
-                .join(clientService.client,client)
-                .join(clientService.services,services)
-                .join(services.serviceCategories,serviceCategory)
-                .where(client.id.eq(clientId), categoriesSearch(categories), nameSearch(serviceName))
+                .join(clientService.services, services)
+                .join(services.serviceCategories, serviceCategory)
+                .where(clientService.clientId.eq(clientId), categoriesSearch(categories), nameSearch(serviceName))
                 .orderBy(clientService.clickCount.desc())
                 .fetch();
 
     }
 
-    private int computeTotalCountQuery(Supplier<Integer> supplier){
+    private int computeTotalCountQuery(Supplier<Integer> supplier) {
         return supplier.get();
     }
 
 
     private BooleanExpression nameSearch(String name) {
-        if(name == null) return null;
+        if (name == null) return null;
         return services.serviceName.contains(name);
     }
 
-    private BooleanExpression categoriesSearch(List<String> categories){
-        if(categories == null || categories.isEmpty()) return null;
+    private BooleanExpression categoriesSearch(List<String> categories) {
+        if (categories == null || categories.isEmpty()) return null;
         return serviceCategory.category.name.in(categories);
     }
 

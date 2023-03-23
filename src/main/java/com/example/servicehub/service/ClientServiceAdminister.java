@@ -7,12 +7,12 @@ import java.util.List;
 
 public interface ClientServiceAdminister {
 
-    void addClientService(Long clientId , Long serviceId);
+    void addClientService(Long clientId, Long serviceId);
 
-    void deleteClientService(Long clientId,Long serviceId,boolean isCustom);
+    void deleteClientService(Long clientId, Long serviceId);
 
     List<ClickServiceDto> servicesOfClient(Long clientId, ServiceSearchConditionForm serviceSearchConditionForm);
 
-    String countClickAndReturnUrl(Long clientId,Long serviceId,boolean isCustom);
+    String countClickAndReturnUrl(Long clientId, Long serviceId);
 
 }

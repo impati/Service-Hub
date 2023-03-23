@@ -1,18 +1,15 @@
 package com.example.servicehub.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Getter
-@ToString(exclude ={"services" , "client"})
+@ToString(exclude = {"services", "clientId"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ClientService extends BaseEntity{
+public class ClientService extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "client_service_id")
@@ -22,24 +19,24 @@ public class ClientService extends BaseEntity{
     @JoinColumn(name = "service_id")
     private Services services;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "client_id")
-    private Client client;
+    @Column(name = "client_id")
+    private Long clientId;
 
     private long clickCount;
 
-    public void click(){
-        this.clickCount += 1L;
-    }
-
-    public static ClientService of(Client client , Services services){
-        return new ClientService(client,services);
-    }
-
-    private ClientService(Client client , Services services){
-        this.client = client;
-        this.services =  services;
+    @Builder
+    public ClientService(Long clientId, Services services) {
+        this.clientId = clientId;
+        this.services = services;
         this.clickCount = 0L;
+    }
+
+    public static ClientService of(Long clientId, Services services) {
+        return new ClientService(clientId, services);
+    }
+
+    public void click() {
+        this.clickCount += 1L;
     }
 
     @Override

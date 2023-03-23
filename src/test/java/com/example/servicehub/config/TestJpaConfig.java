@@ -14,15 +14,16 @@ import java.util.Optional;
 @TestConfiguration
 public class TestJpaConfig {
 
-    @PersistenceContext  private EntityManager em;
+    @PersistenceContext
+    private EntityManager em;
 
     @Bean
-    public AuditorAware<String> auditorAware(){
-        return () -> Optional.of("impati"); // TODO : 스프링 시큐리티 인증 기능 붙일 때 수정
+    public AuditorAware<String> auditorAware() {
+        return () -> Optional.of("impati");
     }
 
     @Bean
-    public JPAQueryFactory jpaQueryFactory(){
+    public JPAQueryFactory jpaQueryFactory() {
         return new JPAQueryFactory(em);
     }
 }

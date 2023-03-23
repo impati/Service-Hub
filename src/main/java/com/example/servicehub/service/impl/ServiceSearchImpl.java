@@ -36,24 +36,24 @@ public class ServiceSearchImpl implements ServiceSearch {
     public Page<PopularityServiceDto> search(ServiceSearchConditionForm serviceSearchConditionForm,
                                              Optional<Long> optionalClient,
                                              Pageable pageRequest
-                                             ) {
+    ) {
 
-        Page<PopularityServiceDto> searchedService = servicesRepository.search(serviceSearchConditionForm.getCategories(), serviceSearchConditionForm.getServiceName(),pageRequest);
+        Page<PopularityServiceDto> searchedService = servicesRepository.search(serviceSearchConditionForm.getCategories(), serviceSearchConditionForm.getServiceName(), pageRequest);
 
         optionalClient.ifPresent(client -> setClientPossessServices(client, searchedService.getContent()));
 
         return searchedService;
     }
 
-    private void setClientPossessServices(Long clientId , List<PopularityServiceDto> services){
-        List<Long> clientServices  = clientServiceRepository.findServiceIdOwnedByClient(
+    private void setClientPossessServices(Long clientId, List<PopularityServiceDto> services) {
+        List<Long> clientServices = clientServiceRepository.findServiceIdOwnedByClient(
                 services
                         .stream()
                         .map(PopularityServiceDto::getServiceId)
                         .collect(toList()), clientId);
 
-        for(var service : services){
-            if(clientServices.contains(service.getServiceId()))
+        for (var service : services) {
+            if (clientServices.contains(service.getServiceId()))
                 service.setPossess(true);
         }
     }
@@ -68,7 +68,7 @@ public class ServiceSearchImpl implements ServiceSearch {
 
         List<ServiceCommentsDto> comments = serviceCommentsAdminister.searchComments(services.getId());
 
-        return SingleServiceWithCommentsDto.of(services,isPossess,comments);
+        return SingleServiceWithCommentsDto.of(services, isPossess, comments);
     }
 
     @Override

@@ -17,9 +17,17 @@ class JsoupMetaDataCrawlerTest {
 
     JsoupMetaDataCrawler crawler = new JsoupMetaDataCrawler();
 
+    static Stream<Arguments> crawlerTest() {
+        return Stream.of(
+                Arguments.of("https://github.com/", "https://github.com/", "GitHub: Let’s build from here", "@github"),
+                Arguments.of("https://www.inflearn.com/", "https://www.inflearn.com/", "인프런 - 라이프타임 커리어 플랫폼", "인프런"),
+                Arguments.of("https://papago.naver.com/", "https://papago.naver.com/", "Free translation service, Papago", "Naver papago")
+        );
+    }
+
     @Test
     @DisplayName("crawler 연결 테스트 test")
-    public void serviceConnectTest() throws Exception{
+    public void serviceConnectTest() throws Exception {
 
         assertThatCode(() -> Jsoup
                 .connect("https://www.udemy.com/")
@@ -31,7 +39,7 @@ class JsoupMetaDataCrawlerTest {
     @ParameterizedTest
     @DisplayName("ServiceMetaData 테스트")
     @MethodSource("crawlerTest")
-    public void getServiceMetaData(String serviceUrl ,String expectedServiceUrl , String title , String siteName) throws Exception{
+    public void getServiceMetaData(String serviceUrl, String expectedServiceUrl, String title, String siteName) throws Exception {
 
         ServiceMetaData serviceMetaData = crawler.tryToGetMetaData(serviceUrl);
 
@@ -44,15 +52,6 @@ class JsoupMetaDataCrawlerTest {
         assertThat(serviceMetaData.getSiteName())
                 .isEqualTo(siteName);
 
-    }
-
-
-    static Stream<Arguments> crawlerTest(){
-        return Stream.of(
-                Arguments.of("https://github.com/","https://github.com/","GitHub: Let’s build from here","@github"),
-                Arguments.of("https://www.inflearn.com/","https://www.inflearn.com/","인프런 - 미래의 동료들과 함께 성장하는 곳 | IT 정보 플랫폼","인프런"),
-                Arguments.of("https://papago.naver.com/","https://papago.naver.com/","Free translation service, Papago","Naver papago")
-        );
     }
 
 }

@@ -17,12 +17,12 @@ public class ServiceCommentsDto {
     private LocalDate createAt;
     private LocalDate lastUpdateAt;
 
-    public static ServiceCommentsDto of(ServiceComment serviceComment){
+    public static ServiceCommentsDto of(ServiceComment serviceComment) {
         return new ServiceCommentsDto(
                 serviceComment.getId(),
                 serviceComment.getContent(),
-                serviceComment.getClient().getId(),
-                serviceComment.getClient().getNickname(),
+                serviceComment.getClientId(),
+                "nickname", // TODO : 대응
                 serviceComment.getCreatedAt(),
                 serviceComment.getUpdatedAt());
     }

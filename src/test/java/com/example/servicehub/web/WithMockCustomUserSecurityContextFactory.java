@@ -1,8 +1,7 @@
 package com.example.servicehub.web;
 
-import com.example.servicehub.domain.ProviderType;
 import com.example.servicehub.domain.RoleType;
-import com.example.servicehub.security.authentication.ClientPrincipal;
+import com.example.servicehub.security.authentication.CustomerPrincipal;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,19 +21,23 @@ public class WithMockCustomUserSecurityContextFactory implements WithSecurityCon
 
         String role = prefix + customUser.role();
 
-        ClientPrincipal clientPrincipal = new ClientPrincipal(
-                customUser.id(),username,"test", ProviderType.KEYCLOAK, RoleType.of(role), Collections.singletonList(new SimpleGrantedAuthority(role)),"test","test","test"
-        );
-        Authentication authentication = UsernamePasswordAuthenticationToken.authenticated(clientPrincipal,clientPrincipal.getPassword(),clientPrincipal.getAuthorities());
+        CustomerPrincipal customerPrincipal = CustomerPrincipal.builder()
+                .id(customUser.id())
+                .username(customUser.username())
+                .profileImageUrl("test")
+                .email("test")
+                .blogUrl("test")
+                .introduceComment("test")
+                .roleType(RoleType.of(role))
+                .authorities(Collections.singletonList(new SimpleGrantedAuthority(role)))
+                .build();
+
+        Authentication authentication = UsernamePasswordAuthenticationToken
+                .authenticated(customerPrincipal, "", customerPrincipal.getAuthorities());
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authentication);
         return context;
     }
-
-
-
-
-
 
 
 }
