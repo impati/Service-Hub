@@ -2,14 +2,14 @@ package com.example.servicehub.security.authentication;
 
 import java.util.Optional;
 
-public abstract class ClientPrincipalUtil {
+public abstract class CustomerPrincipalUtil {
 
-    public static Optional<Long> getClientIdFrom(ClientPrincipal clientPrincipal){
-        if(clientPrincipal == null) return Optional.empty();
-        return Optional.ofNullable(clientPrincipal.getId());
+    private CustomerPrincipalUtil() {
     }
 
-    private ClientPrincipalUtil(){
+    public static Optional<Long> getClientIdFrom(CustomerPrincipal customerPrincipal) {
+        if (customerPrincipal == null) return Optional.empty();
+        return Optional.ofNullable(customerPrincipal.getId());
     }
 
 }
