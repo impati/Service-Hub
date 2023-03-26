@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface CustomServiceRepository extends JpaRepository<CustomService, Long> {
+public interface CustomerCustomServiceRepository extends JpaRepository<CustomService, Long> {
 
     @Query(" select s from CustomService s " +
             " where s.serviceUrl = :serviceUrl " +

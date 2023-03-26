@@ -28,14 +28,17 @@ public class ServiceComment extends BaseEntity {
     @Column(name = "client_id")
     private Long clientId;
 
-    private ServiceComment(String content, Services services, Long clientId) {
+    private String nickname;
+
+    private ServiceComment(String content, Services services, Long clientId, String nickname) {
         this.content = content;
         this.services = services;
         this.clientId = clientId;
+        this.nickname = nickname;
     }
 
-    public static ServiceComment of(String content, Services services, Long clientId) {
-        return new ServiceComment(content, services, clientId);
+    public static ServiceComment of(String content, Services services, Long clientId, String nickname) {
+        return new ServiceComment(content, services, clientId, nickname);
     }
 
     public void updateContent(String content) {

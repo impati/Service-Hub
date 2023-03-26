@@ -14,8 +14,11 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Collections;
 
 @RequiredArgsConstructor
 public class LoginAuthenticationProvider implements AuthenticationProvider {
@@ -37,7 +40,9 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
 
         CustomerDto customer = restTemplate.exchange(customerServer.getTargetUrl() + CUSTOMER_ENDPOINT, HttpMethod.POST, new HttpEntity<>(httpHeaders), CustomerDto.class).getBody();
 
-        return new PreAuthenticatedAuthenticationToken(customer.toEntity(), authenticatedAuthenticationToken.getCredentials());
+        CustomerPrincipal customerPrincipal = customer.toPrincipal();
+
+        return new PreAuthenticatedAuthenticationToken(customerPrincipal, authenticatedAuthenticationToken.getCredentials(), customerPrincipal.getAuthorities());
     }
 
     @Override
@@ -60,7 +65,7 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
         private String profileImageUrl;
         private String introduceComment;
 
-        CustomerPrincipal toEntity() {
+        CustomerPrincipal toPrincipal() {
             return CustomerPrincipal.builder()
                     .id(id)
                     .username(username)
@@ -71,6 +76,7 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
                     .blogUrl(blogUrl)
                     .profileImageUrl(profileImageUrl)
                     .introduceComment(introduceComment)
+                    .authorities(Collections.singletonList(new SimpleGrantedAuthority(roleType.getName())))
                     .build();
         }
     }

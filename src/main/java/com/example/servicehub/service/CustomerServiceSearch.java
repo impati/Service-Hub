@@ -1,18 +1,13 @@
 package com.example.servicehub.service;
 
+import com.example.servicehub.domain.CustomService;
 import com.example.servicehub.dto.ClickServiceDto;
 import com.example.servicehub.dto.ServiceSearchConditionForm;
 
 import java.util.List;
 
-public interface ClientServiceAdminister {
-
-    void addClientService(Long clientId, Long serviceId);
-
-    void deleteClientService(Long clientId, Long serviceId);
-
+public interface CustomerServiceSearch {
     List<ClickServiceDto> servicesOfClient(Long clientId, ServiceSearchConditionForm serviceSearchConditionForm);
 
-    String countClickAndReturnUrl(Long clientId, Long serviceId);
-
+    List<CustomService> customServicesOfClient(Long clientId, String serviceName);
 }

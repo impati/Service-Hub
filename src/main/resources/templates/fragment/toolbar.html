@@ -27,11 +27,13 @@
                    th:href="@{/customer-server/authorization}">로그인</a>
                 <a class="btn btn-outline-primary me-2" onclick="logout()" sec:authorize="isAuthenticated()"> 로그아웃</a>
                 <a class="btn btn-outline-primary me-2" sec:authorize="isAnonymous()" th:href="@{/signup}">회원가입</a>
+                <!--TODO-->
                 <img class="img-profile rounded-circle"
                      src="/assets/images/impati.jpeg" style="width: 5%;height: 5%">
                 <a aria-expanded="false" aria-haspopup="true" class="me-5" data-toggle="" href="#"
                    id="userDropdown" role="button"
-                   sec:authorize="isAuthenticated()" th:href="@{/client/{clientId} (clientId=${#authentication.getPrincipal().getId()})}">
+                   sec:authorize="isAuthenticated()"
+                   th:href="@{/client/{clientId} (clientId=${#authentication.getPrincipal().getId()})}">
                     <span class="mr-2 d-none d-lg-inline text-gray-900 " sec:authorize="isAuthenticated()"
                           th:text="${#authentication.name}">Douglas McGee</span>
                 </a>

@@ -115,6 +115,7 @@
                     <form th:action="@{/comments}" method="post" th:object="${serviceCommentForm}">
                         <input type="hidden" id="serviceId" th:value="${singleServiceWithCommentsDto.serviceId}" name="serviceId">
                         <input type="hidden" name="clientId" sec:authorize="isAuthenticated()"th:value="${#authentication.principal.id}">
+                        <input type="hidden" name="nickname" sec:authorize="isAuthenticated()"th:value="${#authentication.principal.nickname}">
                         <textarea class="form-control" name="content"  id="exampleFormControlTextarea1" placeholder="comments..." rows="1"></textarea>
                         <small class="field-error" th:if="${#request.getParameter('hasError')}" th:text="${#request.getParameter('contentError')}"></small>
                         <br>

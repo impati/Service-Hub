@@ -1,15 +1,21 @@
 package com.example.servicehub.dto;
 
 import com.example.servicehub.domain.CustomService;
+import com.example.servicehub.domain.CustomerService;
+import com.example.servicehub.domain.Services;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
+@ToString
 public class ClickServiceDto {
     private Long click;
     private Long serviceId;
@@ -21,7 +27,8 @@ public class ClickServiceDto {
     private boolean isCustom = false;
 
     @Builder
-    public ClickServiceDto(Long click, Long serviceId ,String serviceName, String logoStoreName, String serviceUrl, String title) {
+    public ClickServiceDto(Long click, Long serviceId, String serviceName,
+                           String logoStoreName, String serviceUrl, String title) {
         this.click = click;
         this.serviceId = serviceId;
         this.serviceName = serviceName;
@@ -30,7 +37,38 @@ public class ClickServiceDto {
         this.title = title;
     }
 
-    public static ClickServiceDto from(CustomService customService){
+    public ClickServiceDto(Services services, Long click) {
+        this.click = click;
+        this.serviceId = services.getId();
+        this.serviceName = services.getServiceName();
+        this.logoStoreName = services.getLogoStoreName();
+        this.serviceUrl = services.getServiceUrl();
+        this.title = services.getTitle();
+        this.categories = services
+                .getServiceCategories()
+                .stream()
+                .map(serviceCategory -> serviceCategory.getCategory().getName())
+                .collect(Collectors.toList());
+    }
+
+    public static ClickServiceDto from(Services services) {
+        ClickServiceDto clickServiceDto = ClickServiceDto.builder()
+                .serviceName(services.getServiceName())
+                .serviceUrl(services.getServiceUrl())
+                .serviceId(services.getId())
+                .title(services.getTitle())
+                .click(services.getCustomerServices().stream().mapToLong(CustomerService::getClickCount).sum())
+                .logoStoreName(services.getLogoStoreName())
+                .build();
+        clickServiceDto.categories = services
+                .getServiceCategories()
+                .stream()
+                .map(serviceCategory -> serviceCategory.getCategory().getName())
+                .collect(Collectors.toList());
+        return clickServiceDto;
+    }
+
+    public static ClickServiceDto from(CustomService customService) {
         ClickServiceDto clickServiceDto = ClickServiceDto.builder()
                 .serviceName(customService.getServiceName())
                 .serviceUrl(customService.getServiceUrl())
@@ -44,7 +82,20 @@ public class ClickServiceDto {
         return clickServiceDto;
     }
 
-    public String getCategories(){
-        return String.join(" ",categories);
+    public String getCategories() {
+        return String.join(" ", categories);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ClickServiceDto)) return false;
+        ClickServiceDto that = (ClickServiceDto) o;
+        return Objects.equals(serviceId, that.serviceId);
+    }
+
+    @Override
+    public int hashCode() {
+        return serviceId != null ? serviceId.hashCode() : 0;
     }
 }

@@ -2,8 +2,8 @@ package com.example.servicehub.service.impl;
 
 import com.example.servicehub.domain.CustomService;
 import com.example.servicehub.dto.CustomServiceForm;
-import com.example.servicehub.repository.CustomServiceRepository;
-import com.example.servicehub.service.CustomServiceAdminister;
+import com.example.servicehub.repository.CustomerCustomServiceRepository;
+import com.example.servicehub.service.CustomerCustomServiceAdminister;
 import com.example.servicehub.support.LogoManager;
 import com.example.servicehub.support.MetaDataCrawler;
 import com.example.servicehub.support.ServiceMetaData;
@@ -11,20 +11,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class CustomServiceAdministerImpl implements CustomServiceAdminister {
+public class CustomerCustomServiceAdministerImpl implements CustomerCustomServiceAdminister {
 
     private final MetaDataCrawler metaDataCrawler;
     private final LogoManager logoManager;
-    private final CustomServiceRepository customServiceRepository;
+    private final CustomerCustomServiceRepository customerCustomServiceRepository;
 
     @Override
     public void addCustomService(Long clientId, CustomServiceForm request) {
@@ -33,7 +31,7 @@ public class CustomServiceAdministerImpl implements CustomServiceAdminister {
 
         String logoStoreName = logoManager.download(serviceMetaData.getImage());
 
-        customServiceRepository.save(createFrom(serviceMetaData, logoStoreName, request, clientId));
+        customerCustomServiceRepository.save(createFrom(serviceMetaData, logoStoreName, request, clientId));
     }
 
     private CustomService createFrom(ServiceMetaData serviceMetaData, String logoStoreName, CustomServiceForm request, Long clientId) {
@@ -48,22 +46,15 @@ public class CustomServiceAdministerImpl implements CustomServiceAdminister {
 
     @Override
     public void deleteCustomService(Long clientId, Long customServiceId) {
-        Optional<CustomService> optionalCustomService = customServiceRepository
+        Optional<CustomService> optionalCustomService = customerCustomServiceRepository
                 .findCustomServiceByClientIdAndServiceId(clientId, customServiceId);
 
-        optionalCustomService.ifPresent(customServiceRepository::delete);
-    }
-
-    @Override
-    public List<CustomService> customServicesOfClient(Long clientId, String serviceName) {
-        if (StringUtils.hasText(serviceName))
-            return customServiceRepository.findCustomServiceByClientIdAndServiceName(clientId, serviceName);
-        return customServiceRepository.findCustomServiceByClientId(clientId);
+        optionalCustomService.ifPresent(customerCustomServiceRepository::delete);
     }
 
     @Override
     public String countClickAndReturnUrl(Long clientId, Long customServiceId) {
-        CustomService customService = customServiceRepository
+        CustomService customService = customerCustomServiceRepository
                 .findCustomServiceByClientIdAndServiceId(clientId, customServiceId)
                 .orElseThrow(IllegalStateException::new);
 

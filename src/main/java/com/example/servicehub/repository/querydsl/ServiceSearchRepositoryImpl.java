@@ -1,5 +1,6 @@
 package com.example.servicehub.repository.querydsl;
 
+import com.example.servicehub.domain.QCategory;
 import com.example.servicehub.dto.ClickServiceDto;
 import com.example.servicehub.dto.PopularityServiceDto;
 import com.querydsl.core.types.Projections;
@@ -15,7 +16,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.function.Supplier;
 
-import static com.example.servicehub.domain.QClientService.clientService;
+import static com.example.servicehub.domain.QCustomerService.customerService;
 import static com.example.servicehub.domain.QServiceCategory.serviceCategory;
 import static com.example.servicehub.domain.QServices.services;
 
@@ -30,7 +31,7 @@ public class ServiceSearchRepositoryImpl implements ServiceSearchRepository {
         List<PopularityServiceDto> result = queryFactory
                 .select(Projections.constructor(
                         PopularityServiceDto.class,
-                        clientService.count(),
+                        customerService.count(),
                         services.serviceName,
                         services.logoStoreName,
                         services.serviceUrl,
@@ -38,7 +39,7 @@ public class ServiceSearchRepositoryImpl implements ServiceSearchRepository {
                         services.id
                 ))
                 .from(services)
-                .leftJoin(services.clientServices, clientService)
+                .leftJoin(services.customerServices, customerService)
                 .where(services.in(
                         JPAExpressions
                                 .selectDistinct(services)
@@ -46,7 +47,7 @@ public class ServiceSearchRepositoryImpl implements ServiceSearchRepository {
                                 .join(serviceCategory.services, services)
                                 .where(categoriesSearch(categories), nameSearch(serviceName))))
                 .groupBy(services.id)
-                .orderBy(clientService.count().desc())
+                .orderBy(customerService.count().desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -66,20 +67,14 @@ public class ServiceSearchRepositoryImpl implements ServiceSearchRepository {
         return queryFactory
                 .selectDistinct(Projections.constructor(
                         ClickServiceDto.class,
-                        clientService.clickCount,
-                        services.id,
-                        services.serviceName,
-                        services.logoStoreName,
-                        services.serviceUrl,
-                        services.title
-                ))
-                .from(clientService)
-                .join(clientService.services, services)
-                .join(services.serviceCategories, serviceCategory)
-                .where(clientService.clientId.eq(clientId), categoriesSearch(categories), nameSearch(serviceName))
-                .orderBy(clientService.clickCount.desc())
+                        services,
+                        customerService.clickCount))
+                .from(customerService)
+                .join(customerService.services, services)
+                .join(services.serviceCategories, serviceCategory).fetchJoin()
+                .join(serviceCategory.category, QCategory.category).fetchJoin()
+                .where(customerService.clientId.eq(clientId), categoriesSearch(categories), nameSearch(serviceName))
                 .fetch();
-
     }
 
     private int computeTotalCountQuery(Supplier<Integer> supplier) {

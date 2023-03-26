@@ -4,7 +4,7 @@ import com.example.servicehub.dto.ServiceCommentForm;
 import com.example.servicehub.dto.ServiceCommentUpdateForm;
 import com.example.servicehub.security.authentication.CustomerPrincipal;
 import com.example.servicehub.service.ServiceCommentsAdminister;
-import com.example.servicehub.service.ServiceSearch;
+import com.example.servicehub.service.SingleServiceSearch;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,7 +24,7 @@ import java.util.Optional;
 public class ServiceCommentsController {
 
     private final ServiceCommentsAdminister serviceCommentsAdminister;
-    private final ServiceSearch serviceSearch;
+    private final SingleServiceSearch searchSingleService;
 
     @PostMapping
     public String addServiceComments(@Valid @ModelAttribute ServiceCommentForm serviceCommentForm,
@@ -48,9 +48,9 @@ public class ServiceCommentsController {
                                         Model model) {
 
         model.addAttribute("singleServiceWithCommentsDto"
-                , serviceSearch.searchSingleService(serviceCommentUpdateForm.getServiceId(), Optional.ofNullable(customerPrincipal.getId())));
+                , searchSingleService.searchWithComments(serviceCommentUpdateForm.getServiceId(), Optional.ofNullable(customerPrincipal.getId())));
 
-        model.addAttribute("commentContent", serviceCommentsAdminister.getCommentContent(serviceCommentUpdateForm.getCommentId()));
+        model.addAttribute("commentContent", serviceCommentsAdminister.bringCommentContent(serviceCommentUpdateForm.getCommentId()));
 
         return "service/service-edit-page";
     }
@@ -78,6 +78,5 @@ public class ServiceCommentsController {
 
         return "OK";
     }
-
 
 }
