@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Import;
 class CustomServiceRepositoryTest {
 
     @Autowired
-    private CustomServiceRepository customServiceRepository;
+    private CustomerCustomServiceRepository customerCustomServiceRepository;
 
 
 }

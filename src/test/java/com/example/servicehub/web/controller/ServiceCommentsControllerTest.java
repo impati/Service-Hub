@@ -5,7 +5,7 @@ import com.example.servicehub.dto.ServiceCommentForm;
 import com.example.servicehub.dto.ServiceCommentUpdateForm;
 import com.example.servicehub.dto.SingleServiceWithCommentsDto;
 import com.example.servicehub.service.ServiceCommentsAdminister;
-import com.example.servicehub.service.ServiceSearch;
+import com.example.servicehub.service.SingleServiceSearch;
 import com.example.servicehub.util.FormDataEncoder;
 import com.example.servicehub.web.WithMockCustomUser;
 import org.junit.jupiter.api.DisplayName;
@@ -28,31 +28,28 @@ import java.util.Optional;
 @WebMvcTest(ServiceCommentsController.class)
 class ServiceCommentsControllerTest {
 
+    private final FormDataEncoder formDataEncoder = new FormDataEncoder();
     @Autowired
     private MockMvc mockMvc;
-
     @MockBean
     private ServiceCommentsAdminister serviceCommentsAdminister;
-
     @MockBean
-    private ServiceSearch serviceSearch;
-
-    private final FormDataEncoder formDataEncoder = new FormDataEncoder();
+    private SingleServiceSearch singleServiceSearch;
 
     @Test
     @DisplayName("서비스에 댓글 달기 테스트")
     @WithMockCustomUser(id = 2L)
-    public void givenServicePage_whenWritingCommentAboutService_thenAddCommentOfServicePage() throws Exception{
+    public void givenServicePage_whenWritingCommentAboutService_thenAddCommentOfServicePage() throws Exception {
 
-        ServiceCommentForm serviceCommentForm = new ServiceCommentForm(1L,2L,"hello");
+        ServiceCommentForm serviceCommentForm = new ServiceCommentForm(1L, "hello", 2L, "impati");
 
         BDDMockito.willDoNothing().given(serviceCommentsAdminister).addServiceComment(serviceCommentForm);
 
         mockMvc.perform(
-                MockMvcRequestBuilders.post("/comments")
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .content(formDataEncoder.encode(serviceCommentForm,ServiceCommentForm.class))
-                        .with(SecurityMockMvcRequestPostProcessors.csrf()))
+                        MockMvcRequestBuilders.post("/comments")
+                                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                                .content(formDataEncoder.encode(serviceCommentForm, ServiceCommentForm.class))
+                                .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
                 .andExpect(MockMvcResultMatchers.view().name("redirect:/service/" + serviceCommentForm.getServiceId()));
 
@@ -62,27 +59,27 @@ class ServiceCommentsControllerTest {
     @Test
     @DisplayName("서비스에 댓글 달기 테스트 - 2000길이 넘기는 오류")
     @WithMockCustomUser(id = 2L)
-    public void givenServicePage_whenWritingCommentOver2000_thenError() throws Exception{
+    public void givenServicePage_whenWritingCommentOver2000_thenError() throws Exception {
 
-        ServiceCommentForm serviceCommentForm = new ServiceCommentForm(1L,2L,greaterThan2000InLength());
+        ServiceCommentForm serviceCommentForm = new ServiceCommentForm(1L, greaterThan2000InLength(), 2L, "impati");
 
         BDDMockito.willDoNothing().given(serviceCommentsAdminister).addServiceComment(serviceCommentForm);
 
         mockMvc.perform(
-                MockMvcRequestBuilders.post("/comments")
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .content(formDataEncoder.encode(serviceCommentForm,ServiceCommentForm.class))
-                        .with(SecurityMockMvcRequestPostProcessors.csrf()))
-                .andExpect(MockMvcResultMatchers.model().attributeExists("contentError","hasError"))
+                        MockMvcRequestBuilders.post("/comments")
+                                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                                .content(formDataEncoder.encode(serviceCommentForm, ServiceCommentForm.class))
+                                .with(SecurityMockMvcRequestPostProcessors.csrf()))
+                .andExpect(MockMvcResultMatchers.model().attributeExists("contentError", "hasError"))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 
         BDDMockito.then(serviceCommentsAdminister).shouldHaveNoInteractions();
     }
 
 
-    private String greaterThan2000InLength(){
+    private String greaterThan2000InLength() {
         StringBuilder stringBuilder = new StringBuilder();
-        for(int i = 0 ;i<1001;i++){
+        for (int i = 0; i < 1001; i++) {
             stringBuilder.append("AB");
         }
         return stringBuilder.toString();
@@ -92,25 +89,25 @@ class ServiceCommentsControllerTest {
     @Test
     @DisplayName("댓글 수정 페이지 테스트")
     @WithMockCustomUser(id = 2L)
-    public void givenServicePage_whenClickCommentButton_thenRenderCommentEditPage() throws Exception{
+    public void givenServicePage_whenClickCommentButton_thenRenderCommentEditPage() throws Exception {
 
         SingleServiceWithCommentsDto singleServiceWithCommentsDto = new SingleServiceWithCommentsDto();
 
 
-        BDDMockito.given(serviceSearch.searchSingleService(1L, Optional.of(2L)))
+        BDDMockito.given(singleServiceSearch.searchWithComments(1L, Optional.of(2L)))
                 .willReturn(singleServiceWithCommentsDto);
 
-        BDDMockito.given(serviceCommentsAdminister.getCommentContent(22L))
+        BDDMockito.given(serviceCommentsAdminister.bringCommentContent(22L))
                 .willReturn("hello world");
 
 
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/comments/edit")
-                        .param("serviceId","1")
-                        .param("commentId","22"))
+                        MockMvcRequestBuilders.get("/comments/edit")
+                                .param("serviceId", "1")
+                                .param("commentId", "22"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.model().attributeExists("singleServiceWithCommentsDto","commentContent"))
-                .andExpect(MockMvcResultMatchers.model().attribute("commentContent","hello world"))
+                .andExpect(MockMvcResultMatchers.model().attributeExists("singleServiceWithCommentsDto", "commentContent"))
+                .andExpect(MockMvcResultMatchers.model().attribute("commentContent", "hello world"))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("serviceCommentUpdateForm"))
                 .andExpect(MockMvcResultMatchers.view().name("service/service-edit-page"));
 
@@ -120,9 +117,9 @@ class ServiceCommentsControllerTest {
     @Test
     @DisplayName("댓글 수정 테스트")
     @WithMockCustomUser(id = 2L)
-    public void givenServiceCommentEditPage_whenEditingComment_thenEditComment() throws Exception{
+    public void givenServiceCommentEditPage_whenEditingComment_thenEditComment() throws Exception {
 
-        ServiceCommentUpdateForm serviceCommentUpdateForm = new ServiceCommentUpdateForm(99L,2L,"test",2L);
+        ServiceCommentUpdateForm serviceCommentUpdateForm = new ServiceCommentUpdateForm(99L, 2L, "test", 2L);
 
         BDDMockito.willDoNothing().given(serviceCommentsAdminister).updateServiceComment(serviceCommentUpdateForm);
 
@@ -141,20 +138,20 @@ class ServiceCommentsControllerTest {
     @Test
     @DisplayName("댓글 삭제 테스트")
     @WithMockCustomUser(id = 3L)
-    public void given_when_then() throws Exception{
+    public void given_when_then() throws Exception {
 
-        BDDMockito.willDoNothing().given(serviceCommentsAdminister).deleteServiceComment(99L,3L);
+        BDDMockito.willDoNothing().given(serviceCommentsAdminister).deleteServiceComment(99L, 3L);
 
         mockMvc.perform(
                         MockMvcRequestBuilders.delete("/comments/delete")
                                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                                .param("commentId","99")
-                                .param("serviceId","3")
+                                .param("commentId", "99")
+                                .param("serviceId", "3")
                                 .with(SecurityMockMvcRequestPostProcessors.csrf()))
-                        .andExpect(MockMvcResultMatchers.status().isOk())
-                        .andExpect(MockMvcResultMatchers.content().string("OK"));
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string("OK"));
 
-        BDDMockito.then(serviceCommentsAdminister).should().deleteServiceComment(99L,3L);
+        BDDMockito.then(serviceCommentsAdminister).should().deleteServiceComment(99L, 3L);
 
     }
 
