@@ -1,13 +1,11 @@
 package com.example.servicehub.dto;
 
 import com.example.servicehub.domain.ServiceComment;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDate;
 
 @Data
-@AllArgsConstructor
 public class ServiceCommentsDto {
 
     private Long commentId;
@@ -17,12 +15,21 @@ public class ServiceCommentsDto {
     private LocalDate createAt;
     private LocalDate lastUpdateAt;
 
+    private ServiceCommentsDto(Long commentId, String content, Long clientId, String nickname, LocalDate createAt, LocalDate lastUpdateAt) {
+        this.commentId = commentId;
+        this.content = content;
+        this.clientId = clientId;
+        this.nickname = nickname;
+        this.createAt = createAt;
+        this.lastUpdateAt = lastUpdateAt;
+    }
+
     public static ServiceCommentsDto of(ServiceComment serviceComment) {
         return new ServiceCommentsDto(
                 serviceComment.getId(),
                 serviceComment.getContent(),
                 serviceComment.getClientId(),
-                "nickname", // TODO : 대응
+                serviceComment.getNickname(),
                 serviceComment.getCreatedAt(),
                 serviceComment.getUpdatedAt());
     }

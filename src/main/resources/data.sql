@@ -96,11 +96,3 @@ insert into service_category(service_id, category_id, created_by, created_at, up
 values (13, 6, 'impati', now(), now());
 insert into service_category(service_id, category_id, created_by, created_at, updated_at)
 values (13, 1, 'impati', now(), now());
-
-
-insert into client_service(service_id, client_id, click_count, created_by, created_at, updated_at)
-values (1, 1, 5, 'impati', now(), now());
-insert into client_service(service_id, client_id, click_count, created_by, created_at, updated_at)
-values (2, 1, 0, 'impati', now(), now());
-insert into client_service(service_id, client_id, click_count, created_by, created_at, updated_at)
-values (2, 2, 2, 'wnsduds1', now(), now());

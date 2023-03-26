@@ -6,10 +6,7 @@ import com.example.servicehub.dto.ServiceUpdateForm;
 import com.example.servicehub.dto.ServicesRegisterForm;
 import com.example.servicehub.security.authentication.CustomerPrincipal;
 import com.example.servicehub.security.authentication.CustomerPrincipalUtil;
-import com.example.servicehub.service.CategoryAdminister;
-import com.example.servicehub.service.ServiceSearch;
-import com.example.servicehub.service.ServiceUpdate;
-import com.example.servicehub.service.ServicesRegister;
+import com.example.servicehub.service.*;
 import com.example.servicehub.support.MetaDataCrawler;
 import com.example.servicehub.support.ServiceMetaData;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +35,7 @@ public class ServiceController {
     private final ServiceSearch serviceSearch;
     private final MetaDataCrawler metaDataCrawler;
     private final ServiceUpdate serviceUpdate;
+    private final SingleServiceSearch searchSingleService;
 
     @GetMapping("/registration")
     public String renderServiceRegistrationPage(@RequestParam(value = "serviceUrl", required = false) String serviceUrl,
@@ -77,7 +75,7 @@ public class ServiceController {
     @PreAuthorize("hasAnyRole('ADMIN')")
     public String renderServiceUpdatePage(@PathVariable Long serviceId, Model model) {
 
-        model.addAttribute("serviceUpdateForm", ServiceUpdateForm.from(serviceSearch.search(serviceId)));
+        model.addAttribute("serviceUpdateForm", ServiceUpdateForm.from(searchSingleService.search(serviceId)));
 
         model.addAttribute("categories", categoryAdminister.getAllCategories());
 
@@ -130,7 +128,7 @@ public class ServiceController {
     @GetMapping("/{serviceId}")
     public String renderServicePage(@PathVariable Long serviceId, @AuthenticationPrincipal CustomerPrincipal customerPrincipal, Model model) {
 
-        model.addAttribute("singleServiceWithCommentsDto", serviceSearch.searchSingleService(serviceId, CustomerPrincipalUtil.getClientIdFrom(customerPrincipal)));
+        model.addAttribute("singleServiceWithCommentsDto", searchSingleService.searchWithComments(serviceId, CustomerPrincipalUtil.getClientIdFrom(customerPrincipal)));
 
         return "service/service-page";
     }

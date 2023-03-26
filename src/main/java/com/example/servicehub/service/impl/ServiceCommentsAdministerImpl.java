@@ -33,7 +33,7 @@ public class ServiceCommentsAdministerImpl implements ServiceCommentsAdminister 
                 .findById(commentsForm.getServiceId()).orElseThrow(() -> new EntityNotFoundException("유효하지 않는 서비스 입니다"));
 
         serviceCommentRepository.save(ServiceComment.of(
-                commentsForm.getContent(), services, commentsForm.getClientId()));
+                commentsForm.getContent(), services, commentsForm.getClientId(), commentsForm.getNickname()));
     }
 
     @Override
@@ -70,7 +70,7 @@ public class ServiceCommentsAdministerImpl implements ServiceCommentsAdminister 
     }
 
     @Override
-    public String getCommentContent(Long serviceCommentsId) {
+    public String bringCommentContent(Long serviceCommentsId) {
         return serviceCommentRepository
                 .findById(serviceCommentsId)
                 .orElseThrow(() -> new EntityNotFoundException("유효하지 않은 댓글 접근 입니다."))

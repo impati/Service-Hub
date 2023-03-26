@@ -15,7 +15,7 @@ public class Services extends BaseEntity {
     @OneToMany(mappedBy = "services", fetch = FetchType.LAZY)
     private final List<ServiceCategory> serviceCategories = new ArrayList<>();
     @OneToMany(mappedBy = "services", fetch = FetchType.LAZY)
-    private final List<ClientService> clientServices = new ArrayList<>();
+    private final List<CustomerService> customerServices = new ArrayList<>();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "service_id")
@@ -29,7 +29,6 @@ public class Services extends BaseEntity {
     @Column(nullable = false, length = 10000)
     private String content;
     private String title;
-
 
     @Builder
     public Services(String serviceName, String logoStoreName, String serviceUrl, String title, String content) {
@@ -54,6 +53,10 @@ public class Services extends BaseEntity {
 
     public void mappingAssociations(ServiceCategory serviceCategory) {
         serviceCategories.add(serviceCategory);
+    }
+
+    public void mappingAssociations(CustomerService customerService) {
+        customerServices.add(customerService);
     }
 
     @Override

@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface ServiceSearchRepository {
 
-    Page<PopularityServiceDto> search(List<String> categories , String serviceName,Pageable pageable);
+    Page<PopularityServiceDto> search(List<String> categories, String serviceName, Pageable pageable);
 
-    List<ClickServiceDto> searchByClient(Long clientId , List<String> categories , String serviceName);
+    List<ClickServiceDto> searchByClient(Long clientId, List<String> categories, String serviceName);
 
 }

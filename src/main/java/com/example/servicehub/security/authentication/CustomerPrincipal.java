@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.security.Principal;
 import java.util.Collection;
@@ -14,7 +15,7 @@ import java.util.Collection;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CustomerPrincipal implements Principal {
+public class CustomerPrincipal implements Principal, UserDetails {
 
     private Long id;
     private String username;
@@ -44,8 +45,33 @@ public class CustomerPrincipal implements Principal {
         this.introduceComment = introduceComment;
     }
 
+    @Override
+    public String getPassword() {
+        return null;
+    }
+
     public String getUsername() {
         return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     @Override
