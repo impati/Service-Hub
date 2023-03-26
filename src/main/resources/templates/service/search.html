@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta content="upgrade-insecure-requests" http-equiv="Content-Security-Policy">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <div th:insert="~{fragment/header :: header}"></div>
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
 
@@ -115,7 +115,6 @@
 
 
     function addAction(serviceId) {
-
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
 
