@@ -2,6 +2,7 @@ package com.example.servicehub.security.config;
 
 import com.example.servicehub.security.LoginAuthenticationProvider;
 import com.example.servicehub.security.filter.AuthorizationRedirectFilter;
+import com.example.servicehub.security.filter.CustomerServerSignupFilter;
 import com.example.servicehub.security.filter.LoginAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -41,6 +42,7 @@ public class SecurityConfig {
 
         httpSecurity.addFilterBefore(loginAuthenticationFilter(authenticationManagerBuilder), AnonymousAuthenticationFilter.class);
         httpSecurity.addFilterBefore(new AuthorizationRedirectFilter(customerServer), AnonymousAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(new CustomerServerSignupFilter(customerServer), AnonymousAuthenticationFilter.class);
 
         return httpSecurity.build();
     }

@@ -26,7 +26,8 @@
                 <a class="btn btn-outline-primary me-2" sec:authorize="isAnonymous()"
                    th:href="@{/customer-server/authorization}">로그인</a>
                 <a class="btn btn-outline-primary me-2" onclick="logout()" sec:authorize="isAuthenticated()"> 로그아웃</a>
-                <a class="btn btn-outline-primary me-2" sec:authorize="isAnonymous()" th:href="@{/signup}">회원가입</a>
+                <a class="btn btn-outline-primary me-2" sec:authorize="isAnonymous()"
+                   th:href="@{/customer-server/signup}">회원가입</a>
                 <!--TODO-->
                 <img class="img-profile rounded-circle"
                      src="/assets/images/impati.jpeg" style="width: 5%;height: 5%">
