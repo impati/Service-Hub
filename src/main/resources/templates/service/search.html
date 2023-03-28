@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <meta content="upgrade-insecure-requests" http-equiv="Content-Security-Policy">
     <div th:insert="~{fragment/header :: header}"></div>
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
 
@@ -120,7 +120,7 @@
 
         $.ajax({
             type: 'POST',
-            url: domain + '/client/add-service/' + serviceId,
+            url: domain + '/customer/add-service/' + serviceId,
             beforeSend: function (xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
                 xhr.setRequestHeader(header, token);
             },
@@ -143,7 +143,7 @@
 
         $.ajax({
             type: 'POST',
-            url: domain + '/client/delete-service/' + serviceId,
+            url: domain + '/customer/delete-service/' + serviceId,
             beforeSend: function (xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
                 xhr.setRequestHeader(header, token);
             },

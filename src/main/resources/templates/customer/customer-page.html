@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <meta content="upgrade-insecure-requests" http-equiv="Content-Security-Policy">
     <div th:insert="~{fragment/header :: header}"></div>
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
@@ -34,7 +34,8 @@
                 </form>
                 <div class="text-end">
                     <button class="btn btn-primary"
-                            th:onclick="|location.href='@{/client/{clientId} (clientId=${simpleClient.clientId})}'|">전체
+                            th:onclick="|location.href='@{/customer/{customerId} (customerId=${simpleClient.clientId})}'|">
+                        전체
                         검색
                     </button>
                 </div>
@@ -58,7 +59,7 @@
                      th:classappend="${service.getCategories()}" th:each="service : ${serviceWithClick}">
                     <div class="card" style="width: 60%; height: 100%;border: none;justify-content: center">
                         <a class="card-link" style="display: block"
-                           th:href="@{/client/click/(serviceId=${service.serviceId},isCustom=${service.isCustom()})}">
+                           th:href="@{/customer/click/(serviceId=${service.serviceId},isCustom=${service.isCustom()})}">
                             <img alt="image"
                                  class="card-img"
                                  style="width: 50px; display: block"
@@ -133,7 +134,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: domain + '/client/add-custom?serviceName=' + customServiceName + '&serviceUrl=' + customServiceUrl,
+                url: domain + '/customer/add-custom?serviceName=' + customServiceName + '&serviceUrl=' + customServiceUrl,
                 beforeSend: function (xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
                     xhr.setRequestHeader(header, token);
                 },

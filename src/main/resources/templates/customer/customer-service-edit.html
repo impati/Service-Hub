@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <meta content="upgrade-insecure-requests" http-equiv="Content-Security-Policy">
     <div th:insert="~{fragment/header :: header}"></div>
 </head>
 <body>
@@ -28,7 +28,7 @@
                     <button class="btn btn-primary" type="submit">검색</button>
                 </form>
                 <div class="text-end">
-                    <button class="btn btn-primary" th:onclick="|location.href='@{/client/service/edit}'|">전체 검색
+                    <button class="btn btn-primary" th:onclick="|location.href='@{/customer/service/edit}'|">전체 검색
                     </button>
                 </div>
             </div><!--//single-form-max-width-->
@@ -55,7 +55,7 @@
                                 th:onclick="|deleteAction('${service.serviceId}' ,'${service.isCustom}')|">-
                         </button>
                         <a class="card-link" style="display: block;width: 100%"
-                           th:href="@{/client/click/(serviceId=${service.serviceId})}">
+                           th:href="@{/customer/click/(serviceId=${service.serviceId})}">
                             <img alt="image"
                                  class="card-img"
                                  style="width: 50px; display: block"
@@ -71,7 +71,7 @@
     </section>
     <div class="text-center">
         <button class="btn btn-primary"
-                th:onclick="|location.href='@{/client/{clientId} (clientId=${#authentication.getPrincipal().getId()}) }'|">
+                th:onclick="|location.href='@{/customer/{customerId} (customerId=${#authentication.getPrincipal().getId()}) }'|">
             완료
         </button>
     </div>
@@ -90,7 +90,7 @@
 
         $.ajax({
             type: 'POST',
-            url: domain + '/client/service/delete/' + serviceId + "?isCustom=" + custom,
+            url: domain + '/customer/service/delete/' + serviceId + "?isCustom=" + custom,
             beforeSend: function (xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
                 xhr.setRequestHeader(header, token);
             },

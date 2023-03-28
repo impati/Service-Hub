@@ -147,7 +147,7 @@
 
         $.ajax({
             type: 'POST',
-            url:domain + '/client/add-service/' + serviceId,
+            url:domain + '/customer/add-service/' + serviceId,
             beforeSend : function(xhr)
             {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
                 xhr.setRequestHeader(header, token);
@@ -171,7 +171,7 @@
 
         $.ajax({
             type: 'POST',
-            url: domain + '/client/delete-service/' + serviceId,
+            url: domain + '/customer/delete-service/' + serviceId,
             beforeSend: function (xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
                 xhr.setRequestHeader(header, token);
             },
