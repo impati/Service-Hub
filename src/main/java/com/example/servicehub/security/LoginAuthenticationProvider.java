@@ -1,9 +1,9 @@
 package com.example.servicehub.security;
 
+import com.example.servicehub.config.CustomerServer;
 import com.example.servicehub.domain.ProviderType;
 import com.example.servicehub.domain.RoleType;
 import com.example.servicehub.security.authentication.CustomerPrincipal;
-import com.example.servicehub.security.config.CustomerServer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,7 +38,7 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
         httpHeaders.set("clientId", customerServer.getClientId());
         httpHeaders.add(HttpHeaders.AUTHORIZATION, "Bearer " + authenticatedAuthenticationToken.getCredentials());
 
-        CustomerDto customer = restTemplate.exchange(customerServer.getTargetUrl() + CUSTOMER_ENDPOINT, HttpMethod.POST, new HttpEntity<>(httpHeaders), CustomerDto.class).getBody();
+        CustomerDto customer = restTemplate.exchange(customerServer.getServer() + CUSTOMER_ENDPOINT, HttpMethod.POST, new HttpEntity<>(httpHeaders), CustomerDto.class).getBody();
 
         CustomerPrincipal customerPrincipal = customer.toPrincipal();
 

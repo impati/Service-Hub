@@ -1,6 +1,6 @@
 package com.example.servicehub.security.filter;
 
-import com.example.servicehub.security.config.CustomerServer;
+import com.example.servicehub.config.CustomerServer;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -40,7 +40,7 @@ public class CustomerServerSignupFilter extends OncePerRequestFilter {
 
     private String getRedirectUrl() {
         return UriComponentsBuilder
-                .fromUriString(customerServer.getTargetUrl())
+                .fromUriString(customerServer.getServer())
                 .path(LOGIN_URI)
                 .queryParam(CLIENT_ID, customerServer.getClientId())
                 .build()

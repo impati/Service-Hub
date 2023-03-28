@@ -1,7 +1,7 @@
 package com.example.servicehub.security.filter;
 
+import com.example.servicehub.config.CustomerServer;
 import com.example.servicehub.security.authentication.CustomerPrincipal;
-import com.example.servicehub.security.config.CustomerServer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,7 +41,7 @@ public class LoginAuthenticationFilter extends AbstractAuthenticationProcessingF
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set("clientId", customerServer.getClientId());
         httpHeaders.add(HttpHeaders.AUTHORIZATION, code);
-        ResponseEntity<AccessTokenDto> exchange = restTemplate.exchange(customerServer.getTargetUrl() + ACCESS_TOKEN_ENDPOINT, HttpMethod.POST, new HttpEntity<>(httpHeaders), AccessTokenDto.class);
+        ResponseEntity<AccessTokenDto> exchange = restTemplate.exchange(customerServer.getServer() + ACCESS_TOKEN_ENDPOINT, HttpMethod.POST, new HttpEntity<>(httpHeaders), AccessTokenDto.class);
 
         AccessTokenDto accessTokenDto = exchange.getBody();
 

@@ -5,6 +5,7 @@ import com.example.servicehub.dto.CustomServiceForm;
 import com.example.servicehub.dto.ServiceSearchConditionForm;
 import com.example.servicehub.security.authentication.CustomerPrincipal;
 import com.example.servicehub.service.*;
+import com.example.servicehub.web.dto.CustomerEditForm;
 import com.example.servicehub.web.dto.SimpleClientDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,8 +13,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,30 +25,31 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/client")
-public class ClientController {
+@RequestMapping("/customer")
+public class CustomerController {
 
     private final CustomerCustomServiceAdminister customerCustomServiceAdminister;
     private final CustomerServiceAdminister customerServiceAdminister;
     private final CategoryAdminister categoryAdminister;
     private final ServiceClickCounter serviceClickCounter;
     private final CustomerServiceSearch customerServiceSearch;
+    private final CustomerEditor customerEditor;
 
-    @GetMapping("/{clientId}")
+    @GetMapping("/{customerId}")
     public String renderClientPage(
-            @PathVariable Long clientId,
+            @PathVariable Long customerId,
             @RequestParam(value = "serviceName", required = false) String serviceName,
             Model model) {
 
         List<String> allCategories = categoryAdminister.getAllCategories();
 
-        model.addAttribute("serviceWithClick", findResult(clientId, ServiceSearchConditionForm.of(allCategories, serviceName)));
+        model.addAttribute("serviceWithClick", findResult(customerId, ServiceSearchConditionForm.of(allCategories, serviceName)));
 
         model.addAttribute("allCategories", allCategories);
 
         model.addAttribute("simpleClient", simpleClientDto());
 
-        return "client/client-page";
+        return "customer/customer-page";
     }
 
     @GetMapping("/service/edit")
@@ -61,7 +65,7 @@ public class ClientController {
 
         model.addAttribute("simpleClient", simpleClientDto());
 
-        return "client/client-service-edit";
+        return "customer/customer-service-edit";
     }
 
     @ResponseBody
@@ -112,13 +116,38 @@ public class ClientController {
         return "Ok";
     }
 
-    private List<ClickServiceDto> findResult(Long clientId, ServiceSearchConditionForm serviceSearchConditionForm) {
+    @GetMapping("/edit")
+    public String renderClientProfileEditPage(
+            @AuthenticationPrincipal CustomerPrincipal customerPrincipal,
+            Model model) {
+
+        model.addAttribute("customerEditForm", CustomerEditForm.from(customerPrincipal));
+
+        return "customer/customer-edit-page";
+    }
+
+    @PostMapping("/edit")
+    public String editClientProfile(@Valid @ModelAttribute CustomerEditForm customerEditForm,
+                                    BindingResult bindingResult,
+                                    @AuthenticationPrincipal CustomerPrincipal customerPrincipal
+    ) {
+
+        if (bindingResult.hasErrors()) {
+            return "customer/customer-edit-page";
+        }
+
+        customerEditor.edit(customerEditForm);
+
+        return "redirect:/customer/" + customerPrincipal.getId();
+    }
+
+    private List<ClickServiceDto> findResult(Long customerId, ServiceSearchConditionForm serviceSearchConditionForm) {
         List<ClickServiceDto> result = new ArrayList<>();
-        result.addAll(customerServiceSearch.customServicesOfClient(clientId, serviceSearchConditionForm.getServiceName())
+        result.addAll(customerServiceSearch.customServicesOfClient(customerId, serviceSearchConditionForm.getServiceName())
                 .stream()
                 .map(ClickServiceDto::from)
                 .collect(toList()));
-        result.addAll(customerServiceSearch.servicesOfClient(clientId, serviceSearchConditionForm));
+        result.addAll(customerServiceSearch.servicesOfClient(customerId, serviceSearchConditionForm));
         return result;
     }
 
@@ -136,5 +165,6 @@ public class ClientController {
     private CustomerPrincipal getCustomerPrincipal() {
         return (CustomerPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
+
 
 }
