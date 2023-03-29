@@ -17,10 +17,7 @@ public class WithMockCustomUserSecurityContextFactory implements WithSecurityCon
 
     @Override
     public SecurityContext createSecurityContext(WithMockCustomUser customUser) {
-        String username = customUser.username();
-
         String role = prefix + customUser.role();
-
         CustomerPrincipal customerPrincipal = CustomerPrincipal.builder()
                 .id(customUser.id())
                 .username(customUser.username())
@@ -33,10 +30,14 @@ public class WithMockCustomUserSecurityContextFactory implements WithSecurityCon
                 .build();
 
         Authentication authentication = UsernamePasswordAuthenticationToken
-                .authenticated(customerPrincipal, "", customerPrincipal.getAuthorities());
+                .authenticated(customerPrincipal, getAccessToken(), customerPrincipal.getAuthorities());
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authentication);
         return context;
+    }
+
+    private String getAccessToken() {
+        return "Bearer accessToken";
     }
 
 
