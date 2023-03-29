@@ -23,9 +23,9 @@ public class TestSecurityConfig {
 
         httpSecurity.anonymous();
 
-        httpSecurity.authorizeRequests(auth-> {
+        httpSecurity.authorizeRequests(auth -> {
             auth.mvcMatchers("/service/registration").hasRole("ADMIN");
-            auth.mvcMatchers("/client/**").hasRole("USER");
+            auth.mvcMatchers("/customer/**").hasRole("USER");
             auth.mvcMatchers("/comments/**").hasRole("USER");
             auth.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll();
             auth.anyRequest().permitAll();
@@ -35,14 +35,14 @@ public class TestSecurityConfig {
     }
 
     @Bean
-    public RoleHierarchy roleHierarchy(){
+    public RoleHierarchy roleHierarchy() {
         RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
         roleHierarchy.setHierarchy("ROLE_ADMIN > ROLE_USER");
         return roleHierarchy;
     }
 
     @Bean
-    public AccessDecisionVoter<? extends Object> roleVoter(){
+    public AccessDecisionVoter<? extends Object> roleVoter() {
         return new RoleHierarchyVoter(roleHierarchy());
     }
 

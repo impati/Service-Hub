@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta content="upgrade-insecure-requests" http-equiv="Content-Security-Policy">
+    <!-- <meta content="upgrade-insecure-requests" http-equiv="Content-Security-Policy"> -->
     <div th:insert="~{fragment/header :: header}"></div>
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
@@ -19,7 +19,7 @@
 
     <section class="cta-section theme-bg-light py-5">
         <div class="container single-col-max-width">
-            <h2 class="heading text-center" th:text="|${simpleClient.nickname} 님의 서비스 목록|">나의 서비스 목록</h2>
+            <h2 class="heading text-center" th:text="|${simpleCustomer.nickname} 님의 서비스 목록|">나의 서비스 목록</h2>
             <div class="intro"></div>
             <div class="single-form-max-width text-center pt-3 mx-auto">
                 <form method="get" th:action>
@@ -34,7 +34,7 @@
                 </form>
                 <div class="text-end">
                     <button class="btn btn-primary"
-                            th:onclick="|location.href='@{/customer/{customerId} (customerId=${simpleClient.clientId})}'|">
+                            th:onclick="|location.href='@{/customer/{customerId} (customerId=${simpleCustomer.customerId})}'|">
                         전체
                         검색
                     </button>

@@ -12,16 +12,16 @@ public class CustomerServiceSteps {
         this.customerServiceRepository = customerServiceRepository;
     }
 
-    public CustomerService create(Long clientId, Services services) {
+    public CustomerService create(Long customerId, Services services) {
         return customerServiceRepository.save(CustomerService
                 .builder()
                 .services(services)
-                .clientId(clientId)
+                .customerId(customerId)
                 .build());
     }
 
-    public CustomerService createWithClick(Long clientId, Services services, int click) {
-        CustomerService customerService = CustomerService.of(clientId, services);
+    public CustomerService createWithClick(Long customerId, Services services, int click) {
+        CustomerService customerService = CustomerService.of(customerId, services);
         for (int i = 0; i < click; i++)
             customerService.click();
         return customerServiceRepository.save(customerService);

@@ -10,7 +10,7 @@ import java.util.Objects;
 
 @Entity
 @Getter
-@ToString(exclude = {"services", "clientId"})
+@ToString(exclude = {"services", "customerId"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ServiceComment extends BaseEntity {
     @Id
@@ -25,20 +25,20 @@ public class ServiceComment extends BaseEntity {
     @JoinColumn(name = "service_id")
     private Services services;
 
-    @Column(name = "client_id")
-    private Long clientId;
+    @Column(name = "customer_id")
+    private Long customerId;
 
     private String nickname;
 
-    private ServiceComment(String content, Services services, Long clientId, String nickname) {
+    private ServiceComment(String content, Services services, Long customerId, String nickname) {
         this.content = content;
         this.services = services;
-        this.clientId = clientId;
+        this.customerId = customerId;
         this.nickname = nickname;
     }
 
-    public static ServiceComment of(String content, Services services, Long clientId, String nickname) {
-        return new ServiceComment(content, services, clientId, nickname);
+    public static ServiceComment of(String content, Services services, Long customerId, String nickname) {
+        return new ServiceComment(content, services, customerId, nickname);
     }
 
     public void updateContent(String content) {

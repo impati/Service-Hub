@@ -13,22 +13,22 @@ public interface CustomerServiceRepository extends JpaRepository<CustomerService
 
     @Query(" select cs from CustomerService cs " +
             " join fetch cs.services s " +
-            " where cs.clientId = :clientId " +
+            " where cs.customerId = :customerId " +
             " and s.id = :serviceId")
-    Optional<CustomerService> findClientServiceBy(@Param("clientId") Long clientId, @Param("serviceId") Long serviceId);
+    Optional<CustomerService> findCustomerServiceBy(@Param("customerId") Long customerId, @Param("serviceId") Long serviceId);
 
-    @Query("select cs.services.id from CustomerService cs where cs.services.id in (:services) and cs.clientId = :clientId")
-    List<Long> findServiceIdOwnedByClient(@Param("services") List<Long> services, @Param("clientId") Long clientId);
+    @Query("select cs.services.id from CustomerService cs where cs.services.id in (:services) and cs.customerId = :customerId")
+    List<Long> findServiceIdOwnedByCustomer(@Param("services") List<Long> services, @Param("customerId") Long customerId);
 
-    @Query("select cs.services from CustomerService cs where cs.clientId = :clientId ")
-    List<Services> findServiceByClientId(@Param("clientId") Long clientId);
+    @Query("select cs.services from CustomerService cs where cs.customerId = :customerId ")
+    List<Services> findServiceByCustomerId(@Param("customerId") Long customerId);
 
     @Query("select count(cs) > 0 from CustomerService cs " +
-            " where cs.clientId = :clientId " +
+            " where cs.customerId = :customerId " +
             " and cs.services = :service ")
-    boolean alreadyExistsServiceForClient(@Param("clientId") Long clientId, @Param("service") Services services);
+    boolean alreadyExistsServiceForCustomer(@Param("customerId") Long customerId, @Param("service") Services services);
 
-    @Query("select count(cs) > 0 from CustomerService cs where cs.services.id = :service and cs.clientId = :clientId")
-    boolean existsServiceAndClientRelationship(@Param("service") Long serviceId, @Param("clientId") Long clientId);
+    @Query("select count(cs) > 0 from CustomerService cs where cs.services.id = :service and cs.customerId = :customerId")
+    boolean existsServiceAndCustomerRelationship(@Param("service") Long serviceId, @Param("customerId") Long customerId);
 
 }

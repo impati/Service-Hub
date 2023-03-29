@@ -17,17 +17,17 @@ public class ServiceCommentsSteps {
         this.serviceCommentRepository = serviceCommentRepository;
     }
 
-    public ServiceComment create(Long clientId, Services services) {
-        return serviceCommentRepository.save(ServiceComment.of(DEFAULT_CONTENT, services, clientId, DEFAULT_NICKNAME));
+    public ServiceComment create(Long customerId, Services services) {
+        return serviceCommentRepository.save(ServiceComment.of(DEFAULT_CONTENT, services, customerId, DEFAULT_NICKNAME));
     }
 
-    public ServiceComment create(String content, Long clientId, Services services) {
-        return serviceCommentRepository.save(ServiceComment.of(content, services, clientId, DEFAULT_NICKNAME));
+    public ServiceComment create(String content, Long customerId, Services services) {
+        return serviceCommentRepository.save(ServiceComment.of(content, services, customerId, DEFAULT_NICKNAME));
     }
 
 
-    public ServiceComment create(String content, Long clientId, String nickname, Services services) {
-        return serviceCommentRepository.save(ServiceComment.of(content, services, clientId, nickname));
+    public ServiceComment create(String content, Long customerId, String nickname, Services services) {
+        return serviceCommentRepository.save(ServiceComment.of(content, services, customerId, nickname));
     }
 
     public List<ServiceComment> findAllComments() {

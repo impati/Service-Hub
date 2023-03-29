@@ -3,9 +3,9 @@ package com.example.servicehub.service;
 import com.example.servicehub.dto.CustomServiceForm;
 
 public interface CustomerCustomServiceAdminister {
-    void addCustomService(Long clientId, CustomServiceForm customServiceForm);
+    void addCustomService(Long customerId, CustomServiceForm customServiceForm);
 
-    void deleteCustomService(Long clientId, Long customServiceId);
+    void deleteCustomService(Long customerId, Long customServiceId);
 
-    String countClickAndReturnUrl(Long clientId, Long customServiceId);
+    String countClickAndReturnUrl(Long customerId, Long customServiceId);
 }

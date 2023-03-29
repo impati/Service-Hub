@@ -10,15 +10,15 @@ public class ServiceCommentsDto {
 
     private Long commentId;
     private String content;
-    private Long clientId;
+    private Long customerId;
     private String nickname;
     private LocalDate createAt;
     private LocalDate lastUpdateAt;
 
-    private ServiceCommentsDto(Long commentId, String content, Long clientId, String nickname, LocalDate createAt, LocalDate lastUpdateAt) {
+    private ServiceCommentsDto(Long commentId, String content, Long customerId, String nickname, LocalDate createAt, LocalDate lastUpdateAt) {
         this.commentId = commentId;
         this.content = content;
-        this.clientId = clientId;
+        this.customerId = customerId;
         this.nickname = nickname;
         this.createAt = createAt;
         this.lastUpdateAt = lastUpdateAt;
@@ -28,7 +28,7 @@ public class ServiceCommentsDto {
         return new ServiceCommentsDto(
                 serviceComment.getId(),
                 serviceComment.getContent(),
-                serviceComment.getClientId(),
+                serviceComment.getCustomerId(),
                 serviceComment.getNickname(),
                 serviceComment.getCreatedAt(),
                 serviceComment.getUpdatedAt());

@@ -13,10 +13,10 @@ public interface ServiceCommentRepository extends JpaRepository<ServiceComment, 
     @Query("select cs from ServiceComment cs  where cs.services.id = :serviceId")
     List<ServiceComment> findByServices(@Param("serviceId") Long serviceId);
 
-    List<ServiceComment> findByClientId(Long clientId);
+    List<ServiceComment> findByCustomerId(Long customerId);
 
     @Query("select count(sc) > 0 from ServiceComment  sc " +
-            " where sc.clientId = :clientId " +
+            " where sc.customerId = :customerId " +
             " and sc = :comment")
-    boolean existsByClient(@Param("comment") ServiceComment comment, @Param("clientId") Long client);
+    boolean existsByCustomer(@Param("comment") ServiceComment comment, @Param("customerId") Long customer);
 }

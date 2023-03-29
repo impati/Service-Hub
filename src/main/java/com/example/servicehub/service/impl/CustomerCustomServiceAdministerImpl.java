@@ -25,37 +25,37 @@ public class CustomerCustomServiceAdministerImpl implements CustomerCustomServic
     private final CustomerCustomServiceRepository customerCustomServiceRepository;
 
     @Override
-    public void addCustomService(Long clientId, CustomServiceForm request) {
+    public void addCustomService(Long customerId, CustomServiceForm request) {
 
         ServiceMetaData serviceMetaData = metaDataCrawler.tryToGetMetaData(request.getServiceUrl());
 
         String logoStoreName = logoManager.download(serviceMetaData.getImage());
 
-        customerCustomServiceRepository.save(createFrom(serviceMetaData, logoStoreName, request, clientId));
+        customerCustomServiceRepository.save(createFrom(serviceMetaData, logoStoreName, request, customerId));
     }
 
-    private CustomService createFrom(ServiceMetaData serviceMetaData, String logoStoreName, CustomServiceForm request, Long clientId) {
+    private CustomService createFrom(ServiceMetaData serviceMetaData, String logoStoreName, CustomServiceForm request, Long customerId) {
         return CustomService.builder()
                 .serviceName(request.getServiceName())
                 .serviceUrl(request.getServiceUrl())
                 .title(serviceMetaData.getTitle())
                 .logoStoreName(logoStoreName)
-                .clientId(clientId)
+                .customerId(customerId)
                 .build();
     }
 
     @Override
-    public void deleteCustomService(Long clientId, Long customServiceId) {
+    public void deleteCustomService(Long customerId, Long customServiceId) {
         Optional<CustomService> optionalCustomService = customerCustomServiceRepository
-                .findCustomServiceByClientIdAndServiceId(clientId, customServiceId);
+                .findCustomServiceByCustomerIdAndServiceId(customerId, customServiceId);
 
         optionalCustomService.ifPresent(customerCustomServiceRepository::delete);
     }
 
     @Override
-    public String countClickAndReturnUrl(Long clientId, Long customServiceId) {
+    public String countClickAndReturnUrl(Long customerId, Long customServiceId) {
         CustomService customService = customerCustomServiceRepository
-                .findCustomServiceByClientIdAndServiceId(clientId, customServiceId)
+                .findCustomServiceByCustomerIdAndServiceId(customerId, customServiceId)
                 .orElseThrow(IllegalStateException::new);
 
         customService.click();

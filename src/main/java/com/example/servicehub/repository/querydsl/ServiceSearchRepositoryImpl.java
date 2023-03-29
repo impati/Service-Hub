@@ -63,7 +63,7 @@ public class ServiceSearchRepositoryImpl implements ServiceSearchRepository {
     }
 
     @Override
-    public List<ClickServiceDto> searchByClient(Long clientId, List<String> categories, String serviceName) {
+    public List<ClickServiceDto> searchByCustomer(Long customerId, List<String> categories, String serviceName) {
         return queryFactory
                 .selectDistinct(Projections.constructor(
                         ClickServiceDto.class,
@@ -73,7 +73,7 @@ public class ServiceSearchRepositoryImpl implements ServiceSearchRepository {
                 .join(customerService.services, services)
                 .join(services.serviceCategories, serviceCategory).fetchJoin()
                 .join(serviceCategory.category, QCategory.category).fetchJoin()
-                .where(customerService.clientId.eq(clientId), categoriesSearch(categories), nameSearch(serviceName))
+                .where(customerService.customerId.eq(customerId), categoriesSearch(categories), nameSearch(serviceName))
                 .fetch();
     }
 

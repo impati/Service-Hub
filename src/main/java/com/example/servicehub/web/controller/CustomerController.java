@@ -6,7 +6,7 @@ import com.example.servicehub.dto.ServiceSearchConditionForm;
 import com.example.servicehub.security.authentication.CustomerPrincipal;
 import com.example.servicehub.service.*;
 import com.example.servicehub.web.dto.CustomerEditForm;
-import com.example.servicehub.web.dto.SimpleClientDto;
+import com.example.servicehub.web.dto.SimpleCustomerDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -36,7 +36,7 @@ public class CustomerController {
     private final CustomerEditor customerEditor;
 
     @GetMapping("/{customerId}")
-    public String renderClientPage(
+    public String renderCustomerPage(
             @PathVariable Long customerId,
             @RequestParam(value = "serviceName", required = false) String serviceName,
             Model model) {
@@ -47,15 +47,15 @@ public class CustomerController {
 
         model.addAttribute("allCategories", allCategories);
 
-        model.addAttribute("simpleClient", simpleClientDto());
+        model.addAttribute("simpleCustomer", simpleCustomerDto());
 
         return "customer/customer-page";
     }
 
     @GetMapping("/service/edit")
-    public String renderClientServiceEdit(@AuthenticationPrincipal CustomerPrincipal customerPrincipal,
-                                          @RequestParam(value = "serviceName", required = false) String serviceName,
-                                          Model model) {
+    public String renderCustomerServiceEdit(@AuthenticationPrincipal CustomerPrincipal customerPrincipal,
+                                            @RequestParam(value = "serviceName", required = false) String serviceName,
+                                            Model model) {
 
         List<String> allCategories = categoryAdminister.getAllCategories();
 
@@ -63,19 +63,19 @@ public class CustomerController {
 
         model.addAttribute("allCategories", allCategories);
 
-        model.addAttribute("simpleClient", simpleClientDto());
+        model.addAttribute("simpleCustomer", simpleCustomerDto());
 
         return "customer/customer-service-edit";
     }
 
     @ResponseBody
     @PostMapping("/service/delete/{serviceId}")
-    public String editClientService(@PathVariable Long serviceId,
-                                    @RequestParam(defaultValue = "false") Boolean isCustom,
-                                    @AuthenticationPrincipal CustomerPrincipal customerPrincipal) {
+    public String deleteCustomerService(@PathVariable Long serviceId,
+                                        @RequestParam(defaultValue = "false") Boolean isCustom,
+                                        @AuthenticationPrincipal CustomerPrincipal customerPrincipal) {
         if (isCustom) customerCustomServiceAdminister.deleteCustomService(customerPrincipal.getId(), serviceId); //TODO
-        else customerServiceAdminister.deleteClientService(customerPrincipal.getId(), serviceId);
-        return "Ok";
+        else customerServiceAdminister.deleteCustomerService(customerPrincipal.getId(), serviceId);
+        return "OK";
     }
 
     @GetMapping("/click")
@@ -92,20 +92,18 @@ public class CustomerController {
 
     @ResponseBody
     @PostMapping("/add-service/{serviceId}")
-    public String addClientService(@PathVariable Long serviceId, @AuthenticationPrincipal CustomerPrincipal customerPrincipal) {
-
-        customerServiceAdminister.addClientService(customerPrincipal.getId(), serviceId);
-
-        return "Ok";
+    public String addCustomerService(@PathVariable Long serviceId, @AuthenticationPrincipal CustomerPrincipal customerPrincipal) {
+        customerServiceAdminister.addCustomerService(customerPrincipal.getId(), serviceId);
+        return "OK";
     }
 
     @ResponseBody
     @PostMapping("/delete-service/{serviceId}")
-    public String deleteClientService(@PathVariable Long serviceId, @AuthenticationPrincipal CustomerPrincipal customerPrincipal) {
+    public String deleteCustomerService(@PathVariable Long serviceId, @AuthenticationPrincipal CustomerPrincipal customerPrincipal) {
 
-        customerServiceAdminister.deleteClientService(customerPrincipal.getId(), serviceId);
+        customerServiceAdminister.deleteCustomerService(customerPrincipal.getId(), serviceId);
 
-        return "Ok";
+        return "OK";
     }
 
     @ResponseBody
@@ -113,11 +111,11 @@ public class CustomerController {
     public String addCustomService(@ModelAttribute CustomServiceForm customServiceForm,
                                    @AuthenticationPrincipal CustomerPrincipal customerPrincipal) {
         customerCustomServiceAdminister.addCustomService(customerPrincipal.getId(), customServiceForm);
-        return "Ok";
+        return "OK";
     }
 
     @GetMapping("/edit")
-    public String renderClientProfileEditPage(
+    public String rendercustomerProfileEditPage(
             @AuthenticationPrincipal CustomerPrincipal customerPrincipal,
             Model model) {
 
@@ -127,9 +125,9 @@ public class CustomerController {
     }
 
     @PostMapping("/edit")
-    public String editClientProfile(@Valid @ModelAttribute CustomerEditForm customerEditForm,
-                                    BindingResult bindingResult,
-                                    @AuthenticationPrincipal CustomerPrincipal customerPrincipal
+    public String editcustomerProfile(@Valid @ModelAttribute CustomerEditForm customerEditForm,
+                                      BindingResult bindingResult,
+                                      @AuthenticationPrincipal CustomerPrincipal customerPrincipal
     ) {
 
         if (bindingResult.hasErrors()) {
@@ -143,19 +141,19 @@ public class CustomerController {
 
     private List<ClickServiceDto> findResult(Long customerId, ServiceSearchConditionForm serviceSearchConditionForm) {
         List<ClickServiceDto> result = new ArrayList<>();
-        result.addAll(customerServiceSearch.customServicesOfClient(customerId, serviceSearchConditionForm.getServiceName())
+        result.addAll(customerServiceSearch.customServicesOfCustomer(customerId, serviceSearchConditionForm.getServiceName())
                 .stream()
                 .map(ClickServiceDto::from)
                 .collect(toList()));
-        result.addAll(customerServiceSearch.servicesOfClient(customerId, serviceSearchConditionForm));
+        result.addAll(customerServiceSearch.servicesOfCustomer(customerId, serviceSearchConditionForm));
         return result;
     }
 
-    private SimpleClientDto simpleClientDto() {
+    private SimpleCustomerDto simpleCustomerDto() {
         CustomerPrincipal customerPrincipal = getCustomerPrincipal();
-        return SimpleClientDto.builder()
+        return SimpleCustomerDto.builder()
                 .nickname(customerPrincipal.getNickname())
-                .clientId(customerPrincipal.getId())
+                .customerId(customerPrincipal.getId())
                 .blogUrl(customerPrincipal.getBlogUrl())
                 .profileUrl(customerPrincipal.getProfileImageUrl())
                 .introComment(customerPrincipal.getIntroduceComment())

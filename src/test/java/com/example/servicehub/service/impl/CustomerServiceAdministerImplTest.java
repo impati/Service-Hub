@@ -30,53 +30,53 @@ class CustomerServiceAdministerImplTest {
 
     @Test
     @DisplayName("사용자 서비스 추가")
-    public void givenClientIdAndServiceId_whenAdding_thenAddServiceOfClient() throws Exception {
+    public void givencustomerIdAndServiceId_whenAdding_thenAddServiceOfcustomer() throws Exception {
         // given
         int size = 10;
-        Long clientId = 1L;
+        Long customerId = 1L;
         List<Services> services = servicesSteps.creates(size);
         // when
         for (var service : services) {
-            customerServiceAdminister.addClientService(clientId, service.getId());
+            customerServiceAdminister.addCustomerService(customerId, service.getId());
         }
         // then
-        List<Services> serviceOfClient = customerServiceRepository
-                .findServiceByClientId(clientId);
+        List<Services> serviceOfcustomer = customerServiceRepository
+                .findServiceByCustomerId(customerId);
 
-        assertThat(serviceOfClient.size()).isEqualTo(size);
-        assertThat(serviceOfClient).containsAnyElementsOf(services);
+        assertThat(serviceOfcustomer.size()).isEqualTo(size);
+        assertThat(serviceOfcustomer).containsAnyElementsOf(services);
     }
 
     @Test
     @DisplayName("사용자 서비스 추가 중복시 무시")
-    public void givenClientAndServiceDuplication_whenOneAdding_thenOneAddServiceForClient() throws Exception {
+    public void givencustomerAndServiceDuplication_whenOneAdding_thenOneAddServiceForcustomer() throws Exception {
         // given
-        Long clientId = 55L;
+        Long customerId = 55L;
         Services services = servicesSteps.create();
         // when
-        customerServiceAdminister.addClientService(clientId, services.getId());
-        customerServiceAdminister.addClientService(clientId, services.getId());
-        customerServiceAdminister.addClientService(clientId, services.getId());
+        customerServiceAdminister.addCustomerService(customerId, services.getId());
+        customerServiceAdminister.addCustomerService(customerId, services.getId());
+        customerServiceAdminister.addCustomerService(customerId, services.getId());
         // then
-        assertThat(customerServiceRepository.findServiceByClientId(clientId).size())
+        assertThat(customerServiceRepository.findServiceByCustomerId(customerId).size())
                 .isEqualTo(1);
     }
 
     @Test
     @DisplayName("사용자 서비스 삭제")
-    public void givenClientAndService_whenDeletingService_thenDelete() throws Exception {
+    public void givencustomerAndService_whenDeletingService_thenDelete() throws Exception {
         // given
         int size = 3;
-        Long clientId = 55L;
+        Long customerId = 55L;
         List<Services> services = servicesSteps.creates(size);
         for (int i = 0; i < size; i++) {
-            customerServiceAdminister.addClientService(clientId, services.get(i).getId());
+            customerServiceAdminister.addCustomerService(customerId, services.get(i).getId());
         }
         // when
-        customerServiceAdminister.deleteClientService(clientId, services.get(0).getId());
-        customerServiceAdminister.deleteClientService(clientId, services.get(0).getId());
+        customerServiceAdminister.deleteCustomerService(customerId, services.get(0).getId());
+        customerServiceAdminister.deleteCustomerService(customerId, services.get(0).getId());
         // then
-        assertThat(customerServiceRepository.findServiceByClientId(clientId).size())
+        assertThat(customerServiceRepository.findServiceByCustomerId(customerId).size())
                 .isEqualTo(size - 1);
     }
 }

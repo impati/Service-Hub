@@ -23,7 +23,7 @@ import java.io.IOException;
 public class LoginAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
     private final static String DEFAULT_FILTER_PROCESSES_URI = "/login/customer-server/code/**";
     private final static String ACCESS_TOKEN_ENDPOINT = "/auth/gettoken";
-
+    private static final String CLIENT_ID = "clientId";
     private final CustomerServer customerServer;
 
     public LoginAuthenticationFilter(CustomerServer customerServer) {
@@ -39,7 +39,7 @@ public class LoginAuthenticationFilter extends AbstractAuthenticationProcessingF
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.set("clientId", customerServer.getClientId());
+        httpHeaders.set(CLIENT_ID, customerServer.getClientId());
         httpHeaders.add(HttpHeaders.AUTHORIZATION, code);
         ResponseEntity<AccessTokenDto> exchange = restTemplate.exchange(customerServer.getServer() + ACCESS_TOKEN_ENDPOINT, HttpMethod.POST, new HttpEntity<>(httpHeaders), AccessTokenDto.class);
 

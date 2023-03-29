@@ -62,7 +62,7 @@ public class ServiceCommentsController {
 
         if (bindingResult.hasErrors()) return "/service/service-edit-page";
 
-        serviceCommentUpdateForm.assignClient(customerPrincipal.getId());
+        serviceCommentUpdateForm.assignCustomer(customerPrincipal.getId());
 
         serviceCommentsAdminister.updateServiceComment(serviceCommentUpdateForm);
 

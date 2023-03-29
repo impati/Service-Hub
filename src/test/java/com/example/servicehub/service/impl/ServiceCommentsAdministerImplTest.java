@@ -54,13 +54,13 @@ class ServiceCommentsAdministerImplTest {
     @DisplayName("서비스 댓글 수정하기")
     public void givenCommentUpdateForm_whenUpdatingComments_thenUpdateComment() throws Exception {
         // given
-        Long clientId = 1L;
+        Long customerId = 1L;
         Services services = servicesSteps.create();
-        ServiceComment serviceComment = serviceCommentsSteps.create(clientId, services);
+        ServiceComment serviceComment = serviceCommentsSteps.create(customerId, services);
 
         String updateComment = "good";
         ServiceCommentUpdateForm serviceCommentUpdateForm =
-                new ServiceCommentUpdateForm(serviceComment.getId(), clientId, updateComment);
+                new ServiceCommentUpdateForm(serviceComment.getId(), customerId, updateComment);
         // when
         serviceCommentsAdminister.updateServiceComment(serviceCommentUpdateForm);
         // then
@@ -72,9 +72,9 @@ class ServiceCommentsAdministerImplTest {
     @DisplayName("서비스 댓글 삭제하기")
     public void givenComment_whenDeletingComment_thenDeleteComment() throws Exception {
         // given
-        Long clientId = 1L;
+        Long customerId = 1L;
         Services services = servicesSteps.create();
-        ServiceComment serviceComment = serviceCommentsSteps.create(clientId, services);
+        ServiceComment serviceComment = serviceCommentsSteps.create(customerId, services);
         // when
         serviceCommentsAdminister.deleteServiceComment(serviceComment.getId(), 1L);
         // then
@@ -84,12 +84,12 @@ class ServiceCommentsAdministerImplTest {
 
     @Test
     @DisplayName("사용자가 작성한 댓글이 아닌 경우 수정 할 수 없다")
-    public void givenCommentAndUnAuthorizeClient_whenUpdating_thenNothing() throws Exception {
+    public void givenCommentAndUnAuthorizecustomer_whenUpdating_thenNothing() throws Exception {
         // given
-        Long clientId = 1L;
+        Long customerId = 1L;
         String originComment = "origin";
         Services services = servicesSteps.create();
-        ServiceComment serviceComment = serviceCommentsSteps.create(originComment, clientId, services);
+        ServiceComment serviceComment = serviceCommentsSteps.create(originComment, customerId, services);
         String updateComment = "good";
         ServiceCommentUpdateForm updateForm =
                 new ServiceCommentUpdateForm(serviceComment.getId(), 99L, updateComment);
@@ -104,12 +104,12 @@ class ServiceCommentsAdministerImplTest {
 
     @Test
     @DisplayName("사용자가 작성한 댓글이 아닌 경우 삭제 할 수 없다")
-    public void givenCommentAndUnAuthorizeClient_whenDeleting_thenNothing() throws Exception {
+    public void givenCommentAndUnAuthorizecustomer_whenDeleting_thenNothing() throws Exception {
         // given
-        Long clientId = 1L;
+        Long customerId = 1L;
         String originComment = "origin";
         Services services = servicesSteps.create();
-        ServiceComment serviceComment = serviceCommentsSteps.create(originComment, clientId, services);
+        ServiceComment serviceComment = serviceCommentsSteps.create(originComment, customerId, services);
         //when
 
         serviceCommentsAdminister.deleteServiceComment(serviceComment.getId(), 99L);
@@ -123,10 +123,10 @@ class ServiceCommentsAdministerImplTest {
     @DisplayName("댓글 내용 조회")
     public void givenServiceCommentId_whenBringContent_thenBringContent() throws Exception {
         // given
-        Long clientId = 1L;
+        Long customerId = 1L;
         String originComment = "origin";
         Services services = servicesSteps.create();
-        ServiceComment serviceComment = serviceCommentsSteps.create(originComment, clientId, services);
+        ServiceComment serviceComment = serviceCommentsSteps.create(originComment, customerId, services);
         // when
         String comment = serviceCommentsAdminister.bringCommentContent(serviceComment.getId());
         // then
@@ -137,12 +137,12 @@ class ServiceCommentsAdministerImplTest {
     @DisplayName("서비스의 댓글 모두 조회")
     public void given_when_then() throws Exception {
         // given
-        Long clientId = 1L;
+        Long customerId = 1L;
         String originComment = "origin";
         Services services = servicesSteps.create();
         String baseNickname = "base";
         for (int i = 0; i < 10; i++) {
-            serviceCommentsSteps.create(originComment, clientId, baseNickname + i, services);
+            serviceCommentsSteps.create(originComment, customerId, baseNickname + i, services);
         }
         // when
         List<ServiceCommentsDto> response = serviceCommentsAdminister.searchComments(services.getId());

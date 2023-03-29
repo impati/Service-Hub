@@ -60,10 +60,10 @@ class DefaultCustomerServiceSearchTest {
         serviceCategorySteps.create(it, jobKorea);
         serviceCategorySteps.create(job, jobKorea);
 
-        Long clientId = 1L;
-        customerServiceSteps.createWithClick(clientId, notion, 50);
-        customerServiceSteps.createWithClick(clientId, github, 10);
-        customerServiceSteps.createWithClick(clientId, youtube, 2);
+        Long customerId = 1L;
+        customerServiceSteps.createWithClick(customerId, notion, 50);
+        customerServiceSteps.createWithClick(customerId, github, 10);
+        customerServiceSteps.createWithClick(customerId, youtube, 2);
     }
 
 
@@ -73,7 +73,7 @@ class DefaultCustomerServiceSearchTest {
         // given
         ServiceSearchConditionForm condition = ServiceSearchConditionForm.of(List.of("IT", "BLOG", "JOB"), null);
         // when
-        List<ClickServiceDto> response = customerServiceSearch.servicesOfClient(1L, condition);
+        List<ClickServiceDto> response = customerServiceSearch.servicesOfCustomer(1L, condition);
         // then
         assertThat(response.size())
                 .isEqualTo(3);
@@ -96,7 +96,7 @@ class DefaultCustomerServiceSearchTest {
         // given
         ServiceSearchConditionForm condition = ServiceSearchConditionForm.of(List.of("BLOG"), null);
         // when
-        List<ClickServiceDto> response = customerServiceSearch.servicesOfClient(1L, condition);
+        List<ClickServiceDto> response = customerServiceSearch.servicesOfCustomer(1L, condition);
         // then
         assertThat(response.size())
                 .isEqualTo(1);
@@ -111,7 +111,7 @@ class DefaultCustomerServiceSearchTest {
         // given
         ServiceSearchConditionForm condition = ServiceSearchConditionForm.of(null, "브");
         // when
-        List<ClickServiceDto> response = customerServiceSearch.servicesOfClient(1L, condition);
+        List<ClickServiceDto> response = customerServiceSearch.servicesOfCustomer(1L, condition);
         // then
         assertThat(response.size())
                 .isEqualTo(2);

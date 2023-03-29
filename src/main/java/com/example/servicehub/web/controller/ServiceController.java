@@ -106,7 +106,7 @@ public class ServiceController {
                                       @PageableDefault Pageable pageable,
                                       Model model) {
 
-        Page<PopularityServiceDto> searchedServices = serviceSearch.search(serviceSearchConditionForm, CustomerPrincipalUtil.getClientIdFrom(customerPrincipal), pageable);
+        Page<PopularityServiceDto> searchedServices = serviceSearch.search(serviceSearchConditionForm, CustomerPrincipalUtil.getCustomerIdFrom(customerPrincipal), pageable);
 
 
         model.addAttribute("firstPage", FIRST_PAGE);
@@ -128,7 +128,7 @@ public class ServiceController {
     @GetMapping("/{serviceId}")
     public String renderServicePage(@PathVariable Long serviceId, @AuthenticationPrincipal CustomerPrincipal customerPrincipal, Model model) {
 
-        model.addAttribute("singleServiceWithCommentsDto", searchSingleService.searchWithComments(serviceId, CustomerPrincipalUtil.getClientIdFrom(customerPrincipal)));
+        model.addAttribute("singleServiceWithCommentsDto", searchSingleService.searchWithComments(serviceId, CustomerPrincipalUtil.getCustomerIdFrom(customerPrincipal)));
 
         return "service/service-page";
     }

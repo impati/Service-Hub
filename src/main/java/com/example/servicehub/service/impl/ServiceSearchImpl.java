@@ -28,22 +28,22 @@ public class ServiceSearchImpl implements ServiceSearch {
 
     @Override
     public Page<PopularityServiceDto> search(ServiceSearchConditionForm condition,
-                                             Optional<Long> optionalClient,
+                                             Optional<Long> optionalCustomer,
                                              Pageable pageRequest) {
         Page<PopularityServiceDto> searchedService = servicesRepository.search(condition.getCategories(), condition.getServiceName(), pageRequest);
-        optionalClient.ifPresent(client -> setClientPossessServices(client, searchedService.getContent()));
+        optionalCustomer.ifPresent(customer -> setCustomerPossessServices(customer, searchedService.getContent()));
         return searchedService;
     }
 
-    private void setClientPossessServices(Long clientId, List<PopularityServiceDto> services) {
-        List<Long> clientServices = customerServiceRepository.findServiceIdOwnedByClient(
+    private void setCustomerPossessServices(Long customerId, List<PopularityServiceDto> services) {
+        List<Long> customerServices = customerServiceRepository.findServiceIdOwnedByCustomer(
                 services
                         .stream()
                         .map(PopularityServiceDto::getServiceId)
-                        .collect(toList()), clientId);
+                        .collect(toList()), customerId);
 
         for (var service : services) {
-            if (clientServices.contains(service.getServiceId()))
+            if (customerServices.contains(service.getServiceId()))
                 service.setPossess(true);
         }
     }

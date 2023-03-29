@@ -28,8 +28,8 @@ public class DefaultCustomerServiceSearch implements CustomerServiceSearch {
 
     @Override
     @Transactional
-    public List<ClickServiceDto> servicesOfClient(Long clientId, ServiceSearchConditionForm condition) {
-        return servicesRepository.searchByClient(clientId, condition.getCategories(), condition.getServiceName())
+    public List<ClickServiceDto> servicesOfCustomer(Long customerId, ServiceSearchConditionForm condition) {
+        return servicesRepository.searchByCustomer(customerId, condition.getCategories(), condition.getServiceName())
                 .stream()
                 .distinct()
                 .sorted(Comparator.comparing(ClickServiceDto::getClick).reversed())
@@ -37,10 +37,10 @@ public class DefaultCustomerServiceSearch implements CustomerServiceSearch {
     }
 
     @Override
-    public List<CustomService> customServicesOfClient(Long clientId, String serviceName) {
+    public List<CustomService> customServicesOfCustomer(Long customerId, String serviceName) {
         if (StringUtils.hasText(serviceName))
-            return customerCustomServiceRepository.findCustomServiceByClientIdAndServiceName(clientId, serviceName);
-        return customerCustomServiceRepository.findCustomServiceByClientId(clientId);
+            return customerCustomServiceRepository.findCustomServiceByCustomerIdAndServiceName(customerId, serviceName);
+        return customerCustomServiceRepository.findCustomServiceByCustomerId(customerId);
     }
 
 }

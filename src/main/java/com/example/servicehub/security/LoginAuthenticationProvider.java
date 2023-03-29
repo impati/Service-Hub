@@ -24,7 +24,7 @@ import java.util.Collections;
 public class LoginAuthenticationProvider implements AuthenticationProvider {
 
     private final static String CUSTOMER_ENDPOINT = "/api/v1/customer";
-
+    private static final String CLIENT_ID = "clientId";
     private final CustomerServer customerServer;
 
     @Override
@@ -35,7 +35,7 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.set("clientId", customerServer.getClientId());
+        httpHeaders.set(CLIENT_ID, customerServer.getClientId());
         httpHeaders.add(HttpHeaders.AUTHORIZATION, "Bearer " + authenticatedAuthenticationToken.getCredentials());
 
         CustomerDto customer = restTemplate.exchange(customerServer.getServer() + CUSTOMER_ENDPOINT, HttpMethod.POST, new HttpEntity<>(httpHeaders), CustomerDto.class).getBody();
