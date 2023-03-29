@@ -17,6 +17,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toStaticResources;
 
@@ -35,7 +36,7 @@ public class SecurityConfig {
 
         httpSecurity.authorizeRequests(auth -> {
             auth.mvcMatchers("/service/registration").hasRole("ADMIN");
-            auth.mvcMatchers("/client/**").hasRole("USER");
+            auth.mvcMatchers("/customer/**").hasRole("USER");
             auth.mvcMatchers("/comments/**").hasRole("USER");
             auth.requestMatchers(toStaticResources().atCommonLocations()).permitAll();
             auth.anyRequest().permitAll();
@@ -45,6 +46,8 @@ public class SecurityConfig {
         httpSecurity.addFilterBefore(new AuthorizationRedirectFilter(customerServer), AnonymousAuthenticationFilter.class);
         httpSecurity.addFilterBefore(new CustomerServerSignupFilter(customerServer), AnonymousAuthenticationFilter.class);
 
+        httpSecurity.exceptionHandling()
+                .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/customer-server/authorization"));
         httpSecurity
                 .logout()
                 .invalidateHttpSession(true)
