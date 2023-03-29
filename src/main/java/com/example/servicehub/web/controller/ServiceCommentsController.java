@@ -2,9 +2,9 @@ package com.example.servicehub.web.controller;
 
 import com.example.servicehub.dto.ServiceCommentForm;
 import com.example.servicehub.dto.ServiceCommentUpdateForm;
-import com.example.servicehub.security.authentication.ClientPrincipal;
+import com.example.servicehub.security.authentication.CustomerPrincipal;
 import com.example.servicehub.service.ServiceCommentsAdminister;
-import com.example.servicehub.service.ServiceSearch;
+import com.example.servicehub.service.SingleServiceSearch;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,16 +24,16 @@ import java.util.Optional;
 public class ServiceCommentsController {
 
     private final ServiceCommentsAdminister serviceCommentsAdminister;
-    private final ServiceSearch serviceSearch;
+    private final SingleServiceSearch searchSingleService;
 
     @PostMapping
     public String addServiceComments(@Valid @ModelAttribute ServiceCommentForm serviceCommentForm,
                                      BindingResult bindingResult,
-                                     RedirectAttributes redirectAttributes){
+                                     RedirectAttributes redirectAttributes) {
 
-        if(bindingResult.hasErrors()){
-            redirectAttributes.addAttribute("contentError",bindingResult.getFieldError().getDefaultMessage());
-            redirectAttributes.addAttribute("hasError",true);
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addAttribute("contentError", bindingResult.getFieldError().getDefaultMessage());
+            redirectAttributes.addAttribute("hasError", true);
             return "redirect:/service/" + serviceCommentForm.getServiceId();
         }
 
@@ -44,13 +44,13 @@ public class ServiceCommentsController {
 
     @GetMapping("/edit")
     public String renderEditCommentPage(@ModelAttribute ServiceCommentUpdateForm serviceCommentUpdateForm,
-                                        @AuthenticationPrincipal ClientPrincipal clientPrincipal,
-                                        Model model){
+                                        @AuthenticationPrincipal CustomerPrincipal customerPrincipal,
+                                        Model model) {
 
         model.addAttribute("singleServiceWithCommentsDto"
-                ,serviceSearch.searchSingleService(serviceCommentUpdateForm.getServiceId(), Optional.ofNullable(clientPrincipal.getId())));
+                , searchSingleService.searchWithComments(serviceCommentUpdateForm.getServiceId(), Optional.ofNullable(customerPrincipal.getId())));
 
-        model.addAttribute("commentContent",serviceCommentsAdminister.getCommentContent(serviceCommentUpdateForm.getCommentId()));
+        model.addAttribute("commentContent", serviceCommentsAdminister.bringCommentContent(serviceCommentUpdateForm.getCommentId()));
 
         return "service/service-edit-page";
     }
@@ -58,11 +58,11 @@ public class ServiceCommentsController {
     @PostMapping("/edit")
     public String updateComment(@Valid @ModelAttribute ServiceCommentUpdateForm serviceCommentUpdateForm,
                                 BindingResult bindingResult,
-                                @AuthenticationPrincipal ClientPrincipal clientPrincipal){
+                                @AuthenticationPrincipal CustomerPrincipal customerPrincipal) {
 
-        if(bindingResult.hasErrors()) return "/service/service-edit-page";
+        if (bindingResult.hasErrors()) return "/service/service-edit-page";
 
-        serviceCommentUpdateForm.assignClient(clientPrincipal.getId());
+        serviceCommentUpdateForm.assignCustomer(customerPrincipal.getId());
 
         serviceCommentsAdminister.updateServiceComment(serviceCommentUpdateForm);
 
@@ -72,12 +72,11 @@ public class ServiceCommentsController {
     @ResponseBody
     @DeleteMapping("/delete")
     public String deleteComment(@ModelAttribute ServiceCommentUpdateForm serviceCommentUpdateForm,
-                                @AuthenticationPrincipal ClientPrincipal clientPrincipal){
+                                @AuthenticationPrincipal CustomerPrincipal customerPrincipal) {
 
-        serviceCommentsAdminister.deleteServiceComment(serviceCommentUpdateForm.getCommentId(),clientPrincipal.getId());
+        serviceCommentsAdminister.deleteServiceComment(serviceCommentUpdateForm.getCommentId(), customerPrincipal.getId());
 
         return "OK";
     }
-
 
 }

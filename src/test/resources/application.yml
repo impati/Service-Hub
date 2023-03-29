@@ -12,12 +12,10 @@ spring:
         show_sql: true #sql 문이 보이도록
         format_sql: true  #sql 계층식 표현
     generate-ddl: true
-    defer-datasource-initialization: true
+    defer-datasource-initialization: false
   sql:
     init:
-      platform: h2
-      data-locations: classpath:data.sql
-      mode: always
+      mode: never
 
 logo:
   dir: /Users/jun-yeongchoe/Desktop/project/ServiceHub/src/test/resources/image/

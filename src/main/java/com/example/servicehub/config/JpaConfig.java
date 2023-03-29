@@ -1,6 +1,6 @@
 package com.example.servicehub.config;
 
-import com.example.servicehub.security.authentication.ClientPrincipal;
+import com.example.servicehub.security.authentication.CustomerPrincipal;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -25,16 +25,16 @@ public class JpaConfig {
     @Bean
     public AuditorAware<String> auditorAware() {
         return () -> Optional.ofNullable(SecurityContextHolder.getContext())
-                        .map(SecurityContext::getAuthentication)
-                        .filter(authentication -> !(authentication instanceof AnonymousAuthenticationToken))
-                        .filter(Authentication::isAuthenticated)
-                        .map(Authentication::getPrincipal)
-                        .map(ClientPrincipal.class::cast)
-                        .map(ClientPrincipal::getNickname);
+                .map(SecurityContext::getAuthentication)
+                .filter(authentication -> !(authentication instanceof AnonymousAuthenticationToken))
+                .filter(Authentication::isAuthenticated)
+                .map(Authentication::getPrincipal)
+                .map(CustomerPrincipal.class::cast)
+                .map(CustomerPrincipal::getNickname);
     }
 
     @Bean
-    public JPAQueryFactory jpaQueryFactory(){
+    public JPAQueryFactory jpaQueryFactory() {
         return new JPAQueryFactory(em);
     }
 

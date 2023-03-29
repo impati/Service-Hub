@@ -10,37 +10,39 @@ import java.util.Objects;
 
 @Entity
 @Getter
-@ToString(exclude = {"services","client"})
+@ToString(exclude = {"services", "customerId"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ServiceComment extends BaseEntity{
+public class ServiceComment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "service_comment_id")
     private Long id;
 
-    @Column(nullable = false,length = 10000)
+    @Column(nullable = false, length = 10000)
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="service_id")
+    @JoinColumn(name = "service_id")
     private Services services;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="client_id")
-    private Client client;
+    @Column(name = "customer_id")
+    private Long customerId;
 
-    public void updateContent(String content){
-        this.content = content;
-    }
+    private String nickname;
 
-    public static ServiceComment of(String content,Services services , Client client){
-        return new ServiceComment(content,services,client);
-    }
-
-    private ServiceComment (String content,Services services , Client client){
+    private ServiceComment(String content, Services services, Long customerId, String nickname) {
         this.content = content;
         this.services = services;
-        this.client = client;
+        this.customerId = customerId;
+        this.nickname = nickname;
+    }
+
+    public static ServiceComment of(String content, Services services, Long customerId, String nickname) {
+        return new ServiceComment(content, services, customerId, nickname);
+    }
+
+    public void updateContent(String content) {
+        this.content = content;
     }
 
     @Override

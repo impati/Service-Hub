@@ -13,10 +13,10 @@ public interface ServiceCommentsAdminister {
 
     void updateServiceComment(ServiceCommentUpdateForm serviceCommentUpdateForm);
 
-    void deleteServiceComment(Long serviceCommentsId,Long clientId);
+    void deleteServiceComment(Long serviceCommentsId, Long customerId);
 
     List<ServiceCommentsDto> searchComments(Long serviceId);
 
-    String getCommentContent(Long serviceCommentsId);
+    String bringCommentContent(Long serviceCommentsId);
 
 }

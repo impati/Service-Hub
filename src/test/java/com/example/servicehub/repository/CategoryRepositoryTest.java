@@ -17,14 +17,14 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 class CategoryRepositoryTest {
 
     @Autowired
-    private  CategoryRepository categoryRepository;
+    private CategoryRepository categoryRepository;
 
     @Test
     @DisplayName("카테고리 게층 구조 테스트 - parent 편")
-    public void givenParentCategoryAndChildList_whenSavingAndAddingChildList_thenValidParent() throws Exception{
+    public void givenParentCategoryAndChildList_whenSavingAndAddingChildList_thenValidParent() throws Exception {
         // given
         Category parentCategory = Category.of("ITTest");
-        Category  backend = Category.of("BACKEND");
+        Category backend = Category.of("BACKEND");
         Category devops = Category.of("DEVOPS");
         parentCategory.addChildCategory(backend);
         parentCategory.addChildCategory(devops);
@@ -44,10 +44,10 @@ class CategoryRepositoryTest {
 
     @Test
     @DisplayName("카테고리 게층 구조 테스트 - child 편")
-    public void givenParentCategoryAndChildList_whenSavingAndAddingChildList_thenValidChild() throws Exception{
+    public void givenParentCategoryAndChildList_whenSavingAndAddingChildList_thenValidChild() throws Exception {
         // given
         Category parentCategory = Category.of("ITTest");
-        Category  backend = Category.of("BACKEND");
+        Category backend = Category.of("BACKEND");
         Category devops = Category.of("DEVOPS");
         parentCategory.addChildCategory(backend);
         parentCategory.addChildCategory(devops);
@@ -60,8 +60,10 @@ class CategoryRepositoryTest {
         Category findBackend = returnCategoryAndNotFoundCheck(backend.getId());
         assertThat(findBackend.getParent()).isEqualTo(parentCategory);
     }
-    private Category returnCategoryAndNotFoundCheck(Long id) throws Exception{
+
+    private Category returnCategoryAndNotFoundCheck(Long id) throws Exception {
         assertThatCode(() -> categoryRepository.findById(id).orElseThrow()).doesNotThrowAnyException();
         return categoryRepository.findById(id).orElseThrow();
     }
+
 }

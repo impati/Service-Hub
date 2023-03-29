@@ -1,12 +1,10 @@
 package com.example.servicehub.service.impl;
 
-import com.example.servicehub.domain.Client;
 import com.example.servicehub.domain.ServiceComment;
 import com.example.servicehub.domain.Services;
 import com.example.servicehub.dto.ServiceCommentForm;
 import com.example.servicehub.dto.ServiceCommentUpdateForm;
 import com.example.servicehub.dto.ServiceCommentsDto;
-import com.example.servicehub.repository.ClientRepository;
 import com.example.servicehub.repository.ServiceCommentRepository;
 import com.example.servicehub.repository.ServicesRepository;
 import com.example.servicehub.service.ServiceCommentsAdminister;
@@ -27,44 +25,39 @@ public class ServiceCommentsAdministerImpl implements ServiceCommentsAdminister 
 
     private final ServiceCommentRepository serviceCommentRepository;
     private final ServicesRepository servicesRepository;
-    private final ClientRepository clientRepository;
 
     @Override
     @Transactional
     public void addServiceComment(ServiceCommentForm commentsForm) {
         Services services = servicesRepository
-                .findById(commentsForm.getServiceId()).orElseThrow(()-> new EntityNotFoundException("유효하지 않는 서비스 입니다"));
-
-        Client client = clientRepository
-                .findById(commentsForm.getClientId()).orElseThrow(()-> new EntityNotFoundException("유효하지 않은 사용자입니다."));
+                .findById(commentsForm.getServiceId()).orElseThrow(() -> new EntityNotFoundException("유효하지 않는 서비스 입니다"));
 
         serviceCommentRepository.save(ServiceComment.of(
-                commentsForm.getContent(),services,client));
+                commentsForm.getContent(), services, commentsForm.getCustomerId(), commentsForm.getNickname()));
     }
 
     @Override
     @Transactional
     public void updateServiceComment(ServiceCommentUpdateForm serviceCommentUpdateForm) {
-        ServiceComment serviceComment  = serviceCommentRepository.findById(serviceCommentUpdateForm.getCommentId())
-                .orElseThrow(()-> new EntityNotFoundException("유효하지 않은 댓글을 수정 시도했습니다"));
+        ServiceComment serviceComment = serviceCommentRepository.findById(serviceCommentUpdateForm.getCommentId())
+                .orElseThrow(() -> new EntityNotFoundException("유효하지 않은 댓글을 수정 시도했습니다"));
 
-        if(isAuthorizeToChangeComments(serviceComment,serviceCommentUpdateForm.getClientId()))
+        if (isAuthorizeToChangeComments(serviceComment, serviceCommentUpdateForm.getCustomerId()))
             serviceComment.updateContent(serviceCommentUpdateForm.getContent());
     }
 
     @Override
     @Transactional
     public void deleteServiceComment(Long serviceCommentsId, Long clientId) {
-        ServiceComment serviceComment  = serviceCommentRepository.findById(serviceCommentsId)
-                .orElseThrow(()-> new EntityNotFoundException("유효하지 않은 댓글을 수정 시도했습니다"));
+        ServiceComment serviceComment = serviceCommentRepository.findById(serviceCommentsId)
+                .orElseThrow(() -> new EntityNotFoundException("유효하지 않은 댓글을 수정 시도했습니다"));
 
-        if(isAuthorizeToChangeComments(serviceComment,clientId))
+        if (isAuthorizeToChangeComments(serviceComment, clientId))
             serviceCommentRepository.delete(serviceComment);
     }
 
-    private boolean isAuthorizeToChangeComments(ServiceComment serviceComment , Long clientId){
-        if(serviceCommentRepository.existsByClient(serviceComment,clientId)) return true;
-        return false;
+    private boolean isAuthorizeToChangeComments(ServiceComment serviceComment, Long clientId) {
+        return serviceCommentRepository.existsByCustomer(serviceComment, clientId);
     }
 
     @Override
@@ -77,10 +70,10 @@ public class ServiceCommentsAdministerImpl implements ServiceCommentsAdminister 
     }
 
     @Override
-    public String getCommentContent(Long serviceCommentsId) {
+    public String bringCommentContent(Long serviceCommentsId) {
         return serviceCommentRepository
                 .findById(serviceCommentsId)
-                .orElseThrow(()-> new EntityNotFoundException("유효하지 않은 댓글 접근 입니다."))
+                .orElseThrow(() -> new EntityNotFoundException("유효하지 않은 댓글 접근 입니다."))
                 .getContent();
     }
 

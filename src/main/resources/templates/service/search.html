@@ -2,149 +2,166 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-  <div th:insert="~{fragment/header :: header}"></div>
-  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+    <!-- <meta content="upgrade-insecure-requests" http-equiv="Content-Security-Policy"> -->
+    <div th:insert="~{fragment/header :: header}"></div>
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.2.13/dist/semantic.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/semantic-ui@2.2.13/dist/semantic.min.css" rel="stylesheet">
 </head>
 
 <body>
 
 <div class="container">
 
-  <div th:insert="~{fragment/toolbar :: toolbar}"></div>
+    <div th:insert="~{fragment/toolbar :: toolbar}"></div>
 
-  <section class="cta-section theme-bg-light py-5">
-    <div class="container text-center single-col-max-width">
-      <h2 class="heading">Service Search</h2>
-      <div class="intro"></div>
-      <div class="single-form-max-width pt-3 mx-auto">
-        <form th:action="@{/service/search}" th:object="${serviceSearchConditionForm}" method="get">
+    <section class="cta-section theme-bg-light py-5">
+        <div class="container text-center single-col-max-width">
+            <h2 class="heading">Service Search</h2>
+            <div class="intro"></div>
+            <div class="single-form-max-width pt-3 mx-auto">
+                <form method="get" th:action="@{/service/search}" th:object="${serviceSearchConditionForm}">
 
-          <div class="form-floating  mb-3 col-12">
-            <input type="text" class="form-control" id="serviceName" th:field="*{serviceName}" placeholder="serviceName">
-            <label for="serviceName"> &nbsp &nbsp 서비스 이름으로 검색</label>
-            <label for="serviceName"></label>
-          </div>
+                    <div class="form-floating  mb-3 col-12">
+                        <input class="form-control" id="serviceName" placeholder="serviceName" th:field="*{serviceName}"
+                               type="text">
+                        <label for="serviceName"> &nbsp &nbsp 서비스 이름으로 검색</label>
+                        <label for="serviceName"></label>
+                    </div>
 
-          <div class="col-12">
-            <div>
-              <select name="categories" multiple="" style="height: auto" class="label ui selection fluid dropdown">
-                <option value="">카테고리 선택</option>
-                <option th:each="category : ${categories}"
-                        th:value="${category}"
-                        th:text="${category}">FAST</option>
-              </select>
-            </div>
-          </div>
-          <hr>
-          <button type="submit" class="btn btn-primary">검색</button>
-        </form>
-        <div class="text-end"><button class="btn btn-primary" th:onclick="|location.href='@{/service/search}'|">전체 검색</button></div>
-      </div><!--//single-form-max-width-->
-    </div><!--//container-->
-  </section>
+                    <div class="col-12">
+                        <div>
+                            <select class="label ui selection fluid dropdown" multiple="" name="categories"
+                                    style="height: auto">
+                                <option value="">카테고리 선택</option>
+                                <option th:each="category : ${categories}"
+                                        th:text="${category}"
+                                        th:value="${category}">FAST
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <hr>
+                    <button class="btn btn-primary" type="submit">검색</button>
+                </form>
+                <div class="text-end">
+                    <button class="btn btn-primary" th:onclick="|location.href='@{/service/search}'|">전체 검색</button>
+                </div>
+            </div><!--//single-form-max-width-->
+        </div><!--//container-->
+    </section>
 
-  <section class="blog-list px-3 pr-0 p-md-5">
-    <div class="container  single-col-max-width">
+    <section class="blog-list px-3 pr-0 p-md-5">
+        <div class="container  single-col-max-width">
 
-      <div class="card mb-sm-3 " style="height: 10%" th:each="service : ${searchedServices}">
+            <div class="card mb-sm-3 " style="height: 10%" th:each="service : ${searchedServices}">
 
 
-        <div class="row" style="line-height: 30%">
+                <div class="row" style="line-height: 30%">
 
-          <div class="col-md-2">
-            <a class="card-link"  th:href="${service.serviceUrl}">
-              <img class="img-fluid rounded-start" width="50%" height="100%" th:src='@{/file/logo/{store} (store=${service.logoStoreName})}' alt="image">
-            </a>
-          </div>
+                    <div class="col-md-2">
+                        <a class="card-link" th:href="${service.serviceUrl}">
+                            <img alt="image" class="img-fluid rounded-start" height="100%"
+                                 th:src='@{/file/logo/{store} (store=${service.logoStoreName})}' width="50%">
+                        </a>
+                    </div>
 
-          <div class="col-md-8 card-body">
-            <a class="card-link" th:href="${service.serviceUrl}">
-              <h5 class="title card-title" th:text="${service.serviceName}">Top 3 JavaScript Frameworks</h5>
-              <div style="text-align: right"><a class="text-link"  th:href="@{/service/{serviceId} (serviceId=${service.serviceId})}">서비스 정보 보기</a></div>
-              <span class="card-text text-truncate" th:text="${service.title}" >Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies...</span>
-            </a>
-          </div><!--//col-->
+                    <div class="col-md-8 card-body">
+                        <a class="card-link" th:href="${service.serviceUrl}">
+                            <h5 class="title card-title" th:text="${service.serviceName}">Top 3 JavaScript
+                                Frameworks</h5>
+                            <div style="text-align: right"><a class="text-link"
+                                                              th:href="@{/service/{serviceId} (serviceId=${service.serviceId})}">서비스
+                                정보 보기</a></div>
+                            <span class="card-text text-truncate" th:text="${service.title}">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies...</span>
+                        </a>
+                    </div><!--//col-->
 
-          <div class="col">
-            <button th:onclick="|javascript:addAction('${service.serviceId}')|" style="width: 100%;height: 100%" th:unless="${service.isPossess}" sec:authorize="isAuthenticated()" class="btn btn-outline-primary justify-content-sm-center"> + </button>
-            <button th:onclick="|javascript:deleteAction('${service.serviceId}')|" style="width: 100%;height: 100%" th:if="${service.isPossess}" sec:authorize="isAuthenticated()" class="btn btn-outline-danger justify-content-sm-center"> - </button>
-          </div>
+                    <div class="col">
+                        <button class="btn btn-outline-primary justify-content-sm-center"
+                                sec:authorize="isAuthenticated()" style="width: 100%;height: 100%"
+                                th:onclick="|javascript:addAction('${service.serviceId}')|"
+                                th:unless="${service.isPossess}"> +
+                        </button>
+                        <button class="btn btn-outline-danger justify-content-sm-center"
+                                sec:authorize="isAuthenticated()" style="width: 100%;height: 100%"
+                                th:if="${service.isPossess}"
+                                th:onclick="|javascript:deleteAction('${service.serviceId}')|"> -
+                        </button>
+                    </div>
 
-        </div><!--//row-->
+                </div><!--//row-->
 
-      </div><!--//item-->
+            </div><!--//item-->
 
-      <nav class="blog-nav nav nav-justified my-5">
-        <a class="nav-link-prev nav-item nav-link rounded-left" th:unless="${currentPage == firstPage}" th:href="@{search (page=${currentPage}-1)}">Previous<i class="arrow-prev fas fa-long-arrow-alt-left"></i></a>
-        <a class="nav-link-next nav-item nav-link rounded-right" th:unless="${currentPage == endPage}" th:href="@{search (page=${currentPage}+1)}">Next<i class="arrow-next fas fa-long-arrow-alt-right"></i></a>
-      </nav>
+            <nav class="blog-nav nav nav-justified my-5">
+                <a class="nav-link-prev nav-item nav-link rounded-left" th:href="@{search (page=${currentPage}-1)}"
+                   th:unless="${currentPage == firstPage}">Previous<i
+                        class="arrow-prev fas fa-long-arrow-alt-left"></i></a>
+                <a class="nav-link-next nav-item nav-link rounded-right" th:href="@{search (page=${currentPage}+1)}"
+                   th:unless="${currentPage == endPage}">Next<i
+                        class="arrow-next fas fa-long-arrow-alt-right"></i></a>
+            </nav>
 
-    </div>
-  </section>
-  <div th:insert="~{fragment/footer :: footer}"></div>
+        </div>
+    </section>
+    <div th:insert="~{fragment/footer :: footer}"></div>
 
 </div><!--//main-wrapper-->
 
 <script type="text/javascript">
 
 
+    function addAction(serviceId) {
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
 
-  function addAction(serviceId){
+        $.ajax({
+            type: 'POST',
+            url: domain + '/customer/add-service/' + serviceId,
+            beforeSend: function (xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                xhr.setRequestHeader(header, token);
+            },
+            async: false, //동기, 비동기 여부
+            cache: false, // 캐시 여부
+            success: function (data) {
+                console.log(data.name);
+                window.location = location.href;
+            },
+            error: function (xhr, status, error) {
+                console.log('error:' + error);
+            },
+        });
+    }
 
-    var token = $("meta[name='_csrf']").attr("content");
-    var header = $("meta[name='_csrf_header']").attr("content");
+    function deleteAction(serviceId) {
 
-    $.ajax({
-      type: 'POST',
-      url: domain + '/client/add-service/' + serviceId,
-      beforeSend : function(xhr)
-      {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-        xhr.setRequestHeader(header, token);
-      },
-      async: false, //동기, 비동기 여부
-      cache :false, // 캐시 여부
-      success: function(data){
-        console.log(data.name);
-        window.location=location.href;
-      },
-      error:function(xhr,status,error){
-        console.log('error:'+error);
-      },
-    });
-  }
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
 
-  function deleteAction(serviceId){
-
-    var token = $("meta[name='_csrf']").attr("content");
-    var header = $("meta[name='_csrf_header']").attr("content");
-
-    $.ajax({
-      type: 'POST',
-      url: domain + '/client/delete-service/' + serviceId,
-      beforeSend : function(xhr)
-      {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-        xhr.setRequestHeader(header, token);
-      },
-      async: false, //동기, 비동기 여부
-      cache :false, // 캐시 여부
-      success: function(data){
-        console.log(data.name);
-        window.location=location.href;
-      },
-      error:function(xhr,status,error){
-        console.log('error:'+error);
-      }
-    });
-  }
+        $.ajax({
+            type: 'POST',
+            url: domain + '/customer/delete-service/' + serviceId,
+            beforeSend: function (xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                xhr.setRequestHeader(header, token);
+            },
+            async: false, //동기, 비동기 여부
+            cache: false, // 캐시 여부
+            success: function (data) {
+                console.log(data.name);
+                window.location = location.href;
+            },
+            error: function (xhr, status, error) {
+                console.log('error:' + error);
+            }
+        });
+    }
 
 </script>
 <script type="text/javascript">
-  $('#example-multiple-selected').multiselect();
+    $('#example-multiple-selected').multiselect();
 </script>
 <script src="/js/jquery.min.js"></script>
 <script src="/js/popper.js"></script>

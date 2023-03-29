@@ -9,16 +9,16 @@ import java.util.Objects;
 @Getter
 @ToString(callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CustomService extends BaseEntity{
+public class CustomService extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name ="custom_service_id")
+    @Column(name = "custom_service_id")
     private Long id;
 
     @Column(nullable = false)
     private String serviceName;
 
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false, unique = true)
     private String logoStoreName;
 
     @Column(nullable = false)
@@ -26,23 +26,22 @@ public class CustomService extends BaseEntity{
 
     private String title;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "client_id")
-    private Client client;
+    @Column(name = "customer_id")
+    private Long customerId;
 
     private long clickCount;
 
-    public void click(){
-        this.clickCount += 1L;
-    }
-
     @Builder
-    public CustomService(String serviceName, String logoStoreName, String serviceUrl, String title, Client client) {
+    public CustomService(String serviceName, String logoStoreName, String serviceUrl, String title, Long customerId) {
         this.serviceName = serviceName;
         this.logoStoreName = logoStoreName;
         this.serviceUrl = serviceUrl;
         this.title = title;
-        this.client = client;
+        this.customerId = customerId;
+    }
+
+    public void click() {
+        this.clickCount += 1L;
     }
 
     @Override

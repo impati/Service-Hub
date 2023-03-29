@@ -1,71 +1,81 @@
 package com.example.servicehub.security.config;
 
-import com.example.servicehub.security.authentication.CustomOAuth2UserService;
-import com.example.servicehub.security.filter.PasswordGrantTypeLoginFilter;
-import com.example.servicehub.security.handler.PasswordGrantTypeLoginFailureHandler;
+import com.example.servicehub.config.CustomerServer;
+import com.example.servicehub.security.LoginAuthenticationProvider;
+import com.example.servicehub.security.filter.AuthorizationRedirectFilter;
+import com.example.servicehub.security.filter.CustomerServerSignupFilter;
+import com.example.servicehub.security.filter.LoginAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
+import org.springframework.security.access.vote.RoleHierarchyVoter;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizedClientManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 
-@EnableWebSecurity
+import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toStaticResources;
+
 @Configuration
 @RequiredArgsConstructor
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-    private final CustomOAuth2UserService customOAuth2UserService;
-    private final DefaultOAuth2AuthorizedClientManager clientManager;
+    private final CustomerServer customerServer;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
 
         httpSecurity.csrf();
 
         httpSecurity.anonymous();
 
-        httpSecurity.authorizeRequests(auth-> {
-                    auth.mvcMatchers("/service/registration").hasRole("ADMIN");
-                    auth.mvcMatchers("/client/**").hasRole("USER");
-                    auth.mvcMatchers("/comments/**").hasRole("USER");
-                    auth.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll();
-                    auth.anyRequest().permitAll();
+        httpSecurity.authorizeRequests(auth -> {
+            auth.mvcMatchers("/service/registration").hasRole("ADMIN");
+            auth.mvcMatchers("/customer/**").hasRole("USER");
+            auth.mvcMatchers("/comments/**").hasRole("USER");
+            auth.requestMatchers(toStaticResources().atCommonLocations()).permitAll();
+            auth.anyRequest().permitAll();
         });
 
-        PasswordGrantTypeLoginFilter passwordGrantTypeLoginFilter = new PasswordGrantTypeLoginFilter(clientManager, customOAuth2UserService);
-        passwordGrantTypeLoginFilter.setAuthenticationFailureHandler(new PasswordGrantTypeLoginFailureHandler());
+        httpSecurity.addFilterBefore(loginAuthenticationFilter(authenticationManagerBuilder), AnonymousAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(new AuthorizationRedirectFilter(customerServer), AnonymousAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(new CustomerServerSignupFilter(customerServer), AnonymousAuthenticationFilter.class);
 
-        httpSecurity
-                .oauth2Client()
-                .and()
-                .addFilterAfter(passwordGrantTypeLoginFilter,AnonymousAuthenticationFilter.class);
-
-        httpSecurity
-                .oauth2Login()
-                .loginPage("/login")
-                .userInfoEndpoint()
-                .userService(customOAuth2UserService);
-
+        httpSecurity.exceptionHandling()
+                .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/customer-server/authorization"));
         httpSecurity
                 .logout()
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
                 .deleteCookies("JSESSIONID", "remember-me")
-                .logoutSuccessUrl("/login");
-
-        httpSecurity.sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
+                .logoutSuccessUrl("/");
 
         return httpSecurity.build();
     }
 
+    public LoginAuthenticationFilter loginAuthenticationFilter(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+        authenticationManagerBuilder.authenticationProvider(new LoginAuthenticationProvider(customerServer));
+        AuthenticationManager authenticationManager = authenticationManagerBuilder.getOrBuild();
+        LoginAuthenticationFilter loginAuthenticationFilter = new LoginAuthenticationFilter(customerServer);
+        loginAuthenticationFilter.setAuthenticationManager(authenticationManager);
+        return loginAuthenticationFilter;
+    }
 
+    @Bean
+    public RoleHierarchy roleHierarchy() {
+        RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
+        roleHierarchy.setHierarchy("ROLE_ADMIN > ROLE_USER");
+        return roleHierarchy;
+    }
+
+    @Bean
+    public AccessDecisionVoter<? extends Object> roleVoter() {
+        return new RoleHierarchyVoter(roleHierarchy());
+    }
 
 }
