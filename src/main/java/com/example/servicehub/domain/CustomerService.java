@@ -10,31 +10,31 @@ import java.util.Objects;
 
 @Entity
 @Getter
-@ToString(exclude = {"services", "clientId"})
+@ToString(exclude = {"services", "customerId"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CustomerService extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "client_service_id")
+    @Column(name = "customer_service_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "service_id")
     private Services services;
 
-    @Column(name = "client_id")
-    private Long clientId;
+    @Column(name = "customer_id")
+    private Long customerId;
 
     private long clickCount;
 
-    public CustomerService(Long clientId, Services services) {
-        this.clientId = clientId;
+    public CustomerService(Long customerId, Services services) {
+        this.customerId = customerId;
         this.services = services;
         this.clickCount = 0L;
     }
 
-    public static CustomerService of(Long clientId, Services services) {
-        CustomerService customerService = new CustomerService(clientId, services);
+    public static CustomerService of(Long customerId, Services services) {
+        CustomerService customerService = new CustomerService(customerId, services);
         services.mappingAssociations(customerService);
         return customerService;
     }
@@ -61,14 +61,14 @@ public class CustomerService extends BaseEntity {
     }
 
     public static class CustomerServiceBuilder {
-        private Long clientId;
+        private Long customerId;
         private Services services;
 
         CustomerServiceBuilder() {
         }
 
-        public CustomerServiceBuilder clientId(Long clientId) {
-            this.clientId = clientId;
+        public CustomerServiceBuilder customerId(Long customerId) {
+            this.customerId = customerId;
             return this;
         }
 
@@ -78,13 +78,13 @@ public class CustomerService extends BaseEntity {
         }
 
         public CustomerService build() {
-            CustomerService customerService = new CustomerService(this.clientId, this.services);
+            CustomerService customerService = new CustomerService(this.customerId, this.services);
             this.services.mappingAssociations(customerService);
-            return new CustomerService(this.clientId, this.services);
+            return new CustomerService(this.customerId, this.services);
         }
 
         public String toString() {
-            return "CustomerService.CustomerServiceBuilder(clientId=" + this.clientId + ", services=" + this.services + ")";
+            return "CustomerService.CustomerServiceBuilder(customerId=" + this.customerId + ", services=" + this.services + ")";
         }
     }
 }

@@ -7,7 +7,7 @@ import com.example.servicehub.dto.ServiceSearchConditionForm;
 import java.util.List;
 
 public interface CustomerServiceSearch {
-    List<ClickServiceDto> servicesOfClient(Long clientId, ServiceSearchConditionForm serviceSearchConditionForm);
+    List<ClickServiceDto> servicesOfCustomer(Long customerId, ServiceSearchConditionForm serviceSearchConditionForm);
 
-    List<CustomService> customServicesOfClient(Long clientId, String serviceName);
+    List<CustomService> customServicesOfCustomer(Long customerId, String serviceName);
 }

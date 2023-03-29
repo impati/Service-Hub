@@ -23,10 +23,10 @@ public class CustomerServiceAdministerImpl implements CustomerServiceAdminister 
     private final ServicesRepository servicesRepository;
 
     @Override
-    public void addClientService(Long clientId, Long serviceId) {
+    public void addCustomerService(Long customerId, Long serviceId) {
         Services services = findService(serviceId);
-        if (alreadyExistForClient(clientId, services)) return;
-        customerServiceRepository.save(CustomerService.of(clientId, services));
+        if (alreadyExistForcustomer(customerId, services)) return;
+        customerServiceRepository.save(CustomerService.of(customerId, services));
     }
 
     private Services findService(Long serviceId) {
@@ -34,13 +34,13 @@ public class CustomerServiceAdministerImpl implements CustomerServiceAdminister 
                 .orElseThrow(() -> new EntityNotFoundException("유효하지 않은 서비스입니다."));
     }
 
-    private boolean alreadyExistForClient(Long clientId, Services services) {
-        return customerServiceRepository.alreadyExistsServiceForClient(clientId, services);
+    private boolean alreadyExistForcustomer(Long customerId, Services services) {
+        return customerServiceRepository.alreadyExistsServiceForCustomer(customerId, services);
     }
 
     @Override
-    public void deleteClientService(Long clientId, Long serviceId) {
-        Optional<CustomerService> optionalClientService = customerServiceRepository.findClientServiceBy(clientId, serviceId);
-        optionalClientService.ifPresent(customerServiceRepository::delete);
+    public void deleteCustomerService(Long customerId, Long serviceId) {
+        Optional<CustomerService> optionalcustomerService = customerServiceRepository.findCustomerServiceBy(customerId, serviceId);
+        optionalcustomerService.ifPresent(customerServiceRepository::delete);
     }
 }

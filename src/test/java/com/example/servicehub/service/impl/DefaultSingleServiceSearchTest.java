@@ -37,30 +37,30 @@ class DefaultSingleServiceSearchTest {
     @DisplayName("단일 서비스 조회 - 댓글이 없는 서비스 정보 조회")
     public void givenServiceId_whenSearchingServiceInformation_thenReturnServiceInformation() throws Exception {
         // given
-        Long clientId = 1L;
+        Long customerId = 1L;
         Services services = servicesSteps.create();
         serviceCategorySteps.create("IT", services);
-        customerServiceSteps.create(clientId, services);
+        customerServiceSteps.create(customerId, services);
         // when
-        SingleServiceWithCommentsDto singleServiceWithCommentsDto = singleServiceSearch.searchWithComments(services.getId(), Optional.of(clientId));
+        SingleServiceWithCommentsDto singleServiceWithCommentsDto = singleServiceSearch.searchWithComments(services.getId(), Optional.of(customerId));
         // then
         assertThat(singleServiceWithCommentsDto.getComments().size()).isEqualTo(0);
     }
 
     @Test
     @DisplayName("단일 서비스 조회 - 사용자가 서비스 소유 체크")
-    public void givenServiceIdAndClientId_whenSearchingService_thenReturnsWhetherTheClientOwns() throws Exception {
+    public void givenServiceIdAndcustomerId_whenSearchingService_thenReturnsWhetherThecustomerOwns() throws Exception {
         // given
-        Long clientId = 1L;
+        Long customerId = 1L;
         Services github = servicesSteps.create("깃허브", "https://github.com");
         Services notion = servicesSteps.create("노션", "https://notion.so");
         Category category = categorySteps.create("IT");
         serviceCategorySteps.create(category, github);
         serviceCategorySteps.create(category, notion);
-        customerServiceSteps.create(clientId, github);
+        customerServiceSteps.create(customerId, github);
         // when
-        SingleServiceWithCommentsDto possessSingleServiceWithCommentsDto = singleServiceSearch.searchWithComments(github.getId(), Optional.of(clientId));
-        SingleServiceWithCommentsDto nonPossessSingleServiceWithCommentsDto = singleServiceSearch.searchWithComments(notion.getId(), Optional.of(clientId));
+        SingleServiceWithCommentsDto possessSingleServiceWithCommentsDto = singleServiceSearch.searchWithComments(github.getId(), Optional.of(customerId));
+        SingleServiceWithCommentsDto nonPossessSingleServiceWithCommentsDto = singleServiceSearch.searchWithComments(notion.getId(), Optional.of(customerId));
         // then
         assertThat(possessSingleServiceWithCommentsDto.isPossess()).isTrue();
         assertThat(nonPossessSingleServiceWithCommentsDto.isPossess()).isFalse();
@@ -68,15 +68,15 @@ class DefaultSingleServiceSearchTest {
 
     @Test
     @DisplayName("단일 서비스 조회 - 댓글과 같이")
-    public void givenServiceIdAndClientID_whenSearching_thenReturnServiceWithComments() throws Exception {
+    public void givenServiceIdAndcustomerID_whenSearching_thenReturnServiceWithComments() throws Exception {
         // given
-        Long clientId = 1L;
+        Long customerId = 1L;
         Services services = servicesSteps.create();
         serviceCategorySteps.create("IT", services);
-        customerServiceSteps.create(clientId, services);
-        serviceCommentsSteps.create(clientId, services);
+        customerServiceSteps.create(customerId, services);
+        serviceCommentsSteps.create(customerId, services);
         // when
-        SingleServiceWithCommentsDto response = singleServiceSearch.searchWithComments(services.getId(), Optional.of(clientId));
+        SingleServiceWithCommentsDto response = singleServiceSearch.searchWithComments(services.getId(), Optional.of(customerId));
         // then
         assertThat(response.isPossess()).isTrue();
         assertThat(response.getComments().size())
@@ -87,11 +87,11 @@ class DefaultSingleServiceSearchTest {
     @DisplayName("단일 서비스 조회 - 인증된 사용자가 아닐 경우")
     public void givenUnAuthenticationUser_whenSearchingServicePage_thenReturnServiceWithComments() throws Exception {
         // given
-        Long clientId = 1L;
+        Long customerId = 1L;
         Services services = servicesSteps.create();
         serviceCategorySteps.create("IT", services);
-        customerServiceSteps.create(clientId, services);
-        serviceCommentsSteps.create(clientId, services);
+        customerServiceSteps.create(customerId, services);
+        serviceCommentsSteps.create(customerId, services);
         // when
         SingleServiceWithCommentsDto response = singleServiceSearch.searchWithComments(services.getId(), Optional.ofNullable(null));
         // then

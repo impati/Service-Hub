@@ -39,7 +39,7 @@ public class StepsConfig {
     }
 
     @Bean
-    public CustomerServiceSteps clientServiceSteps() {
+    public CustomerServiceSteps customerServiceSteps() {
         return new CustomerServiceSteps(customerServiceRepository);
     }
 

@@ -51,7 +51,7 @@ class CustomerControllerTest {
         Long customerId = 1L;
         mockMvc.perform(get("/customer/{customerId}", customerId))
                 .andExpect(status().isOk())
-                .andExpect(model().attributeExists("serviceWithClick", "allCategories", "simpleClient"))
+                .andExpect(model().attributeExists("serviceWithClick", "allCategories", "simpleCustomer"))
                 .andExpect(view().name("customer/customer-page"))
                 .andDo(print());
 
@@ -65,7 +65,7 @@ class CustomerControllerTest {
 
         mockMvc.perform(get("/customer/edit"))
                 .andExpect(status().isOk())
-                .andExpect(handler().methodName("renderClientProfileEditPage"))
+                .andExpect(handler().methodName("rendercustomerProfileEditPage"))
                 .andExpect(model().attributeExists("customerEditForm"))
                 .andExpect(view().name("customer/customer-edit-page"))
                 .andDo(print());
@@ -89,7 +89,7 @@ class CustomerControllerTest {
                         .queryParam("nickname", editForm.getNickname())
                         .with(SecurityMockMvcRequestPostProcessors.csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(handler().methodName("editClientProfile"))
+                .andExpect(handler().methodName("editcustomerProfile"))
                 .andExpect(view().name("redirect:/customer/" + 1))
                 .andDo(print());
 
@@ -106,7 +106,7 @@ class CustomerControllerTest {
         mockMvc.perform(get("/customer/service/edit"))
                 .andExpect(status().isOk())
                 .andExpect(handler().methodName("renderCustomerServiceEdit"))
-                .andExpect(model().attributeExists("serviceWithClick", "allCategories", "simpleClient"))
+                .andExpect(model().attributeExists("serviceWithClick", "allCategories", "simpleCustomer"))
                 .andExpect(view().name("customer/customer-service-edit"))
                 .andDo(print());
     }
@@ -134,7 +134,7 @@ class CustomerControllerTest {
     @WithMockCustomUser(id = 2L)
     public void addCustomerServiceTest() throws Exception {
 
-        willDoNothing().given(customerServiceAdminister).addClientService(2L, 2L);
+        willDoNothing().given(customerServiceAdminister).addCustomerService(2L, 2L);
 
         mockMvc.perform(post("/customer/add-service/{serviceId}", 2)
                         .with(SecurityMockMvcRequestPostProcessors.csrf()))
@@ -143,7 +143,7 @@ class CustomerControllerTest {
                 .andExpect(MockMvcResultMatchers.content().string("OK"))
                 .andDo(print());
 
-        then(customerServiceAdminister).should().addClientService(2L, 2L);
+        then(customerServiceAdminister).should().addCustomerService(2L, 2L);
 
     }
 
@@ -151,7 +151,7 @@ class CustomerControllerTest {
     @DisplayName("사용자 서비스 삭제 API 테스트")
     @WithMockCustomUser(id = 2L)
     public void deleteCustomerServiceTest() throws Exception {
-        willDoNothing().given(customerServiceAdminister).deleteClientService(2L, 2L);
+        willDoNothing().given(customerServiceAdminister).deleteCustomerService(2L, 2L);
 
         mockMvc.perform(post("/customer/delete-service/{serviceId}", 2)
                         .with(SecurityMockMvcRequestPostProcessors.csrf()))
@@ -160,7 +160,7 @@ class CustomerControllerTest {
                 .andExpect(MockMvcResultMatchers.content().string("OK"))
                 .andDo(print());
 
-        then(customerServiceAdminister).should().deleteClientService(2L, 2L);
+        then(customerServiceAdminister).should().deleteCustomerService(2L, 2L);
 
     }
 

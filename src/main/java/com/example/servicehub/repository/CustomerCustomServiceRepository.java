@@ -12,24 +12,24 @@ public interface CustomerCustomServiceRepository extends JpaRepository<CustomSer
 
     @Query(" select s from CustomService s " +
             " where s.serviceUrl = :serviceUrl " +
-            " and s.clientId = :clientId ")
+            " and s.customerId = :customerId ")
     Optional<CustomService> findCustomServiceByServiceUrl(
-            @Param("clientId") Long clientId, @Param("serviceUrl") String serviceUrl);
+            @Param("customerId") Long customerId, @Param("serviceUrl") String serviceUrl);
 
     @Query(" select s from CustomService s " +
             " where s.id = :serviceId " +
-            " and s.clientId = :clientId ")
-    Optional<CustomService> findCustomServiceByClientIdAndServiceId(
-            @Param("clientId") Long clientId, @Param("serviceId") Long customServiceId);
+            " and s.customerId = :customerId ")
+    Optional<CustomService> findCustomServiceByCustomerIdAndServiceId(
+            @Param("customerId") Long customerId, @Param("serviceId") Long customServiceId);
 
     @Query(" select s from CustomService s " +
-            " where s.clientId = :clientId")
-    List<CustomService> findCustomServiceByClientId(@Param("clientId") Long clientId);
+            " where s.customerId = :customerId")
+    List<CustomService> findCustomServiceByCustomerId(@Param("customerId") Long customerId);
 
     @Query(" select s from CustomService s " +
-            " where s.clientId = :clientId " +
+            " where s.customerId = :customerId " +
             " and s.serviceName like concat('%',:serviceName,'%') ")
-    List<CustomService> findCustomServiceByClientIdAndServiceName(
-            @Param("clientId") Long clientId, @Param("serviceName") String serviceName);
+    List<CustomService> findCustomServiceByCustomerIdAndServiceName(
+            @Param("customerId") Long customerId, @Param("serviceName") String serviceName);
 
 }

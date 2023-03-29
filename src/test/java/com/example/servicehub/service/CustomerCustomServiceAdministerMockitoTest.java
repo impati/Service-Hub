@@ -38,9 +38,9 @@ class CustomerCustomServiceAdministerMockitoTest {
 
     @Test
     @DisplayName("커스텀 서비스 등록")
-    public void givenClientIdAndServiceUrl_whenRegisterCustomServiceForCustomer_thenRegisterCustomServiceForCustomer() throws Exception {
+    public void givencustomerIdAndServiceUrl_whenRegisterCustomServiceForCustomer_thenRegisterCustomServiceForCustomer() throws Exception {
         // given
-        Long clientId = 1L;
+        Long customerId = 1L;
         String serviceUrl = "https://service-hub.org";
         CustomServiceForm customServiceForm = CustomServiceForm.builder()
                 .serviceName("서비스허브")
@@ -56,13 +56,13 @@ class CustomerCustomServiceAdministerMockitoTest {
         given(logoManager.download(serviceMetaData.getImage()))
                 .willReturn(storeName);
 
-        CustomService customService = create(serviceMetaData, storeName, customServiceForm, clientId);
+        CustomService customService = create(serviceMetaData, storeName, customServiceForm, customerId);
 
         BDDMockito.given(customerServiceRepository.save(ArgumentMatchers.refEq(customService)))
                 .willReturn(customService);
         // when
 
-        customServiceAdminister.addCustomService(clientId, customServiceForm);
+        customServiceAdminister.addCustomService(customerId, customServiceForm);
         // then
         then(customerServiceRepository).should()
                 .save(ArgumentMatchers.refEq(customService));
@@ -75,7 +75,7 @@ class CustomerCustomServiceAdministerMockitoTest {
         Long customerId = 1L;
         Long customServiceId = 1L;
         CustomService customService = create(customerId);
-        given(customerServiceRepository.findCustomServiceByClientIdAndServiceId(customerId, customServiceId))
+        given(customerServiceRepository.findCustomServiceByCustomerIdAndServiceId(customerId, customServiceId))
                 .willReturn(Optional.of(customService));
         willDoNothing().given(customerServiceRepository).delete(customService);
         // when
@@ -90,17 +90,17 @@ class CustomerCustomServiceAdministerMockitoTest {
                 .serviceName("test")
                 .logoStoreName("default.png")
                 .serviceUrl("https://test.com")
-                .clientId(customerId)
+                .customerId(customerId)
                 .build();
     }
 
-    private CustomService create(ServiceMetaData serviceMetaData, String logoStoreName, CustomServiceForm request, Long clientId) {
+    private CustomService create(ServiceMetaData serviceMetaData, String logoStoreName, CustomServiceForm request, Long customerId) {
         return CustomService.builder()
                 .serviceName(request.getServiceName())
                 .serviceUrl(request.getServiceUrl())
                 .title(serviceMetaData.getTitle())
                 .logoStoreName(logoStoreName)
-                .clientId(clientId)
+                .customerId(customerId)
                 .build();
     }
 }

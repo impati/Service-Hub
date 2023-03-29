@@ -6,7 +6,7 @@ import com.example.servicehub.dto.SingleServiceWithCommentsDto;
 import java.util.Optional;
 
 public interface SingleServiceSearch {
-    SingleServiceWithCommentsDto searchWithComments(Long serviceId, Optional<Long> optionalClientId);
+    SingleServiceWithCommentsDto searchWithComments(Long serviceId, Optional<Long> optionalCustomerId);
 
     Services search(Long serviceId);
 }

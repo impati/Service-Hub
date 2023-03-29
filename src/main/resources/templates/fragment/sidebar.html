@@ -5,11 +5,12 @@
 
     <div class="force-overflow">
         <h1 class="blog-name pt-lg-4 mb-0"><a class="no-text-decoration" href="index.html"
-                                              th:text="${simpleClient.nickname}">SERVICE HUB</a></h1>
+                                              th:text="${simpleCustomer.nickname}">SERVICE HUB</a></h1>
 
         <nav class="navbar navbar-expand-lg navbar-dark">
 
-            <button aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
+            <button aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation"
+                    class="navbar-toggler"
                     data-bs-target="#navigation" data-bs-toggle="collapse" type="button">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -17,8 +18,8 @@
             <div class="collapse navbar-collapse flex-column" id="navigation">
                 <div class="profile-section pt-3 pt-lg-0">
                     <img alt="image" class="profile-image mb-3 rounded-circle mx-auto"
-                         th:src="${simpleClient.profileUrl}">
-                    <div class="bio mb-3" th:text="${simpleClient.introComment}">Hi, my name is jun young . Welcome to
+                         th:src="${simpleCustomer.profileUrl}">
+                    <div class="bio mb-3" th:text="${simpleCustomer.introComment}">Hi, my name is jun young . Welcome to
                         my personal website!
                     </div><!--//bio-->
                     <hr>
@@ -28,7 +29,8 @@
 
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/customer/edit}"
-                           th:if="${#authentication.getPrincipal().getId() == simpleClient.clientId}"><i class="fas fa-calculator fa-fw me-2"></i>프로필 수정</a>
+                           th:if="${#authentication.getPrincipal().getId() == simpleCustomer.customerId}"><i
+                                class="fas fa-calculator fa-fw me-2"></i>프로필 수정</a>
                     </li>
 
                     <hr>
@@ -40,7 +42,8 @@
 
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/customer/service/edit}"
-                           th:if="${#authentication.getPrincipal().getId() == simpleClient.clientId}"><i class="fas fa-laptop-code fa-fw me-2"></i>내서비스 수정</a>
+                           th:if="${#authentication.getPrincipal().getId() == simpleCustomer.customerId}"><i
+                                class="fas fa-laptop-code fa-fw me-2"></i>내서비스 수정</a>
                     </li>
 
                     <li class="nav-item">
@@ -51,7 +54,7 @@
                 </ul>
 
                 <div class="my-2">
-                    <a class="btn btn-primary" target="_blank" th:href="${simpleClient.blogUrl}"><i
+                    <a class="btn btn-primary" target="_blank" th:href="${simpleCustomer.blogUrl}"><i
                             class="fas fa-paper-plane me-2"></i>MY BLOG</a>
                 </div>
 

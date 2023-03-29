@@ -6,18 +6,18 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class SimpleClientDto {
+public class SimpleCustomerDto {
 
     private String nickname;
-    private Long clientId;
+    private Long customerId;
     private String blogUrl;
     private String profileUrl;
     private String introComment;
 
     @Builder
-    public SimpleClientDto(String nickname, Long clientId, String blogUrl, String profileUrl, String introComment) {
+    public SimpleCustomerDto(String nickname, Long customerId, String blogUrl, String profileUrl, String introComment) {
         this.nickname = nickname;
-        this.clientId = clientId;
+        this.customerId = customerId;
         this.blogUrl = blogUrl;
         this.profileUrl = profileUrl;
         this.introComment = introComment;

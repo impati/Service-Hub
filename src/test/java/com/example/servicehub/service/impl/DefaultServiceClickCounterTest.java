@@ -32,12 +32,12 @@ class DefaultServiceClickCounterTest {
     @DisplayName("사용자가 서비스를 클릭시에 서비스 클릭이 증가한다.")
     public void given_when_then() throws Exception {
         // given
-        Long clientId = 1L;
+        Long customerId = 1L;
         Services services = servicesSteps.create();
         int click = 10;
-        CustomerService customerService = customerServiceSteps.createWithClick(clientId, services, click);
+        CustomerService customerService = customerServiceSteps.createWithClick(customerId, services, click);
         // when
-        String redirectUrl = serviceClickCounter.countClickAndReturnUrl(clientId, services.getId());
+        String redirectUrl = serviceClickCounter.countClickAndReturnUrl(customerId, services.getId());
         // then
         Assertions.assertThat(redirectUrl).isEqualTo(services.getServiceUrl());
         Assertions.assertThat(customerService.getClickCount()).isEqualTo(click + 1);

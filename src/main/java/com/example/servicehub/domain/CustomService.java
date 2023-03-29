@@ -26,18 +26,18 @@ public class CustomService extends BaseEntity {
 
     private String title;
 
-    @Column(name = "client_id")
-    private Long clientId;
+    @Column(name = "customer_id")
+    private Long customerId;
 
     private long clickCount;
 
     @Builder
-    public CustomService(String serviceName, String logoStoreName, String serviceUrl, String title, Long clientId) {
+    public CustomService(String serviceName, String logoStoreName, String serviceUrl, String title, Long customerId) {
         this.serviceName = serviceName;
         this.logoStoreName = logoStoreName;
         this.serviceUrl = serviceUrl;
         this.title = title;
-        this.clientId = clientId;
+        this.customerId = customerId;
     }
 
     public void click() {

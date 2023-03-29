@@ -33,7 +33,7 @@ public class ServiceCommentsAdministerImpl implements ServiceCommentsAdminister 
                 .findById(commentsForm.getServiceId()).orElseThrow(() -> new EntityNotFoundException("유효하지 않는 서비스 입니다"));
 
         serviceCommentRepository.save(ServiceComment.of(
-                commentsForm.getContent(), services, commentsForm.getClientId(), commentsForm.getNickname()));
+                commentsForm.getContent(), services, commentsForm.getCustomerId(), commentsForm.getNickname()));
     }
 
     @Override
@@ -42,7 +42,7 @@ public class ServiceCommentsAdministerImpl implements ServiceCommentsAdminister 
         ServiceComment serviceComment = serviceCommentRepository.findById(serviceCommentUpdateForm.getCommentId())
                 .orElseThrow(() -> new EntityNotFoundException("유효하지 않은 댓글을 수정 시도했습니다"));
 
-        if (isAuthorizeToChangeComments(serviceComment, serviceCommentUpdateForm.getClientId()))
+        if (isAuthorizeToChangeComments(serviceComment, serviceCommentUpdateForm.getCustomerId()))
             serviceComment.updateContent(serviceCommentUpdateForm.getContent());
     }
 
@@ -57,7 +57,7 @@ public class ServiceCommentsAdministerImpl implements ServiceCommentsAdminister 
     }
 
     private boolean isAuthorizeToChangeComments(ServiceComment serviceComment, Long clientId) {
-        return serviceCommentRepository.existsByClient(serviceComment, clientId);
+        return serviceCommentRepository.existsByCustomer(serviceComment, clientId);
     }
 
     @Override
