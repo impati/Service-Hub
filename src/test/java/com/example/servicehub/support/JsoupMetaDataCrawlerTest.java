@@ -7,6 +7,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,8 +32,9 @@ class JsoupMetaDataCrawlerTest {
     public void serviceConnectTest() throws Exception {
 
         assertThatCode(() -> Jsoup
-                .connect("https://www.udemy.com/")
-                .userAgent("Mozilla/5.0")
+                .connect("https://www.udemy.com")
+                .timeout(5000)
+                .userAgent("Opera")
                 .get()
         ).doesNotThrowAnyException();
     }
@@ -51,7 +54,19 @@ class JsoupMetaDataCrawlerTest {
 
         assertThat(serviceMetaData.getSiteName())
                 .isEqualTo(siteName);
+    }
+
+    @Test
+    @DisplayName("특정 서비스 메타 정보 요청시 오류 발생 테스트")
+    public void WhenTryToGetServiceMetaData() throws Exception {
+
+        List<String> serviceUrlContainer = new ArrayList<>(List.of("https://programmers.co.kr/", "https://www.coupang.com/"));
+
+        for (var serviceUrl : serviceUrlContainer) {
+            assertThatCode(() -> crawler.tryToGetMetaData(serviceUrl)).doesNotThrowAnyException();
+        }
 
     }
+
 
 }
