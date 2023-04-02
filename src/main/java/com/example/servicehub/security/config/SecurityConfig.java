@@ -18,6 +18,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.web.client.RestTemplate;
 
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toStaticResources;
 
@@ -26,6 +27,7 @@ import static org.springframework.boot.autoconfigure.security.servlet.PathReques
 public class SecurityConfig {
 
     private final CustomerServer customerServer;
+    private final RestTemplate restTemplate;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
@@ -59,9 +61,9 @@ public class SecurityConfig {
     }
 
     public LoginAuthenticationFilter loginAuthenticationFilter(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-        authenticationManagerBuilder.authenticationProvider(new LoginAuthenticationProvider(customerServer));
+        authenticationManagerBuilder.authenticationProvider(new LoginAuthenticationProvider(customerServer, restTemplate));
         AuthenticationManager authenticationManager = authenticationManagerBuilder.getOrBuild();
-        LoginAuthenticationFilter loginAuthenticationFilter = new LoginAuthenticationFilter(customerServer);
+        LoginAuthenticationFilter loginAuthenticationFilter = new LoginAuthenticationFilter(customerServer, restTemplate);
         loginAuthenticationFilter.setAuthenticationManager(authenticationManager);
         return loginAuthenticationFilter;
     }
