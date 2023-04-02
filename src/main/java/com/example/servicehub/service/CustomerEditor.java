@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -21,10 +20,10 @@ public class CustomerEditor {
     private static final String editUri = "/api/v1/customer";
     private final CustomerServer customerServer;
     private final ProfileManager profileManager;
+    private final RestTemplate restTemplate;
 
     public void edit(CustomerEditForm customerEditForm) {
         CustomerEditRequest customerEditRequest = convertFrom(customerEditForm);
-        RestTemplate restTemplate = new RestTemplate(new HttpComponentsClientHttpRequestFactory());
         RequestEntity<CustomerEditRequest> request = RequestEntity.patch(customerServer.getServer() + editUri)
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + getAccessToken())

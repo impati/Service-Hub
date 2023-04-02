@@ -26,23 +26,17 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
     private final static String CUSTOMER_ENDPOINT = "/api/v1/customer";
     private static final String CLIENT_ID = "clientId";
     private final CustomerServer customerServer;
+    private final RestTemplate restTemplate;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        String token = getToken(authentication);
 
-        PreAuthenticatedAuthenticationToken authenticatedAuthenticationToken = (PreAuthenticatedAuthenticationToken) authentication;
-
-        RestTemplate restTemplate = new RestTemplate();
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.set(CLIENT_ID, customerServer.getClientId());
-        httpHeaders.add(HttpHeaders.AUTHORIZATION, "Bearer " + authenticatedAuthenticationToken.getCredentials());
-
-        CustomerDto customer = restTemplate.exchange(customerServer.getServer() + CUSTOMER_ENDPOINT, HttpMethod.POST, new HttpEntity<>(httpHeaders), CustomerDto.class).getBody();
+        CustomerDto customer = restTemplate.exchange(customerServer.getServer() + CUSTOMER_ENDPOINT, HttpMethod.POST, createRequestHeader(token), CustomerDto.class).getBody();
 
         CustomerPrincipal customerPrincipal = customer.toPrincipal();
 
-        return new PreAuthenticatedAuthenticationToken(customerPrincipal, authenticatedAuthenticationToken.getCredentials(), customerPrincipal.getAuthorities());
+        return new PreAuthenticatedAuthenticationToken(customerPrincipal, token, customerPrincipal.getAuthorities());
     }
 
     @Override
@@ -50,6 +44,16 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
         return PreAuthenticatedAuthenticationToken.class.isAssignableFrom(authentication);
     }
 
+    private String getToken(Authentication authentication) {
+        return String.valueOf(authentication.getCredentials());
+    }
+
+    private HttpEntity createRequestHeader(String accessToken) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.set(CLIENT_ID, customerServer.getClientId());
+        httpHeaders.add(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
+        return new HttpEntity<>(httpHeaders);
+    }
 
     @Getter
     @AllArgsConstructor
