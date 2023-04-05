@@ -48,7 +48,7 @@ public class LoginAuthenticationFilter extends AbstractAuthenticationProcessingF
 
     private HttpEntity createRequestHeader(String code) {
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.set(CLIENT_ID, customerServer.getClientId());
+        httpHeaders.add(CLIENT_ID, customerServer.getClientId());
         httpHeaders.add(HttpHeaders.AUTHORIZATION, code);
         return new HttpEntity<>(httpHeaders);
     }
