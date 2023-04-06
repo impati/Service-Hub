@@ -22,18 +22,18 @@ public enum ImageExtension {
         this.name = name;
     }
 
-    public static String extractExtension(String fileName){
+    public static String extractExtension(String fileName) {
         return Arrays.stream(ImageExtension.values())
                 .filter(imageExtension -> fileName.toLowerCase().contains(imageExtension.name))
                 .map(imageExtension -> "." + imageExtension.name)
-                .reduce((first,second) -> second).orElseThrow(IllegalStateException::new);
+                .reduce((first, second) -> second).orElse(".png");
     }
 
-    public static String getExtension(String fileName){
+    public static String getExtension(String fileName) {
         return Arrays.stream(ImageExtension.values())
                 .filter(imageExtension -> fileName.toLowerCase().contains(imageExtension.name))
                 .map(imageExtension -> imageExtension.name)
-                .reduce((first,second) -> second).orElseThrow(IllegalStateException::new);
+                .reduce((first, second) -> second).orElse("png");
     }
 
 }
