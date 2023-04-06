@@ -83,6 +83,7 @@ class CustomerEditorTest {
         Assertions.assertThat(principal.getNickname()).isEqualTo("hi");
         Assertions.assertThat(principal.getBlogUrl()).isEqualTo("https://impati.github.io");
         Assertions.assertThat(principal.getIntroduceComment()).isEqualTo("hello");
+        Assertions.assertThat(principal.getProfileImageUrl()).isEqualTo(getCustomerPrincipal().getProfileImageUrl());
     }
 
     private void createPrincipal() {

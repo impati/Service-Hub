@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.StringUtils;
 
 import java.security.Principal;
 import java.util.Collection;
@@ -83,6 +84,12 @@ public class CustomerPrincipal implements Principal, UserDetails {
         this.nickname = nickname;
     }
 
+    public void update(String nickname, String blogUrl, String introduceComment, String profileImageUrl) {
+        if (StringUtils.hasText(nickname)) this.nickname = nickname;
+        if (StringUtils.hasText(blogUrl)) this.blogUrl = blogUrl;
+        if (StringUtils.hasText(introduceComment)) this.introduceComment = introduceComment;
+        if (StringUtils.hasText(profileImageUrl)) this.profileImageUrl = profileImageUrl;
+    }
 
 }
 

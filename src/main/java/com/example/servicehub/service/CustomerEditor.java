@@ -14,6 +14,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Objects;
+
 @Component
 @RequiredArgsConstructor
 public class CustomerEditor {
@@ -38,8 +40,13 @@ public class CustomerEditor {
                 .blogUrl(customerEditForm.getBlogUrl())
                 .introduceComment(customerEditForm.getIntroComment())
                 .nickname(customerEditForm.getNickname())
-                .profileUrl(ProjectUtils.getDomain() + "/file/profile/" + storeName)
+                .profileUrl(getProfileUrl(storeName))
                 .build();
+    }
+
+    private String getProfileUrl(String storeName) {
+        if (Objects.equals(storeName, "default.png")) return null;
+        return ProjectUtils.getDomain() + "/file/profile/" + storeName;
     }
 
     private String getAccessToken() {
@@ -48,9 +55,10 @@ public class CustomerEditor {
 
     private void synchronization(CustomerEditRequest customerEditRequest) {
         CustomerPrincipal principal = (CustomerPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        principal.setNickname(customerEditRequest.getNickname());
-        principal.setBlogUrl(customerEditRequest.getBlogUrl());
-        principal.setIntroduceComment(customerEditRequest.getIntroduceComment());
-        principal.setProfileImageUrl(customerEditRequest.getProfileUrl());
+        principal.update(
+                customerEditRequest.getNickname(),
+                customerEditRequest.getBlogUrl(),
+                customerEditRequest.getIntroduceComment(),
+                customerEditRequest.getProfileUrl());
     }
 }
