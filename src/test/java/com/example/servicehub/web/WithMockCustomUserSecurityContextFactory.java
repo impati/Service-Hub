@@ -21,6 +21,7 @@ public class WithMockCustomUserSecurityContextFactory implements WithSecurityCon
         CustomerPrincipal customerPrincipal = CustomerPrincipal.builder()
                 .id(customUser.id())
                 .username(customUser.username())
+                .nickname(customUser.username())
                 .profileImageUrl("test")
                 .email("test")
                 .blogUrl("test")

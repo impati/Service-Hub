@@ -36,7 +36,7 @@ class ServicesRegisterTest {
     private ServiceCategoryRepository serviceCategoryRepository;
 
     @Test
-    @DisplayName("로고 파일")
+    @DisplayName("로고 파일로 서비스 등록 테스트")
     public void givenServiceRegisterFormWithLogoFile_whenSavingServices_thenSaveServiceWithCategories() throws Exception {
         // given
         List<String> categoryList = List.of("IT", "REPO");
@@ -64,7 +64,7 @@ class ServicesRegisterTest {
     }
 
     @Test
-    @DisplayName("로고 URL")
+    @DisplayName("로고 URL로 서비스 등록 테스트")
     public void givenServiceRegisterFormWithLogoURL_whenSavingServices_thenSaveServiceWithCategories() throws Exception {
         // given
         List<String> categoryList = List.of("IT");
@@ -86,4 +86,38 @@ class ServicesRegisterTest {
                     assertThat(serviceCategory.getCategory().getName()).containsAnyOf("IT");
                 });
     }
+
+    @Test
+    @DisplayName("registerServices 메서드 오버로드 테스트")
+    public void givenArguments_whenRegisteringService_thenRegisterService() throws Exception {
+        // given
+        List<String> categoryList = List.of("IT");
+        String serviceUrl = "https://test.com/";
+        String title = "서비스 허브 입니다.";
+        String content = "hi 서비스 허브";
+        String name = "서비스 허브";
+        String logoStoreName = "default.png";
+        // when
+        servicesRegister.registerServices(
+                categoryList,
+                name,
+                serviceUrl,
+                title,
+                content,
+                logoStoreName);
+
+        servicesRepository.flush();
+        // then
+
+        Services services = servicesRepository.findByServiceUrl(serviceUrl).orElseThrow();
+        assertThat(services.getServiceUrl()).isEqualTo(serviceUrl);
+        List<ServiceCategory> serviceCategories = serviceCategoryRepository.findByServices(services);
+        serviceCategories
+                .stream()
+                .forEach(serviceCategory -> {
+                    assertThat(serviceCategory.getCategory().getName()).containsAnyOf("IT");
+                });
+    }
+
+
 }

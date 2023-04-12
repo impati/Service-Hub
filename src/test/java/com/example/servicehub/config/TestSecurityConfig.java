@@ -27,6 +27,7 @@ public class TestSecurityConfig {
             auth.mvcMatchers("/service/registration").hasRole("ADMIN");
             auth.mvcMatchers("/customer/**").hasRole("USER");
             auth.mvcMatchers("/comments/**").hasRole("USER");
+            auth.mvcMatchers("/requested-service/registration/**").hasRole("USER");
             auth.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll();
             auth.anyRequest().permitAll();
         });

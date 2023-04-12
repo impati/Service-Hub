@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta content="upgrade-insecure-requests" http-equiv="Content-Security-Policy">
+    <div th:insert="~{fragment/header :: header}"></div>
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/semantic-ui@2.2.13/dist/semantic.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container">
+
+    <div th:insert="~{fragment/toolbar :: toolbar}"></div>
+
+    <section class="blog-list px-3 pr-0 p-md-5">
+        <div class="container  single-col-max-width">
+
+            <div class="table-responsive mt-5">
+                <table class="primary table table-striped">
+                    <thead>
+                    <tr class="resume-wrapper mx-auto theme-bg-light p-5 mb-5 my-5 shadow-lg">
+                        <th>#</th>
+                        <th>제목</th>
+                        <th>작성일</th>
+                        <th>상태</th>
+                        <th>작성자</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr class="resume-wrapper mx-auto theme-bg-light p-5 mb-5 my-5 shadow-lg"
+                        th:each="article,index : ${articles}"
+                        th:onclick="|location.href='@{/requested-service/{articleId} (articleId=${article.id})}'|">
+                        <td th:text="${index.count}"></td>
+
+                        <td class="text-truncate" th:text="${article.articleTitle}">Lorem ipsuelis,
+                            ultricies...
+                        </td>
+
+                        <td class="text-truncate" th:text="${article.createdAt}">Lorem ipsuelis,
+                            ultricies...
+                        </td>
+
+                        <td class="text-truncate" th:text="${article.requestStatus.name()}">요청</td>
+
+                        <td class="text-truncate" th:text="${article.nickname}">Lorem ipsuelis, ultricies...
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </section>
+
+
+    <section class="cta-section  py-5">
+        <div class="container text-center single-col-max-width">
+
+            <!--사용자 이름 , merge 여부 -->
+
+            <form class="row g-3 justify-content-end" method="get" th:action th:object="${condition}">
+                <div class="col-auto">
+                    <input class="form-control" id="nickname" placeholder="닉네임 검색"
+                           th:field="*{nickname}"
+                           type="text">
+                </div>
+                <div class="col-auto">
+                    <select class="form-select" th:field="*{requestStatus}" id="merge"
+                            aria-label="Floating label select example">
+                        <option value="">상태</option>
+                        <option value="COMPLETE">요청 완료</option>
+                        <option value="BEFORE">요청 대기</option>
+                        <option value="DEFER">요청 보류</option>
+                        <option value="FAIL">요청 거절</option>
+                    </select>
+                </div>
+
+                <div class="col-auto">
+                    <button class="btn btn-primary" type="submit">검색</button>
+                </div>
+            </form>
+
+        </div>
+    </section>
+    <div th:insert="~{fragment/footer :: footer}"></div>
+
+</div><!--//main-wrapper-->
+
+<script src="/js/jquery.min.js"></script>
+<script src="/js/popper.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.2.13/dist/semantic.min.js"></script>
+<script src="/js/main.js"></script>
+
+<div th:insert="~{fragment/library :: libraries}"></div>
+
+</body>
+</html>
+

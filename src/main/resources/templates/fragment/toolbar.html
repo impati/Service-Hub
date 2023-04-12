@@ -22,6 +22,10 @@
                 <a class="btn btn-outline-primary me-2 w-100" th:href="@{/service/search}">서비스검색</a>
             </div>
 
+            <div style="text-align: left">
+                <a class="btn btn-outline-primary me-2 w-100" th:href="@{/requested-service}">서비스 요청</a>
+            </div>
+
             <div style="text-align: right">
                 <a class="btn btn-outline-primary me-2" sec:authorize="isAnonymous()"
                    th:href="@{/customer-server/authorization}">로그인</a>

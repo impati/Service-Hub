@@ -40,6 +40,7 @@ public class SecurityConfig {
             auth.mvcMatchers("/service/registration").hasRole("ADMIN");
             auth.mvcMatchers("/customer/**").hasRole("USER");
             auth.mvcMatchers("/comments/**").hasRole("USER");
+            auth.mvcMatchers("/requested-service/registration/**").hasRole("USER");
             auth.requestMatchers(toStaticResources().atCommonLocations()).permitAll();
             auth.anyRequest().permitAll();
         });
