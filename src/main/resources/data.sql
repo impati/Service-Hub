@@ -33,6 +33,7 @@ values ('6718c6a9-e26a-44c2-9656-ba874010b897.jpg', 'https://www.inflearn.com/',
         '인프런 - 미래의 동료들과 함께 성장하는 곳 | IT 정보 플랫폼', 'IT 정보 플랫폼', 'impati', now(), now());
 
 
+
 insert into category(name, created_by, created_at, updated_at)
 values ('IT', 'impati', now(), now());
 insert into category(name, parent_id, created_by, created_at, updated_at)
@@ -96,3 +97,53 @@ insert into service_category(service_id, category_id, created_by, created_at, up
 values (13, 6, 'impati', now(), now());
 insert into service_category(service_id, category_id, created_by, created_at, updated_at)
 values (13, 1, 'impati', now(), now());
+
+
+insert into REQUEST_SERVICE_ARTICLE(nickname, customer_id, article_title, article_description, service_url,
+                                    logo_store_name, service_title, service_name, service_content, created_at,
+                                    updated_at, request_status,
+                                    created_by)
+values ('impati', 1, 'test 서버 요청합니다', 'test 서버입니다.', 'https://test.com', 'default.png', '테스트 서버', '테스트 서버', '테스트 서버',
+        now(), now(), 'BEFORE', 'impati');
+
+insert into REQUEST_SERVICE_ARTICLE(nickname, customer_id, article_title, article_description, service_url,
+                                    logo_store_name, service_title, service_name, service_content, created_at,
+                                    updated_at, request_status,
+                                    created_by)
+values ('impati', 1, 'test 서버 요청합니다22', 'test 서버입니다.22', 'https://test.com22', 'default.png', '테스트 서버22', '테스트 서버22',
+        '테스트 서버22',
+        now(), now(), 'BEFORE', 'impati');
+
+
+insert into REQUEST_SERVICE_ARTICLE(nickname, customer_id, article_title, article_description, service_url,
+                                    logo_store_name, service_title, service_name, service_content, created_at,
+                                    updated_at, request_status,
+                                    created_by)
+values ('impati', 1, 'test 서버 요청합니다33', 'test 서버입니다.33', 'https://test.com', 'default.png', '테스트 서버33', '테스트 서버33',
+        '테스트 서버33',
+        now(), now(), 'BEFORE', 'impati');
+
+
+insert into REQUEST_SERVICE_ARTICLE(nickname, customer_id, article_title, article_description, service_url,
+                                    logo_store_name, service_title, service_name, service_content, created_at,
+                                    updated_at, request_status,
+                                    created_by)
+values ('impati', 1, 'test 서버 요청합니다44', 'test 서버입니다.44', 'https://test.com', 'default.png', '테스트 서버44', '테스트 서버44',
+        '테스트 서버44',
+        now(), now(), 'COMPLETE', 'impati');
+
+insert into REQUEST_SERVICE_ARTICLE(nickname, customer_id, article_title, article_description, service_url,
+                                    logo_store_name, service_title, service_name, service_content, created_at,
+                                    updated_at, request_status,
+                                    created_by)
+values ('impati', 1, 'test 서버 요청합니다55', 'test 서버입니다.55', 'https://test.com', 'default.png', '테스트 서버55', '테스트 서버55',
+        '테스트 서버55',
+        now(), now(), 'FAIL', 'impati');
+
+insert into REQUEST_SERVICE_ARTICLE(nickname, customer_id, article_title, article_description, service_url,
+                                    logo_store_name, service_title, service_name, service_content, created_at,
+                                    updated_at, request_status,
+                                    created_by)
+values ('impati', 1, 'test 서버 요청합니다66', 'test 서버입니다.66', 'https://test.com', 'default.png', '테스트 서버66', '테스트 서버66',
+        '테스트 서버66',
+        now(), now(), 'DEFER', 'impati');
