@@ -17,7 +17,7 @@ spring:
     init:
       mode: never
   profiles:
-    default: test
+    active: test
 
 logo:
   dir: /Users/jun-yeongchoe/Desktop/project/ServiceHub/src/test/resources/image/

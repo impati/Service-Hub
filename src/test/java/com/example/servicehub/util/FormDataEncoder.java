@@ -16,18 +16,20 @@ import static java.util.stream.Collectors.toMap;
 
 public class FormDataEncoder {
 
-    public <T> String encode(Object obj , Class<T> clazz) {
+    public <T> String encode(Object obj, Class<T> clazz) {
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        Map<String, Object> fieldMap = objectMapper.convertValue(obj,new TypeReference<>(){});
+        Map<String, Object> fieldMap = objectMapper.convertValue(obj, new TypeReference<>() {
+        });
 
         MultiValueMap<String, String> valueMap = new LinkedMultiValueMap<>();
 
-        valueMap.setAll(addParamNoCollection(fieldMap,clazz));
+        valueMap.setAll(addParamNoCollection(fieldMap, clazz));
 
-        valueMap.addAll(addParamCollectionType(fieldMap,clazz));
+        valueMap.addAll(addParamCollectionType(fieldMap, clazz));
 
+        if (valueMap.isEmpty()) return "";
         return UriComponentsBuilder.newInstance()
                 .queryParams(valueMap)
                 .encode()
@@ -36,34 +38,31 @@ public class FormDataEncoder {
     }
 
 
-    private <T> Map<String, String > addParamNoCollection(Map<String,Object> fieldMap ,Class<T> clazz){
-        return  Arrays.stream(clazz.getDeclaredFields())
+    private <T> Map<String, String> addParamNoCollection(Map<String, Object> fieldMap, Class<T> clazz) {
+        return Arrays.stream(clazz.getDeclaredFields())
                 .filter(field -> !Collection.class.isAssignableFrom(field.getType()))
                 .map(Field::getName)
                 .filter(fieldMap::containsKey)
                 .filter(key -> fieldMap.get(key) != null)
-                .collect(toMap(key->key,key->String.valueOf(fieldMap.get(key))));
+                .collect(toMap(key -> key, key -> String.valueOf(fieldMap.get(key))));
     }
 
-    private <T> MultiValueMap<String,String> addParamCollectionType(Map<String,Object> fieldMap ,Class<T> clazz){
+    private <T> MultiValueMap<String, String> addParamCollectionType(Map<String, Object> fieldMap, Class<T> clazz) {
         Map<String, List<String>> collect = Arrays.stream(clazz.getDeclaredFields())
                 .filter(field -> Collection.class.isAssignableFrom(field.getType()))
                 .map(Field::getName)
                 .filter(key -> fieldMap.get(key) != null)
                 .collect(toMap(name -> name, name -> ((List<String>) fieldMap.get(name))));
 
-        MultiValueMap<String,String> container = new LinkedMultiValueMap<>();
+        MultiValueMap<String, String> container = new LinkedMultiValueMap<>();
 
-        for (var key : collect.keySet()){
-            for(var value : collect.get(key)) {
-                container.add(key,value);
+        for (var key : collect.keySet()) {
+            for (var value : collect.get(key)) {
+                container.add(key, value);
             }
         }
         return container;
     }
-
-
-
 
 
 }
