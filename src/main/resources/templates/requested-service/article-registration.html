@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta content="upgrade-insecure-requests" http-equiv="Content-Security-Policy">
+    <div th:insert="~{fragment/header :: header}"></div>
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/semantic-ui@2.2.13/dist/semantic.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/3.0.1/github-markdown.css" rel="stylesheet">
+
+</head>
+<style>
+    .field-error {
+        border-color: #dc3545;
+        color: #dc3545;
+    }
+</style>
+<body>
+
+<div class="container">
+
+    <div th:insert="~{fragment/toolbar :: toolbar}"></div>
+
+    <!-- 헤딩 -->
+    <section class="cta-section theme-bg-light py-5">
+        <div class="container text-center">
+            <h2 class="heading">Service Registration</h2>
+        </div><!--//container-->
+    </section>
+
+    <section class="contact-section px-3 py-5 p-md-5">
+
+        <div class="container">
+            <form class="contact-form col-lg-8 mx-lg-auto" enctype="multipart/form-data" method="post" th:action
+                  th:object="${requestServiceArticleForm}">
+
+                <div class="row g-3">
+
+
+                    <div class="col-12">
+                        <label class="sr-only" for="articleTitle">articleTitle</label>
+                        <input aria-required="true" class="form-control" id="articleTitle" name="articleTitle"
+                               placeholder="articleTitle" required="" th:field="*{articleTitle}" type="text">
+                        <small class="form-text text-muted pt-1"><i class="fas fa-info-circle me-2 text-primary"></i>요청
+                            제목을
+                            입력해주세요</small>
+                        <small class="field-error" th:errors="*{articleTitle}"></small>
+                    </div>
+
+
+                    <div class="col-12">
+                        <label class="sr-only" for="articleDescription">articleDescription</label>
+                        <textarea aria-required="true" class="form-control" id="articleDescription"
+                                  name="articleDescription"
+                                  placeholder="articleDescription" required="" th:field="*{articleDescription}"
+                                  type="text"></textarea>
+                        <small class="form-text text-muted pt-1"><i class="fas fa-info-circle me-2 text-primary"></i>요청
+                            내용을 입력해주세요</small>
+                        <small class="field-error" th:errors="*{articleDescription}"></small>
+                    </div>
+
+
+                    <hr>
+
+                    <div class="col-12">
+                        <label class="sr-only" for="serviceName">serviceName</label>
+                        <input aria-required="true" class="form-control" id="serviceName" name="serviceName"
+                               placeholder="serviceName" required="" th:field="*{serviceName}" type="text">
+                        <small class="form-text text-muted pt-1"><i class="fas fa-info-circle me-2 text-primary"></i>서비스
+                            이름을 입력해주세요</small>
+                        <small class="field-error" th:errors="*{serviceName}"></small>
+                    </div>
+
+
+                    <div class="col-12 col-md-6">
+                        <label class="sr-only" for="logoFile">LOGO</label>
+                        <input aria-required="true" class="form-control" id="logoFile" minlength="2" name="file"
+                               placeholder="LOGO" required="" th:field="*{file}" type="file">
+                        <small class="form-text text-muted pt-1"><i class="fas fa-info-circle me-2 text-primary"></i>서비스
+                            로고를 선택해주세요</small>
+                        <small class="field-error" th:errors="*{file}"></small>
+                    </div>
+
+
+                    <div class="col-12 col-md-6">
+                        <input aria-required="true" class="form-control" id="url" name="serviceUrl" placeholder="URL"
+                               required="" th:field="*{serviceUrl}" type="url">
+                        <small class="form-text text-muted pt-1"><i class="fas fa-info-circle me-2 text-primary"></i>서비스
+                            URL을 작성해주세요</small>
+                        <small class="field-error" th:errors="*{serviceUrl}"></small>
+                    </div>
+
+
+                    <div class="col-12 markdown-body">
+                        <label class="sr-only" for="serviceTitle">Title</label>
+                        <input aria-required="true" class="form-control" id="serviceTitle" name="serviceTitle"
+                               placeholder="serviceTitle"
+                               required="" th:field="*{serviceTitle}" type="text">
+                        <small class="form-text text-muted pt-1"><i class="fas fa-info-circle me-2 text-primary"></i>간단한
+                            서비스 설명해주세요</small>
+                        <small class="field-error" th:errors="*{serviceTitle}"></small>
+                    </div>
+
+
+                    <div class="col-12">
+                        <label class="sr-only" for="serviceContent">explain About Service ... </label>
+                        <textarea aria-required="true" class="form-control" id="serviceContent"
+                                  name="serviceContent" placeholder="explain About Service ... " required="" rows="10"
+                                  th:field="*{serviceContent}"></textarea>
+                        <small class="form-text text-muted pt-1"><i class="fas fa-info-circle me-2 text-primary"></i>서비스를
+                            설명해주세요</small>
+                        <small class="field-error" th:errors="*{serviceContent}"></small>
+                    </div>
+
+                    <hr>
+                    <br>
+
+                    <div class="form-group col-12">
+                        <button class="btn btn-block btn-primary py-2" type="submit">등록</button>
+                    </div>
+
+                </div><!--//form-row-->
+            </form>
+        </div><!--//container-->
+    </section>
+
+    <div th:insert="~{fragment/footer :: footer}"></div>
+
+</div><!--//main-wrapper-->
+
+<script src="/js/jquery.min.js"></script>
+<script src="/js/popper.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.2.13/dist/semantic.min.js"></script>
+<script src="/js/main.js"></script>
+
+<div th:insert="~{fragment/library :: libraries}"></div>
+
+</body>
+</html>
+
