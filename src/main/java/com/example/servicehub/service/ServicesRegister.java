@@ -28,34 +28,49 @@ public class ServicesRegister {
     private final ServiceCategoryRepository serviceCategoryRepository;
     private final LogoManager logoManager;
 
-    public void registerServices(ServicesRegisterForm servicesRegisterForm){
-        String logoStoreName = returnLogoStoreName(servicesRegisterForm.getLogoUrl(),servicesRegisterForm.getLogoFile());
+    public void registerServices(ServicesRegisterForm servicesRegisterForm) {
+        String logoStoreName = returnLogoStoreName(servicesRegisterForm.getLogoUrl(), servicesRegisterForm.getLogoFile());
         Services services = Services.of(
                 servicesRegisterForm.getServiceName(),
                 logoStoreName,
                 servicesRegisterForm.getServicesUrl(),
                 servicesRegisterForm.getTitle(),
                 servicesRegisterForm.getContent());
-        addCategoriesToServices(servicesRegisterForm.getCategoryNames(),services);
+        addCategoriesToServices(servicesRegisterForm.getCategoryNames(), services);
         servicesRepository.save(services);
     }
 
-    private String returnLogoStoreName(String logoUrl, MultipartFile logoFile){
-        if(isExistLogoUrl(logoUrl)) return logoManager.download(logoUrl);
+    public void registerServices(List<String> categories, String serviceName,
+                                 String serviceUrl, String serviceTitle,
+                                 String serviceContent, String logoStoreName) {
+        Services services = Services.builder()
+                .serviceUrl(serviceUrl)
+                .title(serviceTitle)
+                .serviceName(serviceName)
+                .content(serviceContent)
+                .logoStoreName(logoStoreName)
+                .build();
+
+        addCategoriesToServices(categories, services);
+        servicesRepository.save(services);
+    }
+
+    private String returnLogoStoreName(String logoUrl, MultipartFile logoFile) {
+        if (isExistLogoUrl(logoUrl)) return logoManager.download(logoUrl);
         return logoManager.tryToRestore(logoFile);
     }
 
-    private boolean isExistLogoUrl(String logoUrl){
-        if(logoUrl != null) return true;
+    private boolean isExistLogoUrl(String logoUrl) {
+        if (logoUrl != null) return true;
         return false;
     }
 
-    private void addCategoriesToServices(List<String> categories,Services services){
+    private void addCategoriesToServices(List<String> categories, Services services) {
         serviceCategoryRepository.saveAll(
                 categoryRepository.findByNames(categories)
-                .stream()
-                .map(category -> ServiceCategory.of(services,category))
-                .collect(toList()));
+                        .stream()
+                        .map(category -> ServiceCategory.of(services, category))
+                        .collect(toList()));
     }
 
 }
