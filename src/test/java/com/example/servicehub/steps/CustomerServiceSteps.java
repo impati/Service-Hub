@@ -1,8 +1,8 @@
 package com.example.servicehub.steps;
 
-import com.example.servicehub.domain.CustomerService;
-import com.example.servicehub.domain.Services;
-import com.example.servicehub.repository.CustomerServiceRepository;
+import com.example.servicehub.domain.customer.CustomerService;
+import com.example.servicehub.domain.services.Services;
+import com.example.servicehub.repository.customer.CustomerServiceRepository;
 
 public class CustomerServiceSteps {
 

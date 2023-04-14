@@ -1,6 +1,11 @@
 package com.example.servicehub.config;
 
-import com.example.servicehub.support.*;
+import com.example.servicehub.support.crawl.JsoupMetaDataCrawler;
+import com.example.servicehub.support.crawl.MetaDataCrawler;
+import com.example.servicehub.support.file.DefaultImageResizer;
+import com.example.servicehub.support.file.ImageResizer;
+import com.example.servicehub.support.file.LogoManager;
+import com.example.servicehub.support.file.ProfileManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;

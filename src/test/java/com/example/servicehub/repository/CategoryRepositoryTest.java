@@ -1,7 +1,8 @@
 package com.example.servicehub.repository;
 
 import com.example.servicehub.config.TestJpaConfig;
-import com.example.servicehub.domain.Category;
+import com.example.servicehub.domain.category.Category;
+import com.example.servicehub.repository.category.CategoryRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

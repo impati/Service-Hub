@@ -1,6 +1,6 @@
 package com.example.servicehub.steps;
 
-import com.example.servicehub.repository.CustomerServiceRepository;
+import com.example.servicehub.repository.customer.CustomerServiceRepository;
 
 public class CustomServiceSteps {
 

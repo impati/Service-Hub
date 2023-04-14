@@ -2,10 +2,11 @@ package com.example.servicehub.service;
 
 
 import com.example.servicehub.config.CustomerServer;
-import com.example.servicehub.domain.RoleType;
+import com.example.servicehub.domain.customer.RoleType;
 import com.example.servicehub.security.authentication.CustomerPrincipal;
-import com.example.servicehub.support.ProfileManager;
-import com.example.servicehub.web.dto.CustomerEditForm;
+import com.example.servicehub.service.customer.CustomerEditor;
+import com.example.servicehub.support.file.ProfileManager;
+import com.example.servicehub.web.dto.customer.CustomerEditForm;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.assertj.core.api.Assertions;

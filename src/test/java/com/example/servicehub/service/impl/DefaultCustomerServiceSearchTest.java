@@ -3,11 +3,12 @@ package com.example.servicehub.service.impl;
 
 import com.example.servicehub.config.StepsConfig;
 import com.example.servicehub.config.TestJpaConfig;
-import com.example.servicehub.domain.Category;
-import com.example.servicehub.domain.Services;
-import com.example.servicehub.dto.ClickServiceDto;
-import com.example.servicehub.dto.ServiceSearchConditionForm;
-import com.example.servicehub.service.CustomerServiceSearch;
+import com.example.servicehub.domain.category.Category;
+import com.example.servicehub.domain.services.Services;
+import com.example.servicehub.dto.services.ClickServiceDto;
+import com.example.servicehub.dto.services.ServiceSearchConditionForm;
+import com.example.servicehub.service.customer.CustomerServiceSearch;
+import com.example.servicehub.service.customer.DefaultCustomerServiceSearch;
 import com.example.servicehub.steps.CategorySteps;
 import com.example.servicehub.steps.CustomerServiceSteps;
 import com.example.servicehub.steps.ServiceCategorySteps;

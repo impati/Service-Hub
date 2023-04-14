@@ -1,12 +1,13 @@
 package com.example.servicehub.service;
 
 import com.example.servicehub.config.TestJpaConfig;
-import com.example.servicehub.domain.RequestServiceArticle;
-import com.example.servicehub.domain.RequestStatus;
-import com.example.servicehub.domain.Services;
-import com.example.servicehub.repository.CategoryRepository;
-import com.example.servicehub.repository.RequestServiceArticleRepository;
-import com.example.servicehub.repository.ServicesRepository;
+import com.example.servicehub.domain.requestService.RequestServiceArticle;
+import com.example.servicehub.domain.requestService.RequestStatus;
+import com.example.servicehub.domain.services.Services;
+import com.example.servicehub.repository.category.CategoryRepository;
+import com.example.servicehub.repository.requestService.RequestServiceArticleRepository;
+import com.example.servicehub.repository.services.ServicesRepository;
+import com.example.servicehub.service.requestService.RequestServiceToServiceTransfer;
 import com.example.servicehub.steps.CategorySteps;
 import com.example.servicehub.steps.RequestServiceArticleSteps;
 import org.junit.jupiter.api.BeforeEach;

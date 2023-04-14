@@ -1,5 +1,6 @@
 package com.example.servicehub.dto;
 
+import com.example.servicehub.dto.services.ClickServiceDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

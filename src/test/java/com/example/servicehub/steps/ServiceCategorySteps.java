@@ -1,9 +1,9 @@
 package com.example.servicehub.steps;
 
-import com.example.servicehub.domain.Category;
-import com.example.servicehub.domain.ServiceCategory;
-import com.example.servicehub.domain.Services;
-import com.example.servicehub.repository.ServiceCategoryRepository;
+import com.example.servicehub.domain.category.Category;
+import com.example.servicehub.domain.services.ServiceCategory;
+import com.example.servicehub.domain.services.Services;
+import com.example.servicehub.repository.services.ServiceCategoryRepository;
 
 public class ServiceCategorySteps {
 

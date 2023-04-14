@@ -1,11 +1,13 @@
 package com.example.servicehub.service;
 
 import com.example.servicehub.config.TestJpaConfig;
-import com.example.servicehub.domain.RequestServiceArticle;
-import com.example.servicehub.domain.RequestStatus;
-import com.example.servicehub.dto.RequestServiceArticleSearchCondition;
-import com.example.servicehub.repository.RequestServiceArticleRepository;
-import com.example.servicehub.repository.querydsl.RequestServiceArticleFinder;
+import com.example.servicehub.domain.requestService.RequestServiceArticle;
+import com.example.servicehub.domain.requestService.RequestStatus;
+import com.example.servicehub.dto.requestService.RequestServiceArticleSearchCondition;
+import com.example.servicehub.repository.requestService.RequestServiceArticleFinder;
+import com.example.servicehub.repository.requestService.RequestServiceArticleRepository;
+import com.example.servicehub.service.requestService.DefaultRequestServiceArticleSearch;
+import com.example.servicehub.service.requestService.RequestServiceArticleSearch;
 import com.example.servicehub.steps.RequestServiceArticleSteps;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

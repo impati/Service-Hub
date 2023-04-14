@@ -1,7 +1,7 @@
 package com.example.servicehub.steps;
 
-import com.example.servicehub.domain.Category;
-import com.example.servicehub.repository.CategoryRepository;
+import com.example.servicehub.domain.category.Category;
+import com.example.servicehub.repository.category.CategoryRepository;
 
 import java.util.List;
 

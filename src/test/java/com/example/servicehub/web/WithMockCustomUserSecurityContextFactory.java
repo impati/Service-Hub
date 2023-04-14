@@ -1,6 +1,6 @@
 package com.example.servicehub.web;
 
-import com.example.servicehub.domain.RoleType;
+import com.example.servicehub.domain.customer.RoleType;
 import com.example.servicehub.security.authentication.CustomerPrincipal;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

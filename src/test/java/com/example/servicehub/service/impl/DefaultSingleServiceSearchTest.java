@@ -2,10 +2,12 @@ package com.example.servicehub.service.impl;
 
 import com.example.servicehub.config.StepsConfig;
 import com.example.servicehub.config.TestJpaConfig;
-import com.example.servicehub.domain.Category;
-import com.example.servicehub.domain.Services;
-import com.example.servicehub.dto.SingleServiceWithCommentsDto;
-import com.example.servicehub.service.SingleServiceSearch;
+import com.example.servicehub.domain.category.Category;
+import com.example.servicehub.domain.services.Services;
+import com.example.servicehub.dto.services.SingleServiceWithCommentsDto;
+import com.example.servicehub.service.services.DefaultSingleServiceSearch;
+import com.example.servicehub.service.services.ServiceCommentsAdministerImpl;
+import com.example.servicehub.service.services.SingleServiceSearch;
 import com.example.servicehub.steps.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
