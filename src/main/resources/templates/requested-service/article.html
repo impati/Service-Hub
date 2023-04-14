@@ -105,7 +105,7 @@
 
                 <br>
                 <hr>
-                <div th:if="${article.requestStatus == T(com.example.servicehub.domain.RequestStatus).BEFORE || article.requestStatus == T(com.example.servicehub.domain.RequestStatus).DEFER }" sec:authorize="hasRole('ADMIN')">
+                <div th:if="${article.requestStatus == T(com.example.servicehub.domain.requestService.RequestStatus).BEFORE || article.requestStatus == T(com.example.servicehub.domain.requestService.RequestStatus).DEFER }" sec:authorize="hasRole('ADMIN')">
                     <form class="contact-form col-lg-8 mx-lg-auto" method="post" th:action>
 
                         <div class="col-auto">

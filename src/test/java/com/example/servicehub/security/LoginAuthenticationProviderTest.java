@@ -2,6 +2,7 @@ package com.example.servicehub.security;
 
 import com.example.servicehub.config.CustomerServer;
 import com.example.servicehub.security.authentication.CustomerPrincipal;
+import com.example.servicehub.security.authentication.LoginAuthenticationProvider;
 import com.example.servicehub.util.JsonMaker;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;

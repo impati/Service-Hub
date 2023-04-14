@@ -1,5 +1,6 @@
 package com.example.servicehub.support;
 
+import com.example.servicehub.support.file.ImageExtension;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

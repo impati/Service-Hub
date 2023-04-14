@@ -1,7 +1,7 @@
 package com.example.servicehub.steps;
 
-import com.example.servicehub.domain.RequestServiceArticle;
-import com.example.servicehub.repository.RequestServiceArticleRepository;
+import com.example.servicehub.domain.requestService.RequestServiceArticle;
+import com.example.servicehub.repository.requestService.RequestServiceArticleRepository;
 
 import java.util.Random;
 

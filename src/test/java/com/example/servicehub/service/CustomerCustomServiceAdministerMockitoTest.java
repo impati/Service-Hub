@@ -1,12 +1,12 @@
 package com.example.servicehub.service;
 
-import com.example.servicehub.domain.CustomService;
-import com.example.servicehub.dto.CustomServiceForm;
-import com.example.servicehub.repository.CustomerCustomServiceRepository;
-import com.example.servicehub.service.impl.CustomerCustomServiceAdministerImpl;
-import com.example.servicehub.support.LogoManager;
-import com.example.servicehub.support.MetaDataCrawler;
-import com.example.servicehub.support.ServiceMetaData;
+import com.example.servicehub.domain.custom.CustomService;
+import com.example.servicehub.dto.custom.CustomServiceForm;
+import com.example.servicehub.repository.customer.CustomerCustomServiceRepository;
+import com.example.servicehub.service.customer.CustomerCustomServiceAdministerImpl;
+import com.example.servicehub.support.crawl.MetaDataCrawler;
+import com.example.servicehub.support.crawl.ServiceMetaData;
+import com.example.servicehub.support.file.LogoManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

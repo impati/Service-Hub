@@ -1,10 +1,11 @@
 package com.example.servicehub.web.controller;
 
 import com.example.servicehub.config.ProjectTestConfig;
-import com.example.servicehub.support.FileManager;
-import com.example.servicehub.support.LogoManager;
-import com.example.servicehub.support.ProfileManager;
+import com.example.servicehub.support.file.FileManager;
+import com.example.servicehub.support.file.LogoManager;
+import com.example.servicehub.support.file.ProfileManager;
 import com.example.servicehub.web.WithMockCustomUser;
+import com.example.servicehub.web.controller.file.ResourceController;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -44,31 +45,31 @@ class ResourceControllerTest {
     @ParameterizedTest(name = "{0} 타입 {1} 파일")
     @MethodSource(value = "fileTest")
     @WithMockCustomUser
-    public void getProfileFile(String fileType,String filename) throws Exception{
+    public void getProfileFile(String fileType, String filename) throws Exception {
 
         BDDMockito.given(fileManagers.get(fileType)).willReturn(getFileManager(fileType));
 
-        mockMVc.perform(MockMvcRequestBuilders.get("/file/{fileType}/{filename}",fileType,filename))
+        mockMVc.perform(MockMvcRequestBuilders.get("/file/{fileType}/{filename}", fileType, filename))
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
     }
 
-    private FileManager getFileManager(String fileType){
+    private FileManager getFileManager(String fileType) {
         switch (fileType) {
-            case "logo": return logoManager;
-            case "profile": return profileManager;
+            case "logo":
+                return logoManager;
+            case "profile":
+                return profileManager;
         }
         throw new IllegalStateException();
     }
 
-    static Stream<Arguments> fileTest(){
+    static Stream<Arguments> fileTest() {
         return Stream.of(
-                Arguments.of("profile","default.png"),
-                Arguments.of("logo","default.png")
+                Arguments.of("profile", "default.png"),
+                Arguments.of("logo", "default.png")
         );
     }
-
-
 
 
 }

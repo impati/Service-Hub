@@ -2,13 +2,14 @@ package com.example.servicehub.service;
 
 
 import com.example.servicehub.config.TestJpaConfig;
-import com.example.servicehub.domain.ServiceCategory;
-import com.example.servicehub.domain.Services;
-import com.example.servicehub.dto.ServicesRegisterForm;
-import com.example.servicehub.repository.ServiceCategoryRepository;
-import com.example.servicehub.repository.ServicesRepository;
-import com.example.servicehub.support.DefaultImageResizer;
-import com.example.servicehub.support.LogoManager;
+import com.example.servicehub.domain.services.ServiceCategory;
+import com.example.servicehub.domain.services.Services;
+import com.example.servicehub.dto.services.ServicesRegisterForm;
+import com.example.servicehub.repository.services.ServiceCategoryRepository;
+import com.example.servicehub.repository.services.ServicesRepository;
+import com.example.servicehub.service.services.ServicesRegister;
+import com.example.servicehub.support.file.DefaultImageResizer;
+import com.example.servicehub.support.file.LogoManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

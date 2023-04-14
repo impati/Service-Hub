@@ -1,13 +1,18 @@
 package com.example.servicehub.web.controller;
 
 import com.example.servicehub.config.TestSecurityConfig;
-import com.example.servicehub.domain.Services;
-import com.example.servicehub.dto.*;
-import com.example.servicehub.service.*;
-import com.example.servicehub.support.MetaDataCrawler;
-import com.example.servicehub.support.ServiceMetaData;
+import com.example.servicehub.domain.services.Services;
+import com.example.servicehub.dto.services.*;
+import com.example.servicehub.service.category.CategoryAdminister;
+import com.example.servicehub.service.services.ServiceSearch;
+import com.example.servicehub.service.services.ServiceUpdate;
+import com.example.servicehub.service.services.ServicesRegister;
+import com.example.servicehub.service.services.SingleServiceSearch;
+import com.example.servicehub.support.crawl.MetaDataCrawler;
+import com.example.servicehub.support.crawl.ServiceMetaData;
 import com.example.servicehub.util.FormDataEncoder;
 import com.example.servicehub.web.WithMockCustomUser;
+import com.example.servicehub.web.controller.services.ServiceController;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;

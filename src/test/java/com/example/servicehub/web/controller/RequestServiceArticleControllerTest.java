@@ -1,16 +1,17 @@
 package com.example.servicehub.web.controller;
 
 import com.example.servicehub.config.TestSecurityConfig;
-import com.example.servicehub.domain.RequestServiceArticle;
-import com.example.servicehub.domain.RequestStatus;
-import com.example.servicehub.dto.RequestServiceArticleForm;
-import com.example.servicehub.dto.RequestServiceArticleSearchCondition;
-import com.example.servicehub.service.CategoryAdminister;
-import com.example.servicehub.service.RequestServiceArticleRegister;
-import com.example.servicehub.service.RequestServiceArticleSearch;
-import com.example.servicehub.service.RequestServiceToServiceTransfer;
+import com.example.servicehub.domain.requestService.RequestServiceArticle;
+import com.example.servicehub.domain.requestService.RequestStatus;
+import com.example.servicehub.dto.requestService.RequestServiceArticleForm;
+import com.example.servicehub.dto.requestService.RequestServiceArticleSearchCondition;
+import com.example.servicehub.service.category.CategoryAdminister;
+import com.example.servicehub.service.requestService.RequestServiceArticleRegister;
+import com.example.servicehub.service.requestService.RequestServiceArticleSearch;
+import com.example.servicehub.service.requestService.RequestServiceToServiceTransfer;
 import com.example.servicehub.util.FormDataEncoder;
 import com.example.servicehub.web.WithMockCustomUser;
+import com.example.servicehub.web.controller.requestService.RequestServiceArticleController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

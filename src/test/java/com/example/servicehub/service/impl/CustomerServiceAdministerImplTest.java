@@ -2,9 +2,10 @@ package com.example.servicehub.service.impl;
 
 import com.example.servicehub.config.StepsConfig;
 import com.example.servicehub.config.TestJpaConfig;
-import com.example.servicehub.domain.Services;
-import com.example.servicehub.repository.CustomerServiceRepository;
-import com.example.servicehub.service.CustomerServiceAdminister;
+import com.example.servicehub.domain.services.Services;
+import com.example.servicehub.repository.customer.CustomerServiceRepository;
+import com.example.servicehub.service.customer.CustomerServiceAdminister;
+import com.example.servicehub.service.customer.CustomerServiceAdministerImpl;
 import com.example.servicehub.steps.ServicesSteps;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

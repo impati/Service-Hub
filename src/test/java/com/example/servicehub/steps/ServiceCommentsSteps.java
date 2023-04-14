@@ -1,8 +1,8 @@
 package com.example.servicehub.steps;
 
-import com.example.servicehub.domain.ServiceComment;
-import com.example.servicehub.domain.Services;
-import com.example.servicehub.repository.ServiceCommentRepository;
+import com.example.servicehub.domain.services.ServiceComment;
+import com.example.servicehub.domain.services.Services;
+import com.example.servicehub.repository.services.ServiceCommentRepository;
 
 import java.util.List;
 

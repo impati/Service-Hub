@@ -1,6 +1,10 @@
 package com.example.servicehub.config;
 
-import com.example.servicehub.repository.*;
+import com.example.servicehub.repository.category.CategoryRepository;
+import com.example.servicehub.repository.customer.CustomerServiceRepository;
+import com.example.servicehub.repository.services.ServiceCategoryRepository;
+import com.example.servicehub.repository.services.ServiceCommentRepository;
+import com.example.servicehub.repository.services.ServicesRepository;
 import com.example.servicehub.steps.*;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;

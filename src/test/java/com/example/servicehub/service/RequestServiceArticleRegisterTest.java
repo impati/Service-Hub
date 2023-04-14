@@ -1,10 +1,11 @@
 package com.example.servicehub.service;
 
 import com.example.servicehub.config.TestJpaConfig;
-import com.example.servicehub.domain.RequestServiceArticle;
-import com.example.servicehub.domain.RequestStatus;
-import com.example.servicehub.dto.RequestServiceArticleForm;
-import com.example.servicehub.repository.RequestServiceArticleRepository;
+import com.example.servicehub.domain.requestService.RequestServiceArticle;
+import com.example.servicehub.domain.requestService.RequestStatus;
+import com.example.servicehub.dto.requestService.RequestServiceArticleForm;
+import com.example.servicehub.repository.requestService.RequestServiceArticleRepository;
+import com.example.servicehub.service.requestService.RequestServiceArticleRegister;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,5 +1,7 @@
 package com.example.servicehub.support;
 
+import com.example.servicehub.support.crawl.JsoupMetaDataCrawler;
+import com.example.servicehub.support.crawl.ServiceMetaData;
 import org.jsoup.Jsoup;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -2,9 +2,10 @@ package com.example.servicehub.service.impl;
 
 import com.example.servicehub.config.StepsConfig;
 import com.example.servicehub.config.TestJpaConfig;
-import com.example.servicehub.domain.CustomerService;
-import com.example.servicehub.domain.Services;
-import com.example.servicehub.service.ServiceClickCounter;
+import com.example.servicehub.domain.customer.CustomerService;
+import com.example.servicehub.domain.services.Services;
+import com.example.servicehub.service.services.DefaultServiceClickCounter;
+import com.example.servicehub.service.services.ServiceClickCounter;
 import com.example.servicehub.steps.CustomerServiceSteps;
 import com.example.servicehub.steps.ServicesSteps;
 import org.assertj.core.api.Assertions;

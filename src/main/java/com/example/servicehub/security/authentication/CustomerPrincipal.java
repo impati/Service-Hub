@@ -1,7 +1,7 @@
 package com.example.servicehub.security.authentication;
 
-import com.example.servicehub.domain.ProviderType;
-import com.example.servicehub.domain.RoleType;
+import com.example.servicehub.domain.customer.ProviderType;
+import com.example.servicehub.domain.customer.RoleType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

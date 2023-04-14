@@ -1,7 +1,7 @@
 package com.example.servicehub.security.config;
 
 import com.example.servicehub.config.CustomerServer;
-import com.example.servicehub.security.LoginAuthenticationProvider;
+import com.example.servicehub.security.authentication.LoginAuthenticationProvider;
 import com.example.servicehub.security.filter.AuthorizationRedirectFilter;
 import com.example.servicehub.security.filter.CustomerServerSignupFilter;
 import com.example.servicehub.security.filter.LoginAuthenticationFilter;

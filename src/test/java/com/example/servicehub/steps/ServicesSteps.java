@@ -1,7 +1,7 @@
 package com.example.servicehub.steps;
 
-import com.example.servicehub.domain.Services;
-import com.example.servicehub.repository.ServicesRepository;
+import com.example.servicehub.domain.services.Services;
+import com.example.servicehub.repository.services.ServicesRepository;
 
 import java.util.ArrayList;
 import java.util.List;

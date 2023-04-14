@@ -1,7 +1,10 @@
 package com.example.servicehub.support;
 
-import com.example.servicehub.dto.MultipartFileForm;
-import com.example.servicehub.dto.RequestServiceArticleForm;
+import com.example.servicehub.dto.common.MultipartFileForm;
+import com.example.servicehub.dto.requestService.RequestServiceArticleForm;
+import com.example.servicehub.support.file.FileTransfer;
+import com.example.servicehub.support.file.LogoManager;
+import com.example.servicehub.support.file.ProfileManager;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

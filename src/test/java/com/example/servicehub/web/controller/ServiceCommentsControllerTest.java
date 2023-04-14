@@ -1,13 +1,14 @@
 package com.example.servicehub.web.controller;
 
 import com.example.servicehub.config.TestSecurityConfig;
-import com.example.servicehub.dto.ServiceCommentForm;
-import com.example.servicehub.dto.ServiceCommentUpdateForm;
-import com.example.servicehub.dto.SingleServiceWithCommentsDto;
-import com.example.servicehub.service.ServiceCommentsAdminister;
-import com.example.servicehub.service.SingleServiceSearch;
+import com.example.servicehub.dto.services.ServiceCommentForm;
+import com.example.servicehub.dto.services.ServiceCommentUpdateForm;
+import com.example.servicehub.dto.services.SingleServiceWithCommentsDto;
+import com.example.servicehub.service.services.ServiceCommentsAdminister;
+import com.example.servicehub.service.services.SingleServiceSearch;
 import com.example.servicehub.util.FormDataEncoder;
 import com.example.servicehub.web.WithMockCustomUser;
+import com.example.servicehub.web.controller.services.ServiceCommentsController;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;

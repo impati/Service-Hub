@@ -1,9 +1,15 @@
 package com.example.servicehub.web.controller;
 
-import com.example.servicehub.dto.CustomServiceForm;
-import com.example.servicehub.service.*;
+import com.example.servicehub.dto.custom.CustomServiceForm;
+import com.example.servicehub.service.category.CategoryAdminister;
+import com.example.servicehub.service.customer.CustomerCustomServiceAdminister;
+import com.example.servicehub.service.customer.CustomerEditor;
+import com.example.servicehub.service.customer.CustomerServiceAdminister;
+import com.example.servicehub.service.customer.CustomerServiceSearch;
+import com.example.servicehub.service.services.ServiceClickCounter;
 import com.example.servicehub.web.WithMockCustomUser;
-import com.example.servicehub.web.dto.CustomerEditForm;
+import com.example.servicehub.web.controller.customer.CustomerController;
+import com.example.servicehub.web.dto.customer.CustomerEditForm;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
