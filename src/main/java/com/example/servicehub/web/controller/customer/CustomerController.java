@@ -40,21 +40,19 @@ public class CustomerController {
     private final CustomerServiceSearch customerServiceSearch;
     private final CustomerEditor customerEditor;
 
-    @GetMapping("/{customerId}")
-    public String renderCustomerPage(
-            @PathVariable Long customerId,
-            @RequestParam(value = "serviceName", required = false) String serviceName,
-            Model model) {
+    @GetMapping
+    public String renderCustomerPage(@RequestParam(value = "serviceName", required = false) String serviceName, Model model) {
 
         List<String> allCategories = categoryAdminister.getAllCategories();
 
-        model.addAttribute("serviceWithClick", findResult(customerId, ServiceSearchConditionForm.of(allCategories, serviceName)));
+        model.addAttribute("serviceWithClick", findResult(getCustomerPrincipal().getId(), ServiceSearchConditionForm.of(allCategories, serviceName)));
 
         model.addAttribute("allCategories", allCategories);
 
         model.addAttribute("simpleCustomer", simpleCustomerDto());
 
         return "customer/customer-page";
+
     }
 
     @GetMapping("/service/edit")
