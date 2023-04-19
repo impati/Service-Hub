@@ -55,7 +55,7 @@ class CustomerControllerTest {
                 .willReturn(List.of("IT"));
 
         Long customerId = 1L;
-        mockMvc.perform(get("/customer/{customerId}", customerId))
+        mockMvc.perform(get("/customer"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("serviceWithClick", "allCategories", "simpleCustomer"))
                 .andExpect(view().name("customer/customer-page"))

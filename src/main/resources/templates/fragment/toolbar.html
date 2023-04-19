@@ -38,7 +38,7 @@
                 <a aria-expanded="false" aria-haspopup="true" class="me-5" data-toggle="" href="#"
                    id="userDropdown" role="button"
                    sec:authorize="isAuthenticated()"
-                   th:href="@{/customer/{customerId} (customerId=${#authentication.getPrincipal().getId()})}">
+                   th:href="@{/customer}">
                     <span class="mr-2 d-none d-lg-inline text-gray-900 " sec:authorize="isAuthenticated()"
                           th:text="${#authentication.name}">Douglas McGee</span>
                 </a>
