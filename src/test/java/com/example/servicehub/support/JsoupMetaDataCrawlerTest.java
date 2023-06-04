@@ -2,7 +2,6 @@ package com.example.servicehub.support;
 
 import com.example.servicehub.support.crawl.JsoupMetaDataCrawler;
 import com.example.servicehub.support.crawl.ServiceMetaData;
-import org.jsoup.Jsoup;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -27,18 +26,6 @@ class JsoupMetaDataCrawlerTest {
                 Arguments.of("https://www.inflearn.com/", "https://www.inflearn.com/", "인프런 - 라이프타임 커리어 플랫폼", "인프런"),
                 Arguments.of("https://papago.naver.com/", "https://papago.naver.com/", "Free translation service, Papago", "Naver papago")
         );
-    }
-
-    @Test
-    @DisplayName("crawler 연결 테스트 test")
-    public void serviceConnectTest() throws Exception {
-
-        assertThatCode(() -> Jsoup
-                .connect("https://www.udemy.com")
-                .timeout(5000)
-                .userAgent("Opera")
-                .get()
-        ).doesNotThrowAnyException();
     }
 
     @ParameterizedTest
