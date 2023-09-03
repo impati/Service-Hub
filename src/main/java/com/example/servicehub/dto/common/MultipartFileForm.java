@@ -1,11 +1,18 @@
 package com.example.servicehub.dto.common;
 
-
-import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
-@Data
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class MultipartFileForm {
-    protected MultipartFile file;
-    protected String storeName;
+
+	protected MultipartFile file;
+	protected String storeName;
 }

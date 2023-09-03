@@ -1,8 +1,8 @@
 package com.example.servicehub.exception.file;
 
-public class FileResizeFailException extends RuntimeException{
+public class FileResizeFailException extends RuntimeException {
 
-    public FileResizeFailException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public FileResizeFailException(final String message, final Throwable cause) {
+		super(message, cause);
+	}
 }

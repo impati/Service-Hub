@@ -1,54 +1,62 @@
 package com.example.servicehub.repository.requestService;
 
-import com.example.servicehub.domain.requestService.RequestServiceArticle;
-import com.example.servicehub.domain.requestService.RequestStatus;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import static com.example.servicehub.domain.requestservice.QRequestServiceArticle.*;
+
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import com.example.servicehub.domain.requestservice.RequestServiceArticle;
+import com.example.servicehub.domain.requestservice.RequestStatus;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
-import static com.example.servicehub.domain.requestService.QRequestServiceArticle.requestServiceArticle;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-@Transactional
 public class RequestServiceArticleFinder {
-    private final JPAQueryFactory queryFactory;
 
-    public Page<RequestServiceArticle> findArticle(RequestStatus requestStatus, String nickname, Pageable pageable) {
+	private final JPAQueryFactory queryFactory;
 
-        List<RequestServiceArticle> result = queryFactory
-                .selectFrom(requestServiceArticle)
-                .where(requestStatus(requestStatus), nickname(nickname))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
+	public Page<RequestServiceArticle> findArticle(
+		final RequestStatus requestStatus,
+		final String nickname,
+		final Pageable pageable
+	) {
+		final List<RequestServiceArticle> result = queryFactory
+			.selectFrom(requestServiceArticle)
+			.where(requestStatus(requestStatus), nickname(nickname))
+			.offset(pageable.getOffset())
+			.limit(pageable.getPageSize())
+			.fetch();
 
+		final long totalCount = queryFactory
+			.selectFrom(requestServiceArticle)
+			.where(requestStatus(requestStatus), nickname(nickname))
+			.fetch().size();
 
-        long totalCount = queryFactory
-                .selectFrom(requestServiceArticle)
-                .where(requestStatus(requestStatus), nickname(nickname))
-                .fetch().size();
+		return new PageImpl<>(result, pageable, totalCount);
+	}
 
-        return new PageImpl<>(result, pageable, totalCount);
-    }
+	private BooleanExpression requestStatus(final RequestStatus requestStatus) {
+		if (requestStatus != null) {
+			return requestServiceArticle.requestStatus.eq(requestStatus);
+		}
 
-    private BooleanExpression requestStatus(RequestStatus requestStatus) {
-        if (requestStatus == null) return null;
-        return requestServiceArticle.requestStatus.eq(requestStatus);
-    }
+		return null;
+	}
 
-    private BooleanExpression nickname(String nickname) {
-        if (nickname == null) return null;
-        return requestServiceArticle.nickname.containsIgnoreCase(nickname);
-    }
+	private BooleanExpression nickname(final String nickname) {
+		if (nickname != null) {
+			return requestServiceArticle.nickname.containsIgnoreCase(nickname);
+		}
 
+		return null;
+	}
 }

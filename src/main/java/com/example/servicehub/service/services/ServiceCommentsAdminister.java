@@ -1,22 +1,20 @@
 package com.example.servicehub.service.services;
 
+import java.util.List;
 
 import com.example.servicehub.dto.services.ServiceCommentForm;
 import com.example.servicehub.dto.services.ServiceCommentUpdateForm;
 import com.example.servicehub.dto.services.ServiceCommentsDto;
 
-import java.util.List;
-
 public interface ServiceCommentsAdminister {
 
-    void addServiceComment(ServiceCommentForm commentsForm);
+	void addServiceComment(final ServiceCommentForm commentsForm);
 
-    void updateServiceComment(ServiceCommentUpdateForm serviceCommentUpdateForm);
+	void updateServiceComment(final ServiceCommentUpdateForm serviceCommentUpdateForm);
 
-    void deleteServiceComment(Long serviceCommentsId, Long customerId);
+	void deleteServiceComment(final Long serviceCommentsId, final Long customerId);
 
-    List<ServiceCommentsDto> searchComments(Long serviceId);
+	List<ServiceCommentsDto> searchComments(final Long serviceId);
 
-    String bringCommentContent(Long serviceCommentsId);
-
+	String bringCommentContent(final Long serviceCommentsId);
 }

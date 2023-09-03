@@ -1,12 +1,17 @@
 package com.example.servicehub.service.requestService;
 
-import com.example.servicehub.domain.requestService.RequestServiceArticle;
-import com.example.servicehub.dto.requestService.RequestServiceArticleSearchCondition;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface RequestServiceArticleSearch {
-    Page<RequestServiceArticle> searchArticle(RequestServiceArticleSearchCondition condition, Pageable pageable);
+import com.example.servicehub.domain.requestservice.RequestServiceArticle;
+import com.example.servicehub.dto.requestService.RequestServiceArticleSearchCondition;
 
-    RequestServiceArticle searchSingleArticle(Long requestServiceArticleId);
+public interface RequestServiceArticleSearch {
+
+	Page<RequestServiceArticle> searchArticle(
+		final RequestServiceArticleSearchCondition condition,
+		final Pageable pageable
+	);
+
+	RequestServiceArticle searchSingleArticle(final Long requestServiceArticleId);
 }

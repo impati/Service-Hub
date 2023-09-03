@@ -1,14 +1,9 @@
 package com.example.servicehub.service;
 
-import com.example.servicehub.config.TestJpaConfig;
-import com.example.servicehub.domain.requestService.RequestServiceArticle;
-import com.example.servicehub.domain.requestService.RequestStatus;
-import com.example.servicehub.dto.requestService.RequestServiceArticleSearchCondition;
-import com.example.servicehub.repository.requestService.RequestServiceArticleFinder;
-import com.example.servicehub.repository.requestService.RequestServiceArticleRepository;
-import com.example.servicehub.service.requestService.DefaultRequestServiceArticleSearch;
-import com.example.servicehub.service.requestService.RequestServiceArticleSearch;
-import com.example.servicehub.steps.RequestServiceArticleSteps;
+import static org.assertj.core.api.Assertions.*;
+
+import java.util.stream.Stream;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,115 +16,150 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
-import java.util.stream.Stream;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
+import com.example.servicehub.config.TestJpaConfig;
+import com.example.servicehub.domain.requestservice.RequestServiceArticle;
+import com.example.servicehub.domain.requestservice.RequestStatus;
+import com.example.servicehub.dto.requestService.RequestServiceArticleSearchCondition;
+import com.example.servicehub.repository.requestService.RequestServiceArticleFinder;
+import com.example.servicehub.repository.requestService.RequestServiceArticleRepository;
+import com.example.servicehub.service.requestService.DefaultRequestServiceArticleSearch;
+import com.example.servicehub.service.requestService.RequestServiceArticleSearch;
+import com.example.servicehub.steps.RequestServiceArticleSteps;
 
 @DataJpaTest
 @Import({DefaultRequestServiceArticleSearch.class, TestJpaConfig.class, RequestServiceArticleFinder.class})
 class DefaultRequestServiceArticleSearchTest {
 
-    @Autowired
-    private RequestServiceArticleRepository requestServiceArticleRepository;
-    @Autowired
-    private RequestServiceArticleSearch requestServiceArticleSearch;
-    private RequestServiceArticleSteps requestServiceArticleSteps;
+	@Autowired
+	private RequestServiceArticleRepository requestServiceArticleRepository;
 
+	@Autowired
+	private RequestServiceArticleSearch requestServiceArticleSearch;
 
-    @BeforeEach
-    void setup() {
-        requestServiceArticleSteps = new RequestServiceArticleSteps(requestServiceArticleRepository);
-    }
+	private RequestServiceArticleSteps requestServiceArticleSteps;
 
-    @Test
-    @DisplayName("RequestServiceArticle 단일 조회 테스트")
-    public void givenId_whenSearchingArticle_thenReturnArticle() throws Exception {
-        // given
-        RequestServiceArticle requestServiceArticle = requestServiceArticleSteps.create();
+	@BeforeEach
+	void setup() {
+		requestServiceArticleSteps = new RequestServiceArticleSteps(requestServiceArticleRepository);
+	}
 
-        // when
-        RequestServiceArticle response = requestServiceArticleSearch.searchSingleArticle(requestServiceArticle.getId());
+	@Test
+	@DisplayName("RequestServiceArticle 단일 조회 테스트")
+	void givenId_whenSearchingArticle_thenReturnArticle() {
+		// given
+		final RequestServiceArticle requestServiceArticle = requestServiceArticleSteps.create();
 
-        // then
-        assertThat(response.getId()).isEqualTo(requestServiceArticle.getId());
-        assertThat(response.getServiceContent()).isEqualTo(requestServiceArticle.getServiceContent());
-    }
+		// when
+		final RequestServiceArticle response = requestServiceArticleSearch.searchSingleArticle(
+			requestServiceArticle.getId());
 
-    @Test
-    @DisplayName("RequestServiceArticle 조회 테스트")
-    public void givenSearchCondition_whenSearching_thenReturnRequestServiceArticleResultFitTheCondition() throws Exception {
-        // given
-        requestServiceArticleSteps.create();
+		// then
+		assertThat(response.getId()).isEqualTo(requestServiceArticle.getId());
+		assertThat(response.getServiceContent()).isEqualTo(requestServiceArticle.getServiceContent());
+	}
 
-        RequestServiceArticleSearchCondition condition = new RequestServiceArticleSearchCondition(RequestStatus.BEFORE, null);
+	@Test
+	@DisplayName("RequestServiceArticle 조회 테스트")
+	void givenSearchCondition_whenSearching_thenReturnRequestServiceArticleResultFitTheCondition() {
+		// given
+		requestServiceArticleSteps.create();
+		final RequestServiceArticleSearchCondition condition = new RequestServiceArticleSearchCondition(
+			RequestStatus.BEFORE,
+			null
+		);
 
-        // when
-        Page<RequestServiceArticle> response = requestServiceArticleSearch.searchArticle(condition, PageRequest.of(0, 10));
+		// when
+		final Page<RequestServiceArticle> response = requestServiceArticleSearch.searchArticle(
+			condition,
+			PageRequest.of(0, 10)
+		);
 
-        // then
-        assertThat(response.getContent().size()).isEqualTo(1);
-    }
+		// then
+		assertThat(response.getContent()).hasSize(1);
+	}
 
-    @ParameterizedTest(name = "#[{index}]  merge = [{0}] , nickname = [{1}]")
-    @MethodSource("searchArticle")
-    @DisplayName("RequestServiceArticle 여러 개 조회 테스트")
-    public void givenSearchCondition_whenSearching_thenReturnMultipleRequestServiceArticleResultFitTheCondition(
-            RequestStatus requestStatus, String nickname, int pageSize, int numberOfElements, int totalElements, int totalPages, int pageNumber
-    ) throws Exception {
-        // given
-        int n = 10;
-        for (int i = 0; i < n; i++) requestServiceArticleSteps.createRandom("test1", 99L);
-        for (int i = 0; i < 2 * n; i++) requestServiceArticleSteps.createRandom("test2", 999L);
-        for (int i = 0; i < 2 * n; i++) requestServiceArticleSteps.createRandomAndMerge("test2", 999L);
+	@ParameterizedTest(name = "#[{index}]  merge = [{0}] , nickname = [{1}]")
+	@MethodSource("searchArticle")
+	@DisplayName("RequestServiceArticle 여러 개 조회 테스트")
+	void givenSearchCondition_whenSearching_thenReturnMultipleRequestServiceArticleResultFitTheCondition(
+		final RequestStatus requestStatus,
+		final String nickname,
+		final int pageSize,
+		final int numberOfElements,
+		final int totalElements,
+		final int totalPages,
+		final int pageNumber
+	) {
+		// given
+		int n = 10;
+		for (int i = 0; i < n; i++) {
+			requestServiceArticleSteps.createRandom("test1", 99L);
+		}
 
-        RequestServiceArticleSearchCondition condition = new RequestServiceArticleSearchCondition(requestStatus, nickname);
+		for (int i = 0; i < 2 * n; i++) {
+			requestServiceArticleSteps.createRandom("test2", 999L);
+		}
 
-        // when
-        Page<RequestServiceArticle> response = requestServiceArticleSearch.searchArticle(condition, PageRequest.of(pageNumber, pageSize));
+		for (int i = 0; i < 2 * n; i++) {
+			requestServiceArticleSteps.createRandomAndMerge("test2", 999L);
+		}
 
-        // then
-        assertThat(response.getNumberOfElements()).isEqualTo(numberOfElements);
-        assertThat(response.getTotalElements()).isEqualTo(totalElements);
-        assertThat(response.getTotalPages()).isEqualTo(totalPages);
-        assertThat(response.getNumber()).isEqualTo(pageNumber);
+		final RequestServiceArticleSearchCondition condition = new RequestServiceArticleSearchCondition(
+			requestStatus,
+			nickname
+		);
 
-    }
+		// when
+		final Page<RequestServiceArticle> response = requestServiceArticleSearch.searchArticle(condition,
+			PageRequest.of(pageNumber, pageSize));
 
-    private static Stream<Arguments> searchArticle() {
-        return Stream.of(
-                Arguments.of(null, null, setPageSize(10), setNumberOfElements(10), setTotalElements(50), setTotalPages(50 / 10), setPageNumber(0)),
-                Arguments.of(RequestStatus.BEFORE, null, setPageSize(10), setNumberOfElements(10), setTotalElements(30), setTotalPages(30 / 10), setPageNumber(0)),
-                Arguments.of(RequestStatus.BEFORE, null, setPageSize(12), setNumberOfElements(12), setTotalElements(30), setTotalPages(30 / 12 + 1), setPageNumber(0)),
-                Arguments.of(RequestStatus.COMPLETE, null, setPageSize(12), setNumberOfElements(12), setTotalElements(20), setTotalPages(20 / 12 + 1), setPageNumber(0)),
-                Arguments.of(RequestStatus.COMPLETE, null, setPageSize(12), setNumberOfElements(20 % 12), setTotalElements(20), setTotalPages(20 / 12 + 1), setPageNumber(20 / 12)),
-                Arguments.of(null, "test1", setPageSize(12), setNumberOfElements(10), setTotalElements(10), setTotalPages(1), setPageNumber(0)),
-                Arguments.of(null, "test2", setPageSize(12), setNumberOfElements(12), setTotalElements(40), setTotalPages(40 / 12 + 1), setPageNumber(0)),
-                Arguments.of(RequestStatus.BEFORE, "test2", setPageSize(12), setNumberOfElements(12), setTotalElements(20), setTotalPages(20 / 12 + 1), setPageNumber(0)),
-                Arguments.of(RequestStatus.COMPLETE, "test2", setPageSize(12), setNumberOfElements(12), setTotalElements(20), setTotalPages(20 / 12 + 1), setPageNumber(0))
-        );
-    }
+		// then
+		assertThat(response.getNumberOfElements()).isEqualTo(numberOfElements);
+		assertThat(response.getTotalElements()).isEqualTo(totalElements);
+		assertThat(response.getTotalPages()).isEqualTo(totalPages);
+		assertThat(response.getNumber()).isEqualTo(pageNumber);
+	}
 
-    private static int setPageSize(int pageSize) {
-        return pageSize;
-    }
+	private static Stream<Arguments> searchArticle() {
+		return Stream.of(
+			Arguments.of(null, null, setPageSize(10), setNumberOfElements(10), setTotalElements(50),
+				setTotalPages(50 / 10), setPageNumber(0)),
+			Arguments.of(RequestStatus.BEFORE, null, setPageSize(10), setNumberOfElements(10), setTotalElements(30),
+				setTotalPages(30 / 10), setPageNumber(0)),
+			Arguments.of(RequestStatus.BEFORE, null, setPageSize(12), setNumberOfElements(12), setTotalElements(30),
+				setTotalPages(30 / 12 + 1), setPageNumber(0)),
+			Arguments.of(RequestStatus.COMPLETE, null, setPageSize(12), setNumberOfElements(12), setTotalElements(20),
+				setTotalPages(20 / 12 + 1), setPageNumber(0)),
+			Arguments.of(RequestStatus.COMPLETE, null, setPageSize(12), setNumberOfElements(20 % 12),
+				setTotalElements(20), setTotalPages(20 / 12 + 1), setPageNumber(20 / 12)),
+			Arguments.of(null, "test1", setPageSize(12), setNumberOfElements(10), setTotalElements(10),
+				setTotalPages(1), setPageNumber(0)),
+			Arguments.of(null, "test2", setPageSize(12), setNumberOfElements(12), setTotalElements(40),
+				setTotalPages(40 / 12 + 1), setPageNumber(0)),
+			Arguments.of(RequestStatus.BEFORE, "test2", setPageSize(12), setNumberOfElements(12), setTotalElements(20),
+				setTotalPages(20 / 12 + 1), setPageNumber(0)),
+			Arguments.of(RequestStatus.COMPLETE, "test2", setPageSize(12), setNumberOfElements(12),
+				setTotalElements(20), setTotalPages(20 / 12 + 1), setPageNumber(0))
+		);
+	}
 
-    private static int setNumberOfElements(int numberOfElements) {
-        return numberOfElements;
-    }
+	private static int setPageSize(final int pageSize) {
+		return pageSize;
+	}
 
+	private static int setNumberOfElements(final int numberOfElements) {
+		return numberOfElements;
+	}
 
-    private static int setTotalPages(int totalPages) {
-        return totalPages;
-    }
+	private static int setTotalPages(final int totalPages) {
+		return totalPages;
+	}
 
-    private static int setTotalElements(int totalElements) {
-        return totalElements;
-    }
+	private static int setTotalElements(final int totalElements) {
+		return totalElements;
+	}
 
-    private static int setPageNumber(int pageNumber) {
-        return pageNumber;
-    }
-
-
+	private static int setPageNumber(final int pageNumber) {
+		return pageNumber;
+	}
 }

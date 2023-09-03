@@ -1,76 +1,117 @@
 package com.example.servicehub.domain.services;
 
-import com.example.servicehub.domain.common.BaseEntity;
-import com.example.servicehub.domain.customer.CustomerService;
-import lombok.*;
-
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import com.example.servicehub.domain.common.BaseEntity;
+import com.example.servicehub.domain.customer.CustomerService;
+
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Getter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Services extends BaseEntity {
-    @OneToMany(mappedBy = "services", fetch = FetchType.LAZY)
-    private final List<ServiceCategory> serviceCategories = new ArrayList<>();
-    @OneToMany(mappedBy = "services", fetch = FetchType.LAZY)
-    private final List<CustomerService> customerServices = new ArrayList<>();
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "service_id")
-    private Long id;
-    @Column(nullable = false, unique = true)
-    private String serviceName;
-    @Column(unique = true)
-    private String logoStoreName;
-    @Column(nullable = false, unique = true)
-    private String serviceUrl;
-    @Column(nullable = false, length = 10000)
-    private String content;
-    private String title;
 
-    @Builder
-    public Services(String serviceName, String logoStoreName, String serviceUrl, String title, String content) {
-        this.title = title;
-        this.serviceName = serviceName;
-        this.logoStoreName = logoStoreName;
-        this.serviceUrl = serviceUrl;
-        this.content = content;
-    }
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "service_id")
+	private Long id;
 
-    public static Services of(String serviceName, String logoStoreName, String serviceUrl, String title, String content) {
-        return new Services(serviceName, logoStoreName, serviceUrl, title, content);
-    }
+	@Column(name = "service_name", nullable = false, unique = true)
+	private String serviceName;
 
-    public void update(String serviceName, String logo, String serviceUrl, String title, String content) {
-        this.serviceName = serviceName;
-        this.logoStoreName = logo;
-        this.serviceUrl = serviceUrl;
-        this.title = title;
-        this.content = content;
-    }
+	@Column(name = "logo_store_name", unique = true)
+	private String logoStoreName;
 
-    public void mappingAssociations(ServiceCategory serviceCategory) {
-        serviceCategories.add(serviceCategory);
-    }
+	@Column(name = "service_url", nullable = false, unique = true)
+	private String serviceUrl;
 
-    public void mappingAssociations(CustomerService customerService) {
-        customerServices.add(customerService);
-    }
+	@Column(name = "content", nullable = false, length = 10000)
+	private String content;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Services)) return false;
-        Services services = (Services) o;
-        return this.getId() != null && Objects.equals(id, services.id);
-    }
+	@Column(name = "title")
+	private String title;
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
+	@OneToMany(mappedBy = "services", fetch = FetchType.LAZY)
+	private final List<ServiceCategory> serviceCategories = new ArrayList<>();
+
+	@OneToMany(mappedBy = "services", fetch = FetchType.LAZY)
+	private final List<CustomerService> customerServices = new ArrayList<>();
+
+	@Builder
+	public Services(
+		final String serviceName,
+		final String logoStoreName,
+		final String serviceUrl,
+		final String title,
+		final String content
+	) {
+		this.title = title;
+		this.serviceName = serviceName;
+		this.logoStoreName = logoStoreName;
+		this.serviceUrl = serviceUrl;
+		this.content = content;
+	}
+
+	public static Services of(
+		final String serviceName,
+		final String logoStoreName,
+		final String serviceUrl,
+		final String title,
+		final String content
+	) {
+		return new Services(serviceName, logoStoreName, serviceUrl, title, content);
+	}
+
+	public void update(
+		final String serviceName,
+		final String logo,
+		final String serviceUrl,
+		final String title,
+		final String content
+	) {
+		this.serviceName = serviceName;
+		this.logoStoreName = logo;
+		this.serviceUrl = serviceUrl;
+		this.title = title;
+		this.content = content;
+	}
+
+	public void mappingAssociations(final ServiceCategory serviceCategory) {
+		serviceCategories.add(serviceCategory);
+	}
+
+	public void mappingAssociations(final CustomerService customerService) {
+		customerServices.add(customerService);
+	}
+
+	@Override
+	public boolean equals(final Object o) {
+		if (this == o)
+			return true;
+		if (!(o instanceof Services))
+			return false;
+		Services services = (Services)o;
+		return this.getId() != null && Objects.equals(id, services.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
 }

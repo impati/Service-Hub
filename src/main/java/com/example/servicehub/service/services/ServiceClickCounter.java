@@ -1,5 +1,6 @@
 package com.example.servicehub.service.services;
 
 public interface ServiceClickCounter {
-    String countClickAndReturnUrl(Long customerId, Long serviceId);
+
+	String countClickAndReturnUrl(final Long customerId, final Long serviceId);
 }
