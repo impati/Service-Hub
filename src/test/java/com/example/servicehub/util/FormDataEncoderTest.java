@@ -1,7 +1,7 @@
 package com.example.servicehub.util;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import static java.util.stream.Collectors.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -9,81 +9,73 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
-public class FormDataEncoderTest {
+class FormDataEncoderTest {
 
-    @Test
-    @DisplayName("FormDataEncoder - container Collection Test")
-    public void existCollection() throws Exception {
-        // given
+	@Test
+	@DisplayName("FormDataEncoder - container Collection Test")
+	void existCollection() {
+		// given
+		final String username = "test";
+		final List<String> categories = List.of("IT", "BLOG");
+		final Pair pair = new Pair(username, categories);
+		final FormDataEncoder formDataEncoder = new FormDataEncoder();
+		final String encode = formDataEncoder.encode(pair, Pair.class);
 
-        String username = "test";
-        List<String> categories = List.of("IT", "BLOG");
+		assertThat(encode).isEqualTo(
+			"username=" + username +
+				"&categories=" + "IT" +
+				"&categories=" + "BLOG"
+		);
+	}
 
-        Pair pair = new Pair(username, categories);
+	@Test
+	@DisplayName("컬렉션 필드 네임 가져오기")
+	void getCollectionFieldNames() {
 
+		final List<String> collectionFieldNames = Arrays.stream(Pair.class.getDeclaredFields())
+			.filter(field -> Collection.class.isAssignableFrom(field.getType()))
+			.map(Field::getName)
+			.collect(toList());
 
-        FormDataEncoder formDataEncoder = new FormDataEncoder();
-        String encode = formDataEncoder.encode(pair, Pair.class);
+		assertThat(collectionFieldNames)
+			.contains("categories");
+	}
 
-        assertThat(encode).isEqualTo(
-                "username=" + username +
-                        "&categories=" + "IT" +
-                        "&categories=" + "BLOG"
-        );
+	@Test
+	@DisplayName("리플렉션 타입 검사")
+	void reflection() {
+		final List<String> container = new ArrayList<>();
 
-    }
+		assertThat(Collection.class.isAssignableFrom(container.getClass()))
+			.isTrue();
+	}
 
+	static class Pair {
+		String username;
+		List<String> categories;
 
-    @Test
-    @DisplayName("컬렉션 필드 네임 가져오기")
-    public void getCollectionFieldNames() throws Exception {
+		public Pair(final String username, final List<String> categories) {
+			this.username = username;
+			this.categories = categories;
+		}
 
-        List<String> collectionFieldNames = Arrays.stream(Pair.class.getDeclaredFields())
-                .filter(field -> Collection.class.isAssignableFrom(field.getType()))
-                .map(Field::getName)
-                .collect(toList());
+		public String getUsername() {
+			return username;
+		}
 
-        assertThat(collectionFieldNames)
-                .contains("categories");
-    }
+		public void setUsername(String username) {
+			this.username = username;
+		}
 
-    @Test
-    @DisplayName("리플렉션 타입 검사")
-    public void reflection() throws Exception {
-        List<String> container = new ArrayList<>();
+		public List<String> getCategories() {
+			return categories;
+		}
 
-        assertThat(Collection.class.isAssignableFrom(container.getClass()))
-                .isTrue();
-    }
-
-
-    static class Pair {
-        String username;
-        List<String> categories;
-
-        public Pair(String username, List<String> categories) {
-            this.username = username;
-            this.categories = categories;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
-        }
-
-        public List<String> getCategories() {
-            return categories;
-        }
-
-        public void setCategories(List<String> categories) {
-            this.categories = categories;
-        }
-    }
-
+		public void setCategories(List<String> categories) {
+			this.categories = categories;
+		}
+	}
 }

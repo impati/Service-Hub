@@ -1,5 +1,14 @@
 package com.example.servicehub.service.services;
 
+import static java.util.stream.Collectors.*;
+
+import java.util.List;
+
+import javax.persistence.EntityNotFoundException;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.servicehub.domain.services.ServiceCategory;
 import com.example.servicehub.domain.services.Services;
 import com.example.servicehub.dto.services.ServiceUpdateForm;
@@ -8,15 +17,9 @@ import com.example.servicehub.repository.services.ServiceCategoryRepository;
 import com.example.servicehub.repository.services.ServicesRepository;
 import com.example.servicehub.support.file.AbstractFileManager;
 import com.example.servicehub.support.file.LogoManager;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityNotFoundException;
-import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @Service
@@ -24,59 +27,49 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class ServiceUpdate {
 
-    private final ServiceCategoryRepository serviceCategoryRepository;
-    private final CategoryRepository categoryRepository;
-    private final ServicesRepository servicesRepository;
-    private final LogoManager logoManager;
+	private final ServiceCategoryRepository serviceCategoryRepository;
+	private final CategoryRepository categoryRepository;
+	private final ServicesRepository servicesRepository;
+	private final LogoManager logoManager;
 
-    public void update(ServiceUpdateForm serviceUpdateForm) {
+	public void update(final ServiceUpdateForm serviceUpdateForm) {
+		final Services services = servicesRepository.findById(serviceUpdateForm.getServiceId())
+			.orElseThrow(() -> new EntityNotFoundException("유효하지 않은 서비스입니다."));
 
-        Services services = servicesRepository.findById(serviceUpdateForm.getServiceId())
-                .orElseThrow(() -> new EntityNotFoundException("유효하지 않은 서비스입니다."));
+		updateCategories(services, serviceUpdateForm.getCategoryNames());
 
-        updateCategories(services, serviceUpdateForm.getCategoryNames());
+		String storeName = getStoreName(serviceUpdateForm);
+		if (isDefaultFile(storeName)) {
+			storeName = services.getLogoStoreName();
+		}
 
-        String storeName = getStoreName(serviceUpdateForm);
+		services.update(
+			serviceUpdateForm.getServiceName(), storeName,
+			serviceUpdateForm.getServiceUrl(), serviceUpdateForm.getTitle(),
+			serviceUpdateForm.getDescription());
+	}
 
-        if (isDefaultFile(storeName)) storeName = services.getLogoStoreName();
+	private String getStoreName(final ServiceUpdateForm serviceUpdateForm) {
+		return logoManager.tryToRestore(serviceUpdateForm.getLogoFile());
+	}
 
-        services.update(
-                serviceUpdateForm.getServiceName(), storeName,
-                serviceUpdateForm.getServiceUrl(), serviceUpdateForm.getTitle(),
-                serviceUpdateForm.getDescription());
+	private boolean isDefaultFile(final String fileName) {
+		return fileName.equals(AbstractFileManager.DEFAULT);
+	}
 
-    }
+	private void updateCategories(final Services services, final List<String> categoryNames) {
+		final List<ServiceCategory> serviceCategories = serviceCategoryRepository.findByServices(services);
 
-    private String getStoreName(ServiceUpdateForm serviceUpdateForm) {
-        return logoManager.tryToRestore(serviceUpdateForm.getLogoFile());
-    }
+		final List<ServiceCategory> newServiceCategories = categoryRepository.findByNames(categoryNames).stream()
+			.map(categories -> ServiceCategory.of(services, categories))
+			.collect(toList());
 
-    private boolean isDefaultFile(String fileName) {
-        if (fileName.equals(AbstractFileManager.DEFAULT)) return true;
-        return false;
-    }
+		serviceCategoryRepository.deleteAll(serviceCategories.stream()
+			.filter(serviceCategory -> !newServiceCategories.contains(serviceCategory))
+			.collect(toList()));
 
-    private void updateCategories(Services services, List<String> categoryNames) {
-
-        List<ServiceCategory> serviceCategories = serviceCategoryRepository.findByServices(services);
-
-        List<ServiceCategory> newServiceCategories =
-                categoryRepository.findByNames(categoryNames)
-                        .stream()
-                        .map(categories -> ServiceCategory.of(services, categories))
-                        .collect(toList());
-
-        serviceCategoryRepository.deleteAll(
-                serviceCategories
-                        .stream()
-                        .filter(serviceCategory -> !newServiceCategories.contains(serviceCategory))
-                        .collect(toList()));
-
-        serviceCategoryRepository.saveAll(
-                newServiceCategories
-                        .stream()
-                        .filter(serviceCategory -> !serviceCategories.contains(serviceCategory))
-                        .collect(toList()));
-    }
-
+		serviceCategoryRepository.saveAll(newServiceCategories.stream()
+			.filter(serviceCategory -> !serviceCategories.contains(serviceCategory))
+			.collect(toList()));
+	}
 }

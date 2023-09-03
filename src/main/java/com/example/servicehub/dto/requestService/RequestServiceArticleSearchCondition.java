@@ -1,12 +1,16 @@
 package com.example.servicehub.dto.requestService;
 
-import com.example.servicehub.domain.requestService.RequestStatus;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import com.example.servicehub.domain.requestservice.RequestStatus;
 
-@Data
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor
 @AllArgsConstructor
 public class RequestServiceArticleSearchCondition {
-    private RequestStatus requestStatus;
-    private String nickname;
+
+	private RequestStatus requestStatus;
+	private String nickname;
 }

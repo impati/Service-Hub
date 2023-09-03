@@ -1,10 +1,11 @@
 package com.example.servicehub.web.validator;
 
-import com.example.servicehub.web.validator.annotation.FileSize;
-import org.springframework.web.multipart.MultipartFile;
-
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import com.example.servicehub.web.validator.annotation.FileSize;
 
 public class FileSizeValidator implements ConstraintValidator<FileSize, MultipartFile> {
 
@@ -12,13 +13,16 @@ public class FileSizeValidator implements ConstraintValidator<FileSize, Multipar
     private long maxSizeMB;
 
     @Override
-    public void initialize(FileSize constraintAnnotation) {
+    public void initialize(final FileSize constraintAnnotation) {
         maxSizeMB = constraintAnnotation.maxSizeInMB();
     }
 
     @Override
-    public boolean isValid(MultipartFile file, ConstraintValidatorContext context) {
-        if(file == null || file.isEmpty()) return true;
+    public boolean isValid(final MultipartFile file, final ConstraintValidatorContext context) {
+        if (file == null || file.isEmpty()) {
+            return true;
+        }
+
         return file.getSize() <= maxSizeMB * MB;
     }
 }

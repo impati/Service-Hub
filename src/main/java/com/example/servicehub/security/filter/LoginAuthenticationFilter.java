@@ -1,8 +1,8 @@
 package com.example.servicehub.security.filter;
 
-import com.example.servicehub.config.CustomerServer;
-import com.example.servicehub.security.authentication.CustomerPrincipal;
-import lombok.Getter;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -13,48 +13,53 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import com.example.servicehub.config.CustomerServer;
+import com.example.servicehub.security.authentication.CustomerPrincipal;
+
+import lombok.Getter;
 
 public class LoginAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
-    private final static String DEFAULT_FILTER_PROCESSES_URI = "/login/customer-server/code/**";
-    private final static String ACCESS_TOKEN_ENDPOINT = "/auth/gettoken";
-    private final static String CLIENT_ID = "clientId";
-    private final CustomerServer customerServer;
-    private final RestTemplate restTemplate;
 
-    public LoginAuthenticationFilter(CustomerServer customerServer, RestTemplate restTemplate) {
-        super(DEFAULT_FILTER_PROCESSES_URI);
-        this.customerServer = customerServer;
-        this.restTemplate = restTemplate;
-    }
+	private final static String DEFAULT_FILTER_PROCESSES_URI = "/login/customer-server/code/**";
+	private final static String ACCESS_TOKEN_ENDPOINT = "/auth/gettoken";
+	private final static String CLIENT_ID = "clientId";
 
-    @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
-        String code = request.getParameter("code");
+	private final CustomerServer customerServer;
+	private final RestTemplate restTemplate;
 
-        ResponseEntity<AccessTokenDto> result = restTemplate.exchange(AccessTokenEndPointURL(), HttpMethod.POST, createRequestHeader(code), AccessTokenDto.class);
+	public LoginAuthenticationFilter(final CustomerServer customerServer, final RestTemplate restTemplate) {
+		super(DEFAULT_FILTER_PROCESSES_URI);
+		this.customerServer = customerServer;
+		this.restTemplate = restTemplate;
+	}
 
-        AccessTokenDto accessTokenDto = result.getBody();
+	@Override
+	public Authentication attemptAuthentication(
+		final HttpServletRequest request,
+		final HttpServletResponse response) throws AuthenticationException {
+		final String code = request.getParameter("code");
 
-        return new PreAuthenticatedAuthenticationToken(new CustomerPrincipal(), accessTokenDto.getAccessToken());
-    }
+		final ResponseEntity<AccessTokenDto> result = restTemplate.exchange(AccessTokenEndPointURL(), HttpMethod.POST,
+			createRequestHeader(code), AccessTokenDto.class);
 
-    private String AccessTokenEndPointURL() {
-        return customerServer.getServer() + ACCESS_TOKEN_ENDPOINT;
-    }
+		final AccessTokenDto accessTokenDto = result.getBody();
 
-    private HttpEntity createRequestHeader(String code) {
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(CLIENT_ID, customerServer.getClientId());
-        httpHeaders.add(HttpHeaders.AUTHORIZATION, code);
-        return new HttpEntity<>(httpHeaders);
-    }
+		return new PreAuthenticatedAuthenticationToken(new CustomerPrincipal(), accessTokenDto.getAccessToken());
+	}
 
-    @Getter
-    static class AccessTokenDto {
-        private String accessToken;
-    }
+	private String AccessTokenEndPointURL() {
+		return customerServer.getServer() + ACCESS_TOKEN_ENDPOINT;
+	}
+
+	private HttpEntity createRequestHeader(String code) {
+		final HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.add(CLIENT_ID, customerServer.getClientId());
+		httpHeaders.add(HttpHeaders.AUTHORIZATION, code);
+		return new HttpEntity<>(httpHeaders);
+	}
+
+	@Getter
+	static class AccessTokenDto {
+		private String accessToken;
+	}
 }

@@ -11,40 +11,38 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
-
 @TestConfiguration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class TestSecurityConfig {
 
-    @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+	@Bean
+	SecurityFilterChain securityFilterChain(final HttpSecurity httpSecurity) throws Exception {
 
-        httpSecurity.csrf();
+		httpSecurity.csrf();
 
-        httpSecurity.anonymous();
+		httpSecurity.anonymous();
 
-        httpSecurity.authorizeRequests(auth -> {
-            auth.mvcMatchers("/service/registration").hasRole("ADMIN");
-            auth.mvcMatchers("/customer/**").hasRole("USER");
-            auth.mvcMatchers("/comments/**").hasRole("USER");
-            auth.mvcMatchers("/requested-service/registration/**").hasRole("USER");
-            auth.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll();
-            auth.anyRequest().permitAll();
-        });
+		httpSecurity.authorizeRequests(auth -> {
+			auth.mvcMatchers("/service/registration").hasRole("ADMIN");
+			auth.mvcMatchers("/customer/**").hasRole("USER");
+			auth.mvcMatchers("/comments/**").hasRole("USER");
+			auth.mvcMatchers("/requested-service/registration/**").hasRole("USER");
+			auth.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll();
+			auth.anyRequest().permitAll();
+		});
 
-        return httpSecurity.build();
-    }
+		return httpSecurity.build();
+	}
 
-    @Bean
-    public RoleHierarchy roleHierarchy() {
-        RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
-        roleHierarchy.setHierarchy("ROLE_ADMIN > ROLE_USER");
-        return roleHierarchy;
-    }
+	@Bean
+	public RoleHierarchy roleHierarchy() {
+		RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
+		roleHierarchy.setHierarchy("ROLE_ADMIN > ROLE_USER");
+		return roleHierarchy;
+	}
 
-    @Bean
-    public AccessDecisionVoter<? extends Object> roleVoter() {
-        return new RoleHierarchyVoter(roleHierarchy());
-    }
-
+	@Bean
+	public AccessDecisionVoter<? extends Object> roleVoter() {
+		return new RoleHierarchyVoter(roleHierarchy());
+	}
 }

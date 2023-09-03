@@ -1,17 +1,12 @@
 package com.example.servicehub.web.controller;
 
-import com.example.servicehub.config.TestSecurityConfig;
-import com.example.servicehub.domain.requestService.RequestServiceArticle;
-import com.example.servicehub.domain.requestService.RequestStatus;
-import com.example.servicehub.dto.requestService.RequestServiceArticleForm;
-import com.example.servicehub.dto.requestService.RequestServiceArticleSearchCondition;
-import com.example.servicehub.service.category.CategoryAdminister;
-import com.example.servicehub.service.requestService.RequestServiceArticleRegister;
-import com.example.servicehub.service.requestService.RequestServiceArticleSearch;
-import com.example.servicehub.service.requestService.RequestServiceToServiceTransfer;
-import com.example.servicehub.util.FormDataEncoder;
-import com.example.servicehub.web.WithMockCustomUser;
-import com.example.servicehub.web.controller.requestService.RequestServiceArticleController;
+import static org.mockito.BDDMockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,141 +19,135 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
-
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import com.example.servicehub.config.TestSecurityConfig;
+import com.example.servicehub.domain.requestservice.RequestServiceArticle;
+import com.example.servicehub.domain.requestservice.RequestStatus;
+import com.example.servicehub.dto.requestService.RequestServiceArticleForm;
+import com.example.servicehub.dto.requestService.RequestServiceArticleSearchCondition;
+import com.example.servicehub.service.category.CategoryAdminister;
+import com.example.servicehub.service.requestService.RequestServiceArticleRegister;
+import com.example.servicehub.service.requestService.RequestServiceArticleSearch;
+import com.example.servicehub.service.requestService.RequestServiceToServiceTransfer;
+import com.example.servicehub.util.FormDataEncoder;
+import com.example.servicehub.web.WithMockCustomUser;
+import com.example.servicehub.web.controller.requestService.RequestServiceArticleController;
 
 @WebMvcTest(RequestServiceArticleController.class)
 @Import(TestSecurityConfig.class)
 class RequestServiceArticleControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+	@Autowired
+	private MockMvc mockMvc;
 
-    @MockBean
-    private RequestServiceArticleSearch requestServiceArticleSearch;
+	@MockBean
+	private RequestServiceArticleSearch requestServiceArticleSearch;
 
-    @MockBean
-    private RequestServiceToServiceTransfer requestServiceToServiceTransfer;
+	@MockBean
+	private RequestServiceToServiceTransfer requestServiceToServiceTransfer;
 
-    @MockBean
-    private CategoryAdminister categoryAdminister;
+	@MockBean
+	private CategoryAdminister categoryAdminister;
 
-    @MockBean
-    private RequestServiceArticleRegister requestServiceArticleRegister;
+	@MockBean
+	private RequestServiceArticleRegister requestServiceArticleRegister;
 
-    private FormDataEncoder dataEncoder;
+	private FormDataEncoder dataEncoder;
 
-    @BeforeEach
-    void setup() {
-        dataEncoder = new FormDataEncoder();
-    }
+	@BeforeEach
+	void setup() {
+		dataEncoder = new FormDataEncoder();
+	}
 
-    @Test
-    @DisplayName("등록 요청 서비스들 조회 테스트")
-    public void givenURL_whenSearchingRequestedService_thenRenderRequestServiceArticles() throws Exception {
+	@Test
+	@DisplayName("등록 요청 서비스들 조회 테스트")
+	void givenURL_whenSearchingRequestedService_thenRenderRequestServiceArticles() throws Exception {
+		final RequestServiceArticleSearchCondition condition = new RequestServiceArticleSearchCondition(any(), any());
+		final PageRequest pageRequest = PageRequest.of(0, 10);
 
-        RequestServiceArticleSearchCondition condition = new RequestServiceArticleSearchCondition(null, null);
-        PageRequest pageRequest = PageRequest.of(0, 10);
+		given(requestServiceArticleSearch.searchArticle(condition, pageRequest))
+			.willReturn(new PageImpl<>(stubbing(), pageRequest, 1));
 
-        given(requestServiceArticleSearch.searchArticle(condition, pageRequest))
-                .willReturn(new PageImpl<>(stubbing(), pageRequest, 1));
+		mockMvc.perform(get("/requested-service")
+				.content(dataEncoder.encode(condition, RequestServiceArticleSearchCondition.class)))
+			.andExpect(status().isOk())
+			.andExpect(view().name("requested-service/articles"))
+			.andExpect(model().attributeExists("articles"))
+			.andDo(print());
+	}
 
+	@Test
+	@DisplayName("등록 요청 서비스 조회 테스트")
+	void givenURL_whenSearchingRequestedService_thenRenderRequestServiceArticle() throws Exception {
+		given(requestServiceArticleSearch.searchSingleArticle(1L))
+			.willReturn(stubbingOne());
 
-        mockMvc.perform(get("/requested-service")
-                        .content(dataEncoder.encode(condition, RequestServiceArticleSearchCondition.class)))
-                .andExpect(status().isOk())
-                .andExpect(view().name("requested-service/articles"))
-                .andExpect(model().attributeExists("articles"))
-                .andDo(print());
+		given(categoryAdminister.getAllCategories())
+			.willReturn(List.of("IT", "AI"));
 
-    }
+		mockMvc.perform(get("/requested-service/{articleId}", 1L))
+			.andExpect(status().isOk())
+			.andExpect(view().name("requested-service/article"))
+			.andExpect(model().attributeExists("article", "categoryNames"))
+			.andDo(print());
+	}
 
-    @Test
-    @DisplayName("등록 요청 서비스 조회 테스트")
-    public void givenURL_whenSearchingRequestedService_thenRenderRequestServiceArticle() throws Exception {
+	@Test
+	@DisplayName("등록 요청 서비스를 실제 서비스로 등록")
+	void givenArticleId_whenTransferToServices_thenRegisterServices() throws Exception {
+		final List<String> categories = List.of("IT", "AI");
+		willDoNothing().given(requestServiceToServiceTransfer).registerRequestedServiceAsService(
+			1L,
+			categories,
+			RequestStatus.COMPLETE
+		);
 
-        given(requestServiceArticleSearch.searchSingleArticle(1L))
-                .willReturn(stubbingOne());
+		mockMvc.perform(post("/requested-service/{articleId}", 1L)
+				.queryParam("categoryNames", "IT", "AI")
+				.queryParam("status", "COMPLETE")
+				.with(SecurityMockMvcRequestPostProcessors.csrf()))
+			.andExpect(status().is3xxRedirection())
+			.andExpect(handler().methodName("saveService"))
+			.andExpect(view().name("redirect:/requested-service/" + 1L))
+			.andDo(print());
+	}
 
-        given(categoryAdminister.getAllCategories())
-                .willReturn(List.of("IT", "AI"));
+	@Test
+	@DisplayName("등록 요청 서비스 등록 페이지 테스트")
+	@WithMockCustomUser
+	void givenURL_whenToRegisterRequestedService_thenRenderRequestServiceRegistrationPage() throws Exception {
+		mockMvc.perform(get("/requested-service/registration"))
+			.andExpect(status().isOk())
+			.andExpect(view().name("requested-service/article-registration"))
+			.andExpect(model().attributeExists("requestServiceArticleForm"))
+			.andDo(print());
+	}
 
-        mockMvc.perform(get("/requested-service/{articleId}", 1L))
-                .andExpect(status().isOk())
-                .andExpect(view().name("requested-service/article"))
-                .andExpect(model().attributeExists("article", "categoryNames"))
-                .andDo(print());
+	@Test
+	@DisplayName("등록 요청 서비스 등록 테스트")
+	@WithMockCustomUser
+	void givenRequestServiceArticleForm_whenThenRegisterRequestServiceArticle() throws Exception {
+		final RequestServiceArticleForm stub = new RequestServiceArticleForm();
+		given(requestServiceArticleRegister.register(any(), any(), any())).willReturn(1L);
 
-    }
+		mockMvc.perform(post("/requested-service/registration")
+				.content(dataEncoder.encode(stub, RequestServiceArticleForm.class))
+				.with(SecurityMockMvcRequestPostProcessors.csrf()))
+			.andExpect(status().is3xxRedirection())
+			.andExpect(handler().methodName("register"))
+			.andExpect(view().name("redirect:/requested-service/" + 1L))
+			.andDo(print());
+	}
 
-    @Test
-    @DisplayName("등록 요청 서비스를 실제 서비스로 등록")
-    public void givenArticleId_whenTransferToServices_thenRegisterServices() throws Exception {
+	private List<RequestServiceArticle> stubbing() {
+		return List.of(RequestServiceArticle
+			.builder()
+			.serviceContent("test")
+			.build());
+	}
 
-
-        List<String> categories = List.of("IT", "AI");
-        willDoNothing().given(requestServiceToServiceTransfer)
-                .registerRequestedServiceAsService(1L, categories, RequestStatus.COMPLETE);
-
-        mockMvc.perform(post("/requested-service/{articleId}", 1L)
-                        .queryParam("categoryNames", "IT", "AI")
-                        .queryParam("status", "COMPLETE")
-                        .with(SecurityMockMvcRequestPostProcessors.csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(handler().methodName("saveService"))
-                .andExpect(view().name("redirect:/requested-service/" + 1L))
-                .andDo(print());
-
-    }
-
-    @Test
-    @DisplayName("등록 요청 서비스 등록 페이지 테스트")
-    @WithMockCustomUser
-    public void givenURL_whenToRegisterRequestedService_thenRenderRequestServiceRegistrationPage() throws Exception {
-
-        mockMvc.perform(get("/requested-service/registration"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("requested-service/article-registration"))
-                .andExpect(model().attributeExists("requestServiceArticleForm"))
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("등록 요청 서비스 등록 테스트")
-    @WithMockCustomUser
-    public void givenRequestServiceArticleForm_whenToRegisterRequestServiceArticle_thenRegisterRequestServiceArticle() throws Exception {
-
-        RequestServiceArticleForm stub = new RequestServiceArticleForm();
-
-        given(requestServiceArticleRegister.register(1L, "rob", stub))
-                .willReturn(1L);
-
-        mockMvc.perform(post("/requested-service/registration")
-                        .content(dataEncoder.encode(stub, RequestServiceArticleForm.class))
-                        .with(SecurityMockMvcRequestPostProcessors.csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(handler().methodName("register"))
-                .andExpect(view().name("redirect:/requested-service/" + 1L))
-                .andDo(print());
-    }
-
-    private List<RequestServiceArticle> stubbing() {
-        return List.of(RequestServiceArticle
-                .builder()
-                .build());
-    }
-
-    private RequestServiceArticle stubbingOne() {
-        return RequestServiceArticle
-                .builder()
-                .build();
-    }
-
-
+	private RequestServiceArticle stubbingOne() {
+		return RequestServiceArticle
+			.builder()
+			.build();
+	}
 }

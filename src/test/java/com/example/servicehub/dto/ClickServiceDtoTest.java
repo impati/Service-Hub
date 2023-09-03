@@ -1,26 +1,26 @@
 package com.example.servicehub.dto;
 
-import com.example.servicehub.dto.services.ClickServiceDto;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import com.example.servicehub.dto.services.ClickServiceDto;
 
 class ClickServiceDtoTest {
 
-    @Test
-    @DisplayName("Categories 를 String 변환 테스트")
-    public void given_when_then() throws Exception{
-        // given
-        List<String>  categories = List.of("IT","BLOG");
-        // when
-        ClickServiceDto clickServiceDto =
-                new ClickServiceDto(null, null, null, null, null, null, categories,false);
-        // then
-        assertThat(clickServiceDto.getCategories())
-                .isEqualTo("IT BLOG");
-    }
-
+	@Test
+	@DisplayName("Categories 를 String 변환 테스트")
+	void given_when_then() {
+		// given
+		final List<String> categories = List.of("IT", "BLOG");
+		// when
+		final ClickServiceDto clickServiceDto =
+			new ClickServiceDto(null, null, null, null, null, null, categories, false);
+		// then
+		assertThat(clickServiceDto.getCategories())
+			.isEqualTo("IT BLOG");
+	}
 }

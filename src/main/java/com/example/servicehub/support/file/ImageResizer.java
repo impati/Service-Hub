@@ -1,5 +1,6 @@
 package com.example.servicehub.support.file;
 
 public interface ImageResizer {
-    String resizeImageAndSave(String imageName);
+
+    String resizeImageAndSave(final String imageName);
 }

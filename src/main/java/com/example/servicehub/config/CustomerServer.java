@@ -1,11 +1,13 @@
 package com.example.servicehub.config;
 
-import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties("customer")
+import lombok.Data;
+
 @Data
+@ConfigurationProperties("customer")
 public class CustomerServer {
-    private String clientId;
-    private String server;
+
+	private String clientId;
+	private String server;
 }
