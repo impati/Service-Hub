@@ -14,22 +14,22 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.example.servicehub.config.CustomerServer;
+import com.example.servicehub.config.CustomerServerConfig;
 
 public class CustomerServerSignupFilter extends OncePerRequestFilter {
-    
+
 	private static final String DEFAULT_AUTHORIZATION_REQUEST_BASE_URI = "/customer-server/signup";
 	private static final String CLIENT_ID = "clientId";
 	private static final String LOGIN_URI = "/signup";
 
 	private final RequestMatcher requestMatcher;
 	private final RedirectStrategy redirectStrategy;
-	private final CustomerServer customerServer;
+	private final CustomerServerConfig customerServerConfig;
 
-	public CustomerServerSignupFilter(final CustomerServer customerServer) {
+	public CustomerServerSignupFilter(final CustomerServerConfig customerServerConfig) {
 		this.requestMatcher = new AntPathRequestMatcher(DEFAULT_AUTHORIZATION_REQUEST_BASE_URI);
 		this.redirectStrategy = new DefaultRedirectStrategy();
-		this.customerServer = customerServer;
+		this.customerServerConfig = customerServerConfig;
 	}
 
 	@Override
@@ -47,9 +47,9 @@ public class CustomerServerSignupFilter extends OncePerRequestFilter {
 
 	private String getRedirectUrl() {
 		return UriComponentsBuilder
-			.fromUriString(customerServer.getServer())
+			.fromUriString(customerServerConfig.getServer())
 			.path(LOGIN_URI)
-			.queryParam(CLIENT_ID, customerServer.getClientId())
+			.queryParam(CLIENT_ID, customerServerConfig.getClientId())
 			.build()
 			.toString();
 	}

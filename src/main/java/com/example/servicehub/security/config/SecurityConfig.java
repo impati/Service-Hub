@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.AnonymousAuthenticationFi
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.web.client.RestTemplate;
 
-import com.example.servicehub.config.CustomerServer;
+import com.example.servicehub.config.CustomerServerConfig;
 import com.example.servicehub.security.authentication.LoginAuthenticationProvider;
 import com.example.servicehub.security.filter.AuthorizationRedirectFilter;
 import com.example.servicehub.security.filter.CustomerServerSignupFilter;
@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-	private final CustomerServer customerServer;
+	private final CustomerServerConfig customerServerConfig;
 	private final RestTemplate restTemplate;
 
 	@Bean
@@ -52,9 +52,9 @@ public class SecurityConfig {
 
 		httpSecurity.addFilterBefore(loginAuthenticationFilter(authenticationManagerBuilder),
 			AnonymousAuthenticationFilter.class);
-		httpSecurity.addFilterBefore(new AuthorizationRedirectFilter(customerServer),
+		httpSecurity.addFilterBefore(new AuthorizationRedirectFilter(customerServerConfig),
 			AnonymousAuthenticationFilter.class);
-		httpSecurity.addFilterBefore(new CustomerServerSignupFilter(customerServer),
+		httpSecurity.addFilterBefore(new CustomerServerSignupFilter(customerServerConfig),
 			AnonymousAuthenticationFilter.class);
 
 		httpSecurity.exceptionHandling()
@@ -73,11 +73,11 @@ public class SecurityConfig {
 		final AuthenticationManagerBuilder authenticationManagerBuilder
 	) throws Exception {
 		authenticationManagerBuilder.authenticationProvider(
-			new LoginAuthenticationProvider(customerServer, restTemplate)
+			new LoginAuthenticationProvider(customerServerConfig, restTemplate)
 		);
 		final AuthenticationManager authenticationManager = authenticationManagerBuilder.getOrBuild();
 		final LoginAuthenticationFilter loginAuthenticationFilter = new LoginAuthenticationFilter(
-			customerServer,
+			customerServerConfig,
 			restTemplate
 		);
 		loginAuthenticationFilter.setAuthenticationManager(authenticationManager);

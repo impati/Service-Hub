@@ -14,7 +14,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.example.servicehub.config.CustomerServer;
+import com.example.servicehub.config.CustomerServerConfig;
 
 public class AuthorizationRedirectFilter extends OncePerRequestFilter {
 
@@ -24,12 +24,12 @@ public class AuthorizationRedirectFilter extends OncePerRequestFilter {
 
 	private final RequestMatcher requestMatcher;
 	private final RedirectStrategy redirectStrategy;
-	private final CustomerServer customerServer;
+	private final CustomerServerConfig customerServerConfig;
 
-	public AuthorizationRedirectFilter(final CustomerServer customerServer) {
+	public AuthorizationRedirectFilter(final CustomerServerConfig customerServerConfig) {
 		this.requestMatcher = new AntPathRequestMatcher(DEFAULT_AUTHORIZATION_REQUEST_BASE_URI);
 		this.redirectStrategy = new DefaultRedirectStrategy();
-		this.customerServer = customerServer;
+		this.customerServerConfig = customerServerConfig;
 	}
 
 	@Override
@@ -47,9 +47,9 @@ public class AuthorizationRedirectFilter extends OncePerRequestFilter {
 
 	private String getRedirectUrl() {
 		return UriComponentsBuilder
-			.fromUriString(customerServer.getServer())
+			.fromUriString(customerServerConfig.getServer())
 			.path(LOGIN_URI)
-			.queryParam(CLIENT_ID, customerServer.getClientId())
+			.queryParam(CLIENT_ID, customerServerConfig.getClientId())
 			.build()
 			.toString();
 	}

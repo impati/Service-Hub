@@ -12,7 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.web.client.RestTemplate;
 
-import com.example.servicehub.config.CustomerServer;
+import com.example.servicehub.config.CustomerServerConfig;
 import com.example.servicehub.domain.customer.ProviderType;
 import com.example.servicehub.domain.customer.RoleType;
 
@@ -26,7 +26,7 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
 
 	private static final String CUSTOMER_ENDPOINT = "/api/v1/customer";
 	private static final String CLIENT_ID = "clientId";
-	private final CustomerServer customerServer;
+	private final CustomerServerConfig customerServerConfig;
 	private final RestTemplate restTemplate;
 
 	@Override
@@ -42,7 +42,7 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
 
 	private CustomerDto getCustomer(final String token) {
 		return restTemplate.exchange(
-			customerServer.getServer() + CUSTOMER_ENDPOINT,
+			customerServerConfig.getServer() + CUSTOMER_ENDPOINT,
 			HttpMethod.POST,
 			createRequestHeader(token), CustomerDto.class).getBody();
 	}
@@ -58,7 +58,7 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
 
 	private HttpEntity createRequestHeader(final String accessToken) {
 		HttpHeaders httpHeaders = new HttpHeaders();
-		httpHeaders.set(CLIENT_ID, customerServer.getClientId());
+		httpHeaders.set(CLIENT_ID, customerServerConfig.getClientId());
 		httpHeaders.add(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
 		return new HttpEntity<>(httpHeaders);
 	}

@@ -13,7 +13,7 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.web.client.RestTemplate;
 
-import com.example.servicehub.config.CustomerServer;
+import com.example.servicehub.config.CustomerServerConfig;
 import com.example.servicehub.security.authentication.CustomerPrincipal;
 
 import lombok.Getter;
@@ -24,12 +24,12 @@ public class LoginAuthenticationFilter extends AbstractAuthenticationProcessingF
 	private final static String ACCESS_TOKEN_ENDPOINT = "/auth/gettoken";
 	private final static String CLIENT_ID = "clientId";
 
-	private final CustomerServer customerServer;
+	private final CustomerServerConfig customerServerConfig;
 	private final RestTemplate restTemplate;
 
-	public LoginAuthenticationFilter(final CustomerServer customerServer, final RestTemplate restTemplate) {
+	public LoginAuthenticationFilter(final CustomerServerConfig customerServerConfig, final RestTemplate restTemplate) {
 		super(DEFAULT_FILTER_PROCESSES_URI);
-		this.customerServer = customerServer;
+		this.customerServerConfig = customerServerConfig;
 		this.restTemplate = restTemplate;
 	}
 
@@ -48,12 +48,12 @@ public class LoginAuthenticationFilter extends AbstractAuthenticationProcessingF
 	}
 
 	private String AccessTokenEndPointURL() {
-		return customerServer.getServer() + ACCESS_TOKEN_ENDPOINT;
+		return customerServerConfig.getServer() + ACCESS_TOKEN_ENDPOINT;
 	}
 
 	private HttpEntity createRequestHeader(String code) {
 		final HttpHeaders httpHeaders = new HttpHeaders();
-		httpHeaders.add(CLIENT_ID, customerServer.getClientId());
+		httpHeaders.add(CLIENT_ID, customerServerConfig.getClientId());
 		httpHeaders.add(HttpHeaders.AUTHORIZATION, code);
 		return new HttpEntity<>(httpHeaders);
 	}
