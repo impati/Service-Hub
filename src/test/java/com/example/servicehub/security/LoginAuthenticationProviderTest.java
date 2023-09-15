@@ -19,7 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.web.client.RestTemplate;
 
-import com.example.servicehub.config.CustomerServer;
+import com.example.servicehub.config.CustomerServerConfig;
 import com.example.servicehub.security.authentication.CustomerPrincipal;
 import com.example.servicehub.security.authentication.LoginAuthenticationProvider;
 import com.example.servicehub.util.JsonMaker;
@@ -31,7 +31,7 @@ import okhttp3.mockwebserver.MockWebServer;
 class LoginAuthenticationProviderTest {
 
 	@Mock
-	private CustomerServer customerServer;
+	private CustomerServerConfig customerServerConfig;
 
 	private MockWebServer mockWebServer;
 
@@ -52,16 +52,17 @@ class LoginAuthenticationProviderTest {
 
 		final String baseUrl = mockWebServer.url("/").toString();
 
-		given(customerServer.getServer()).willReturn(baseUrl);
+		given(customerServerConfig.getServer()).willReturn(baseUrl);
 
-		given(customerServer.getClientId()).willReturn("clientId");
+		given(customerServerConfig.getClientId()).willReturn("clientId");
 
 		mockWebServer.enqueue(new MockResponse()
 			.setResponseCode(200)
 			.setBody(stubCustomerDto())
 			.setHeader("Content-Type", MediaType.APPLICATION_JSON));
 
-		final LoginAuthenticationProvider loginAuthenticationProvider = new LoginAuthenticationProvider(customerServer,
+		final LoginAuthenticationProvider loginAuthenticationProvider = new LoginAuthenticationProvider(
+			customerServerConfig,
 			new RestTemplate());
 
 		final String token = "accessToken";

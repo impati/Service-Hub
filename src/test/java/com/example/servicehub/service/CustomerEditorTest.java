@@ -21,7 +21,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.client.RestTemplate;
 
-import com.example.servicehub.config.CustomerServer;
+import com.example.servicehub.config.CustomerServerConfig;
 import com.example.servicehub.domain.customer.RoleType;
 import com.example.servicehub.security.authentication.CustomerPrincipal;
 import com.example.servicehub.service.customer.CustomerEditor;
@@ -39,7 +39,7 @@ class CustomerEditorTest {
 	private CustomerEditor customerEditor;
 
 	@Mock
-	private CustomerServer customerServer;
+	private CustomerServerConfig customerServerConfig;
 
 	@Mock
 	private ProfileManager profileManager;
@@ -65,7 +65,7 @@ class CustomerEditorTest {
 	void customerEditorTest() {
 		createPrincipal();
 		final String baseUrl = String.format("http://localhost:%s", mockWebServer.getPort());
-		given(customerServer.getServer())
+		given(customerServerConfig.getServer())
 			.willReturn(baseUrl);
 		given(profileManager.tryToRestore(null))
 			.willReturn("default.png");

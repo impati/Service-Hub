@@ -20,7 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.client.RestTemplate;
 
-import com.example.servicehub.config.CustomerServer;
+import com.example.servicehub.config.CustomerServerConfig;
 import com.example.servicehub.util.JsonMaker;
 
 import okhttp3.mockwebserver.MockResponse;
@@ -31,7 +31,7 @@ import okhttp3.mockwebserver.RecordedRequest;
 class LoginAuthenticationFilterTest {
 
 	@Mock
-	private CustomerServer customerServer;
+	private CustomerServerConfig customerServerConfig;
 
 	@Mock
 	private HttpServletRequest request;
@@ -58,14 +58,14 @@ class LoginAuthenticationFilterTest {
 		// given
 		final String baseUrl = mockWebServer.url("/").toString();
 
-		final LoginAuthenticationFilter loginAuthenticationFilter = new LoginAuthenticationFilter(customerServer,
+		final LoginAuthenticationFilter loginAuthenticationFilter = new LoginAuthenticationFilter(customerServerConfig,
 			new RestTemplate());
 
 		given(request.getParameter("code")).willReturn("code");
 
-		given(customerServer.getServer()).willReturn(baseUrl);
+		given(customerServerConfig.getServer()).willReturn(baseUrl);
 
-		given(customerServer.getClientId()).willReturn("clientId");
+		given(customerServerConfig.getClientId()).willReturn("clientId");
 
 		mockWebServer.enqueue(new MockResponse()
 			.setResponseCode(200)

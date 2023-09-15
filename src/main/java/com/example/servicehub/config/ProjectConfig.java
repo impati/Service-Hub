@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 
 @Configuration
 @RequiredArgsConstructor
-@EnableConfigurationProperties(CustomerServer.class)
+@EnableConfigurationProperties({CustomerServerConfig.class, ServerConfig.class})
 public class ProjectConfig {
 
 	@Bean

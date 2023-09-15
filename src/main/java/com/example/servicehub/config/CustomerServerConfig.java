@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @ConfigurationProperties("customer")
-public class CustomerServer {
+public class CustomerServerConfig {
 
 	private String clientId;
 	private String server;
