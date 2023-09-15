@@ -8,6 +8,14 @@ DEPLOY_LOG="deploy.log"
 
 TIME_NOW=$(date)
 
+PREVIOUS_PID=$(pgrep -f ServiceHub)
+
+if [ -n $PREVIOUS_PID ]
+then
+  echo "[ $TIME_NOW ] Kill previous process $PREVIOUS_PID" >>$DEPLOY_LOG
+  kill -9 $PREVIOUS_PID
+fi
+
 chmod 755 $JAR_FILE
 
 echo "[ $TIME_NOW ] Run java application $JAR_FILE" >>$DEPLOY_LOG
