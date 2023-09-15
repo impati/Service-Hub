@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import com.example.servicehub.domain.common.BaseEntity;
 import com.example.servicehub.domain.customer.CustomerService;
@@ -21,6 +22,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+@Table(name = "services")
 @Entity
 @Getter
 @ToString
@@ -102,12 +104,15 @@ public class Services extends BaseEntity {
 
 	@Override
 	public boolean equals(final Object o) {
-		if (this == o)
+		if (this == o) {
 			return true;
-		if (!(o instanceof Services))
+		}
+		if (!(o instanceof Services)) {
 			return false;
+		}
+
 		Services services = (Services)o;
-		return this.getId() != null && Objects.equals(id, services.id);
+		return this.getId() != null && Objects.equals(getId(), services.getId());
 	}
 
 	@Override
