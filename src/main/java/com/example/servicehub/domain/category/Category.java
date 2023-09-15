@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import com.example.servicehub.domain.common.BaseEntity;
 
@@ -21,6 +22,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+@Table(name = "category")
 @Entity
 @Getter
 @ToString(exclude = {"child", "parent"})
@@ -55,12 +57,15 @@ public class Category extends BaseEntity {
 
 	@Override
 	public boolean equals(final Object o) {
-		if (this == o)
+		if (this == o){
 			return true;
-		if (!(o instanceof Category))
+		}
+		if (!(o instanceof Category)){
 			return false;
+		}
+
 		Category category = (Category)o;
-		return this.getId() != null && Objects.equals(id, category.id);
+		return this.getId() != null && Objects.equals(getId(), category.getId());
 	}
 
 	@Override

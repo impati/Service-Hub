@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import com.example.servicehub.domain.common.BaseEntity;
 
@@ -18,6 +19,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+@Table(name = "service_comment")
 @Entity
 @Getter
 @ToString(exclude = {"services", "customerId"})
@@ -31,7 +33,7 @@ public class ServiceComment extends BaseEntity {
 
 	@Column(name = "content", nullable = false, length = 10000)
 	private String content;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "service_id")
 	private Services services;
@@ -69,12 +71,15 @@ public class ServiceComment extends BaseEntity {
 
 	@Override
 	public boolean equals(final Object o) {
-		if (this == o)
+		if (this == o) {
 			return true;
-		if (!(o instanceof ServiceComment))
+		}
+		if (!(o instanceof ServiceComment)) {
 			return false;
+		}
+
 		ServiceComment that = (ServiceComment)o;
-		return this.getId() != null && Objects.equals(id, that.id);
+		return this.getId() != null && Objects.equals(getId(), that.getId());
 	}
 
 	@Override
