@@ -20,6 +20,12 @@ jobs:
           java-version: '11'
           distribution: 'corretto'
 
+      - name: before script executable
+        run: chmod 755 scripts/before.sh
+
+      - name: Run before script
+        run: ./scripts/before.sh
+
       - name: Build with Gradle
         uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25
         with:
