@@ -126,31 +126,6 @@ class ServiceUpdateTest {
 	}
 
 	@Test
-	@DisplayName("서비스 정보 업데이트 - 로고 업데이트")
-	void givenServiceUpdateForm_whenUpdatingLogoFile_thenUpdateService() throws IOException {
-		// given
-		final Services services = servicesSteps.create();
-		final ServiceUpdateForm updateForm = ServiceUpdateForm.from(services);
-		final String originStoreName = services.getLogoStoreName();
-
-		// when
-		MockMultipartFile mockMultipartFile = new MockMultipartFile(
-			"test",
-			"test.png",
-			"image/png",
-			new FileInputStream(
-				"/Users/jun-yeongchoe/Desktop/project/ServiceHub/src/main/resources/image/default.png")
-		);
-		updateForm.setLogoFile(mockMultipartFile);
-		serviceUpdate.update(updateForm);
-
-		// then
-		final Services updatedServices = servicesRepository.findById(services.getId()).get();
-		assertThat(updatedServices.getLogoStoreName()).isNotNull();
-		assertThat(updatedServices.getLogoStoreName()).isNotEqualTo(originStoreName);
-	}
-
-	@Test
 	@DisplayName("서비스 정보 업데이트 - 로고 업데이트 하지 않기")
 	void givenServiceFormWithNoLogoFile_whenNonUpdatingLogoFile_thenNothing() {
 		// given

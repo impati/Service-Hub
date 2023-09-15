@@ -20,7 +20,7 @@ spring:
     active: test
 
 logo:
-  dir: ${pwd}/src/test/resources/image/
+  dir: /test/
 
 profile:
-  dir: ${pwd}/src/test/resources/profile/
+  dir: /test/
