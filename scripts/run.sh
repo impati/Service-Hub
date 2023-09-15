@@ -11,7 +11,7 @@ TIME_NOW=$(date)
 chmod 755 $JAR_FILE
 
 sudo cp -r ../static src/main/resources
-sudo chmod -R 755 src/main/resources/static
+sudo chmod -R 777 src/main/resources/static
 
 echo "[ $TIME_NOW ] Run java application $JAR_FILE" >>$DEPLOY_LOG
 nohup java -jar -Dspring.profiles.active=prod $JAR_FILE &
